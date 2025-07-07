@@ -8,7 +8,6 @@
     "**/.git": true,
     "**/.svn": true,
     "**/.hg": true,
-    "**/CVS": true,
     "**/.DS_Store": true,
     "**/Thumbs.db": true,
     "**/*.???~": true,
@@ -19,6 +18,7 @@
     "**/*_adt.pvs": false,
     "**/.pvscontext": true,
     "**/.vscode": true,
+    "**/CVS": true,
     "**/orphaned-proofs.prf": true,
     "**/pvsbin": true
   },

@@ -32,7 +32,7 @@ Previously, I successfully completed my graduate studies in Computer Science at 
   </a>
 </div> -->
 
-<div class="call-to-action">
+<!-- <div class="call-to-action">
   <h2 style="color: #e74d3c; font-weight: 600; margin-bottom: 10px;">
     Looking for Summer 2025 Internship!
   </h2>
@@ -47,7 +47,7 @@ Previously, I successfully completed my graduate studies in Computer Science at 
       View Research Summary
     </a>
   </div>
-</div>
+</div> -->
 
 {% include_relative _includes/news.md %}
 
