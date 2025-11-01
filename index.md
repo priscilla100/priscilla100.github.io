@@ -36,13 +36,7 @@ Prior to Stony Brook, I completed my M.Sc. in Computer Science at the University
   </div>
 </div>
 
-## News
-- **[Dec 2025]** Presenting at **HONET 2025** on LLM-based anomaly detection for digital substations
-- **[Nov 2025]** Paper submitted to **FASE 2026** on evaluating LLMs for natural language to LTL translation
-- **[May 2024]** Attended **NSF-sponsored Formal Methods Summer School** at University of Illinois
-- **[Apr 2024]** Received **NSF travel award** to attend CPS-IoT Week in Hong Kong
-- **[Nov 2023]** Attended **ACM CCS 2023** in Copenhagen (NSF iMentor scholarship)
-- **[Aug 2023]** Started PhD at Stony Brook University
+{% include_relative _includes/news.md %}
 
 
 ## Selected Publications
@@ -113,26 +107,8 @@ Comprehensive evaluation framework for assessing LLMs' ability to translate natu
 **Teaching Assistant**, Stony Brook University:
 - **ISE 331**: Fundamentals of Computer Security (Spring 2024)
 - **CSE 331**: Computer Security Fundamentals (Fall 2023)
-<!-- 
-## Contact
-
-**Email:** [priscillakyeidanso@gmail.com](mailto:priscillakyeidanso@gmail.com)  
-**Phone:** +1 (934) 799-1337  
-**Office:** Computer Science Building, Stony Brook University -->
-<!-- 
-**Links:**
-[GitHub](https://github.com/priscilla100) | [Google Scholar](https://scholar.google.com/citations?user=bPvjbUMAAAAJ&hl=en) | [LinkedIn](https://linkedin.com/in/priscilla-kyei-danso) | [CV (PDF)](./assets/2025_CV.pdf) -->
 
 ---
-
-## Looking for Summer 2026 Research Internships
-
-I am actively seeking **Summer 2026 research internship opportunities** in:
-- Formal Methods & Program Verification
-- AI Safety & Trustworthy AI
-- Neural-Symbolic Reasoning
-- Compliance Automation & Privacy Engineering
-- LLM Safety & Evaluation
 
 **Interested in collaborating?** Feel free to reach out via email!
 
