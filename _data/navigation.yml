@@ -1,0 +1,26 @@
+main:
+  - title: "Work Experience"
+    url: /work-experience/
+    right: true
+
+  # - title: "Resume"
+  #   url: /resume/
+
+  - title: "Services"
+    url: /services/
+    
+  - title: "Projects"
+    url: /projects/
+
+  # - title: "Teaching"
+  #   url: /teaching/
+
+
+# - title: "Talks"
+#   url: /talks/
+
+  - title: "Publications"
+    url: /publications/
+
+  - title: "Home"
+    url: /
