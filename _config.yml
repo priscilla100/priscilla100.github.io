@@ -1,0 +1,48 @@
+# Basic Information 
+title: Priscilla Kyei Danso
+position: PhD Student Computer Science
+affiliation: Stony Brook University
+affiliation_link: https://www.stonybrook.edu/
+affiliation_logo: /assets/img/logo.png
+email: pdanso (at) cs.stonybrook.edu
+
+# Search Engine Optimization (SEO)
+keywords: Priscilla Kyei Danso, Danso Priscilla Kyei, DansoPriscillaKyei, PriscillaKyeiDanso
+canonical: https://priscilla100.github.io
+description: Priscilla Kyei Danso is a third year PhD in Computer Science student at Stony Brook University. Her research lies in Security, Privacy, Formal Methods, and Automated Reasoning.
+
+# The option is used to enable the Illinois template.
+enable_hopkins_logo: true
+
+# The option is used to show the last update time.
+enable_last_update: false
+
+# Links
+link_type: icon #text/icon
+cv_link: /assets/2025_CV.pdf
+google_scholar: https://scholar.google.com/citations?user=bPvjbUMAAAAJ&hl=en
+github_link: https://github.com/priscilla100/
+linkedin: https://www.linkedin.com/in/priscilla-kyei-danso/
+twitter: https://twitter.com/_ewurabena/
+
+# Images 
+avatar: /assets/img/me.jpg
+
+# Footnotes
+# footnote: Feel free to use my website's source code.
+# footnote_link: https://github.com/yaoyao-liu/minimal-light
+
+# Analytics
+# Please remove the following lines about analytics services if you fork my project. 
+# Otherwise, the analytics information of your website will be recorded to my ClustrMaps accounts.
+# clustrmaps_id: CJD8XwsJhSyQ6sbsU-Gw0cNcUlbah7KW3xvHN2QlwW0
+
+# The following files will be removed from the generated website.
+exclude:
+  - build.sh
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - LICENSE
+  - CNAME
+  - vendor/

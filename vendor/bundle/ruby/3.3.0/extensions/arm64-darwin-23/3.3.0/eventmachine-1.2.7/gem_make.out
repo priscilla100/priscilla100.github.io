@@ -1,0 +1,19 @@
+current directory: /Users/priscilladanso/Documents/GitHub/priscilla100.github.io.v1/vendor/bundle/ruby/3.3.0/gems/eventmachine-1.2.7/ext/fastfilereader
+/Users/priscilladanso/.rbenv/versions/3.3.4/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /Users/priscilladanso/Documents/GitHub/priscilla100.github.io.v1/vendor/bundle/ruby/3.3.0/gems/eventmachine-1.2.7/ext/fastfilereader
+make DESTDIR\= sitearchdir\=./.gem.20251031-44572-3k9yzd sitelibdir\=./.gem.20251031-44572-3k9yzd clean
+
+current directory: /Users/priscilladanso/Documents/GitHub/priscilla100.github.io.v1/vendor/bundle/ruby/3.3.0/gems/eventmachine-1.2.7/ext/fastfilereader
+make DESTDIR\= sitearchdir\=./.gem.20251031-44572-3k9yzd sitelibdir\=./.gem.20251031-44572-3k9yzd
+compiling mapper.cpp
+compiling rubymain.cpp
+linking shared-object fastfilereaderext.bundle
+
+current directory: /Users/priscilladanso/Documents/GitHub/priscilla100.github.io.v1/vendor/bundle/ruby/3.3.0/gems/eventmachine-1.2.7/ext/fastfilereader
+make DESTDIR\= sitearchdir\=./.gem.20251031-44572-3k9yzd sitelibdir\=./.gem.20251031-44572-3k9yzd install
+/usr/bin/install -c -m 0755 fastfilereaderext.bundle ./.gem.20251031-44572-3k9yzd
+
+current directory: /Users/priscilladanso/Documents/GitHub/priscilla100.github.io.v1/vendor/bundle/ruby/3.3.0/gems/eventmachine-1.2.7/ext/fastfilereader
+make DESTDIR\= sitearchdir\=./.gem.20251031-44572-3k9yzd sitelibdir\=./.gem.20251031-44572-3k9yzd clean

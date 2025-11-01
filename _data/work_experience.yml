@@ -1,0 +1,95 @@
+# Work Experience Data
+work_experience:
+  # - company: "Stony Brook University"
+  #   location: "New York, USA"
+  #   position: "Graduate Research Assistant"
+  #   start_date: "Aug 2023"
+  #   end_date: "Present"
+  #   description:
+  #     - "Conducting an in-depth analysis of LLM capabilities in translating free, unbounded assertive natural language into formal logic expressions."
+  #     - "Designing experiments to test model effectiveness in identifying logical structures and mapping assertive statements to formal specifications."
+  #     - "Evaluating and documenting outcomes to refine model capabilities in translating to specific logic forms for applications in compliance and legal reasoning."
+  #   skills: ["Privacy Compliance", "Formal Verification", "NuSMV", "Research"]
+
+  # - company: "Stony Brook University"
+  #   location: "New York, USA"
+  #   position: "Teaching Assistant"
+  #   start_date: "Jan 2024"
+  #   end_date: "Apr 2024"
+  #   description:
+  #     - "Assisted in teaching ISE331 Fundamentals of Computer Security."
+  #     - "Held office hours to provide guidance and answer student questions."
+  #     - "Proctored exams and graded assignments, providing constructive feedback."
+  #   skills: ["Computer Security", "Teaching", "Grading"]
+
+  # - company: "The Canadian Institute for Cybersecurity"
+  #   location: "Fredericton, Canada"
+  #   position: "Graduate Research Assistant"
+  #   start_date: "May 2021"
+  #   end_date: "Dec 2022"
+  #   description:
+  #     - "Engineered machine learning models for IoT device profiling and vulnerability assessment."
+  #     - "Published research on ensemble-based intrusion detection systems for IoT devices."
+  #     - "Collaborated on creating a publicly available IoT dataset for researchers."
+  #   skills: ["Machine Learning", "IoT Security", "Research", "Python", "Data Analysis"]
+
+  - company: "United Nations World Food Programme"
+    location: "Accra, Ghana"
+    position: "Data Analyst"
+    start_date: "Nov 2020"
+    end_date: "Apr 2021"
+    description:
+      - "Developed a Fleet Management System to optimize operations for pharmaceutical companies across West Africa."
+      - "Conducted data integrity assessments and trained staff on system usage."
+    skills: ["Data Analysis", "Fleet Management", "Microsoft Access"]
+
+  - company: "Cobalt Partners"
+    location: "Accra, Ghana"
+    position: "Web Developer Consultant"
+    start_date: "Jul 2020"
+    end_date: "Mar 2021"
+    description:
+      - "Contributed to the development of an enterprise portal supporting 1,599 children across 89 classrooms daily."
+      - "Analyzed educational datasets using Google BigQuery and Microsoft PowerBI."
+    skills: ["Web Development", "Laravel", "VueJS", "Google BigQuery", "PowerBI"]
+
+  - company: "Mesika Ghana"
+    location: "Accra, Ghana"
+    position: "Data Scientist"
+    start_date: "Aug 2019"
+    end_date: "Jun 2020"
+    description:
+      - "Analyzed transaction data for over 1 million customers using Pandas, Scikit-learn, and Plotly."
+      - "Implemented an ETL pipeline to optimize data storage and retrieval efficiency."
+      - "Collaborated on creating a visualization dashboard for customer transactions."
+    skills: ["Data Science", "ETL", "Pandas", "Scikit-learn", "Plotly"]
+
+  - company: "Ernst and Young Ghana"
+    location: "Accra, Ghana"
+    position: "Intern"
+    start_date: "Apr 2019"
+    end_date: "Jul 2019"
+    description:
+      - "Conducted data analysis and visualization for ministerial data using Power BI and MS Excel."
+      - "Drafted proposals and documentation for client projects."
+    skills: ["Data Analysis", "Power BI", "MS Excel", "Documentation"]
+
+  - company: "SuperTech Ghana"
+    location: "Accra, Ghana"
+    position: "Software Developer"
+    start_date: "Jan 2018"
+    end_date: "Mar 2019"
+    description:
+      - "Developed a document management system using SharePoint."
+      - "Designed custom reports within the Microsoft Dynamics ERP application."
+    skills: ["Software Development", "SharePoint", "Microsoft Dynamics"]
+
+  - company: "IT Consortium"
+    location: "Accra, Ghana"
+    position: "Assistant Programmer"
+    start_date: "Jun 2016"
+    end_date: "Dec 2017"
+    description:
+      - "Provided technical support for the Ghana online passport application system."
+      - "Tracked and resolved tickets using a project management system."
+    skills: ["Technical Support", "Project Management", "Troubleshooting"]
