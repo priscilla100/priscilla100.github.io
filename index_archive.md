@@ -38,15 +38,30 @@ Prior to Stony Brook, I completed my M.Sc. in Computer Science at the University
 
 {% include_relative _includes/news.md %}
 
-## Currently working on
 
-### An Agentic Policy Compliance System
+## Selected Publications
+
+[Full publication list →](/publications)
+
+**[Under Review]** **P.K. Danso**, et al. "A Multi-dimensional Evaluation of LLMs in Translating Natural Language to LTL". *[International Conference on Fundamental Approaches to Software Engineering (FASE 2026)](https://github.com/priscilla100/all_publications_pdf/blob/main/FASE26_paper_50.pdf)*.
+
+**[IoT-J 2023]** **P.K. Danso**, S. Dadkhah, E.C.P. Neto, et al. "[Transferability of Machine Learning Algorithms for IoT Device Profiling and Identification](https://github.com/priscilla100/all_publications_pdf/blob/main/Transferability_of_Machine_Learning_Algorithm_for_IoT_Device_Profiling_and_Identification.pdf)". *IEEE Internet of Things Journal*, 2023.
+
+**[PST 2022]** S. Dadkhah, H. Mahdikhani, **P.K. Danso\***, et al. "[Towards the Development of a Realistic Multidimensional IoT Profiling Dataset](https://github.com/priscilla100/all_publications_pdf/blob/main/Towards_the_Development_of_a_Realistic_M.pdf)". *IEEE Privacy, Security and Trust (PST)*, 2022. (**220+ citations**)
+
+**[HONET 2022]** **P.K. Danso**, E.C.P. Neto, S. Dadkhah, et al. "[Ensemble-based Intrusion Detection for Internet of Things Devices](https://github.com/priscilla100/all_publications_pdf/blob/main/Ensemble-basedIntrusionDetectionforInternetofThingsDevices.pdf)". *IEEE Smart Communities (HONET)*, 2022.
+
+**[HONET 2025]** **P.K. Danso**, et al. "[LLM-based Anomaly Detection for Digital Substation Cybersecurity](https://github.com/priscilla100/all_publications_pdf/blob/main/LLMbasedAnomalyDetectionforDigitalSubstationCybersecurity.pdf)". *IEEE Smart Communities (HONET)*, 2025. *(To appear December 2025)*
+
+\* *Equal contribution*
+
+## Featured Projects
+
+### 🤖 Agentic Policy Compliance System
 **[GitHub →](https://github.com/priscilla100/policy-checker/)**
 <!-- | [Demo Video →](https://youtube.com/...)** -->
-An autonomous agent that translates natural language policy queries into formal logic and verifies compliance across HIPAA, GDPR, SOX, and GLBA regulations.
-<img src="assets/img/agentic.png" class="teaser img-fluid z-depth-1" style="width=100;height=40%">
 
-Features:
+An autonomous agent that translates natural language policy queries into formal logic and verifies compliance across HIPAA, GDPR, SOX, and GLBA regulations. Features:
 - LLM-based natural language to formal logic translation (LTL/FOL)
 - OCaml-powered formal verification engine
 - Multi-step autonomous planning and execution
@@ -54,10 +69,30 @@ Features:
 - Confidence-based decision making
 - Natural language explanation generation
 
-
-
-
 **Tech Stack:** Python, OCaml, GPT-4/Claude, Formal Logic, Agentic Reasoning
+
+### 📊 IoT Device Profiling Dataset
+**[Dataset →](https://www.unb.ca/cic/datasets/iotdataset-2022.html)**
+
+A realistic, multi-dimensional dataset for IoT device profiling used by 220+ research papers worldwide. Captures network traffic, device behavior, and attack patterns across 40+ IoT device types.
+
+**Impact:** Widely adopted benchmark in IoT security research community
+
+### 🔍 LLM-to-LTL Benchmark Suite
+**[Coming Soon - FASE 2026] | [GitHub →](https://github.com/icsekdk/promptEVAL/) | [Demo Playground →](https://appexperimentdashboardpy-2qq8aouv7wkun3k9yzctqw.streamlit.app/)**
+
+Comprehensive evaluation framework for assessing LLMs' ability to translate natural language to Linear Temporal Logic, including semantic equivalence, satisfiability, and trace-based verification metrics.
+
+## Academic Service
+
+**Reviewer:**
+- IEEE Internet of Things Journal (2023–Present)
+- ACM CCS Artifact Evaluation (2024, 2025)
+- USENIX Security Artifact Evaluation (2025)
+
+**Non-Academic Service**
+- Secretary, Women in Computer Science, Stony Brook University (2024–Present)
+- Mentor, Center for Inclusice Education (CIE), Stony Brook University (2025–Present)
 
 ## Honors & Awards
 
