@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 4 — ComplianceGPT Lab REU 2026</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside id="sidebar">
+  <div class="logo"><div class="lab-name">ComplianceGPT Lab</div><div class="lab-sub">AI Innovation &amp; Diffusion REU 2026<br>Stony Brook University</div></div>
+  <nav>
+    <div class="nav-section">Program</div>
+    <a href="index.html">Welcome</a><a href="schedule.html">Weekly Schedule</a><a href="slides-week1.html">Week 1 Slides</a><a href="slides-week2.html">Week 2 Slides</a>
+    <div class="nav-section">Foundations</div>
+    <a href="setup.html">Setup &amp; Tools</a><a href="foundations.html">AI Fundamentals</a><a href="foundations.html#regulations">Regulations</a>
+    <div class="nav-section">Curriculum</div>
+    <a href="week1.html">Week 1 — Intro to AI</a><a href="week2.html">Week 2 — Language &amp; Law</a><a href="week3.html">Week 3 — Prompt Eng.</a><a href="week4.html" class="active">Week 4 — RAG</a><a href="week5.html">Week 5 — ComplianceGPT</a><a href="week6.html">Week 6 — Communication</a>
+    <div class="nav-section">Research</div>
+    <a href="projects.html">Student Projects</a><a href="readings.html">Reading List</a><a href="assignments.html">Assignments</a>
+  </nav>
+</aside>
+<main id="main">
+<div class="page-header">
+  <div class="breadcrumb">Curriculum</div>
+  <h1>Week 4 — Retrieval-Augmented Generation</h1>
+  <p class="subtitle">July 14–17 · Embeddings · Vector search · RAG in ComplianceGPT · Project work begins</p>
+</div>
+<div class="content">
+
+  <div class="week-header">
+    <div class="week-num">W4</div>
+    <div class="week-info">
+      <h2>Retrieval-Augmented Generation</h2>
+      <p>Jul 14–17 &nbsp;·&nbsp; RAG concepts + ComplianceGPT RAG strategy &nbsp;·&nbsp; Deliverable: mid-point pitch (5 min) + preliminary results</p>
+    </div>
+  </div>
+
+  <h2>Learning Goals</h2>
+  <ul>
+    <li>Understand what RAG is and why it exists</li>
+    <li>Know how embeddings and vector search work conceptually</li>
+    <li>Understand how ComplianceGPT uses RAG to retrieve relevant HIPAA sections</li>
+    <li>Have preliminary results from your project to present at mid-point</li>
+  </ul>
+
+  <h2>Day 1 — Monday, July 14: What is RAG?</h2>
+  <div class="day-block">
+    <div class="day-title">🔍 Topics</div>
+    <div class="day-body">
+      <div class="grid-2">
+        <div>
+          <h4>The Problem RAG Solves</h4>
+          <ul>
+            <li>LLMs have a knowledge cutoff — they don't know your documents</li>
+            <li>Fine-tuning is expensive and doesn't always generalize</li>
+            <li>Solution: give the model relevant context at query time</li>
+            <li>RAG = Retrieval + Augmented Generation</li>
+          </ul>
+        </div>
+        <div>
+          <h4>The RAG Pipeline</h4>
+          <ol>
+            <li><strong>Chunk</strong> the knowledge base into segments</li>
+            <li><strong>Embed</strong> each chunk as a vector</li>
+            <li><strong>Store</strong> vectors in a vector database</li>
+            <li><strong>Query</strong>: embed the question, find nearest chunks</li>
+            <li><strong>Inject</strong> retrieved chunks into the prompt</li>
+            <li><strong>Generate</strong>: LLM answers with context</li>
+          </ol>
+        </div>
+      </div>
+      <div class="card card-navy" style="margin-top:14px;">
+        <h3>Analogy</h3>
+        <p>RAG is like an open-book exam. Without RAG, the model takes a closed-book exam — it has to rely on what it memorized during training. With RAG, you hand it the relevant textbook pages before it answers. The model doesn't need to have memorized HIPAA — it gets the relevant section retrieved and injected into its prompt at runtime.</p>
+      </div>
+    </div>
+  </div>
+  <div class="day-block">
+    <div class="day-title">🎯 Day 1 Task</div>
+    <div class="day-body">
+      <p>Open <code>notebooks/week4_rag_intro.ipynb</code>. Walk through: embedding a sentence using <code>sentence-transformers</code>, computing cosine similarity between two sentences, finding the most similar HIPAA section from a list of 5. Run all cells. Modify one cell to test a sentence of your own.</p>
+    </div>
+  </div>
+
+  <h2>Day 2 — Wednesday, July 16: RAG in ComplianceGPT + Mid-Point Pitches</h2>
+  <div class="day-block">
+    <div class="day-title">📡 Topics</div>
+    <div class="day-body">
+      <div class="grid-2">
+        <div>
+          <h4>How ComplianceGPT Uses RAG</h4>
+          <ul>
+            <li>Strategy: "rag" and "rag_bm25" in <code>batch_runner.py</code></li>
+            <li>Retrieval corpus: HIPAA sections, preamble, enforcement guidance</li>
+            <li>Query: the last 3 sentences of the scenario (not the full text)</li>
+            <li>Why 3 sentences: full scenario floods BM25 with unrelated terms</li>
+            <li>Retrieved sections injected into LLM1 extraction prompt</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Vector Search vs. BM25</h4>
+          <ul>
+            <li>BM25: keyword-based scoring (TF-IDF variant). Fast, interpretable</li>
+            <li>Vector search: semantic similarity via embeddings. Better for paraphrase</li>
+            <li>Hybrid: rank-bm25 combines both signals</li>
+            <li>ComplianceGPT finding: BM25 outperforms pure vector on this corpus</li>
+            <li>Your project might test: why? What scenarios does each strategy handle better?</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="day-block">
+    <div class="day-title">🎤 Mid-Point Pitches</div>
+    <div class="day-body">
+      <p>Each student presents a 5-minute update. Structure:</p>
+      <ol>
+        <li><strong>What I've done</strong> — experiments run, data collected so far</li>
+        <li><strong>What I've found</strong> — even preliminary: trends, surprises, anything</li>
+        <li><strong>What's blocked</strong> — any technical issues, unclear methodology, missing data</li>
+        <li><strong>Plan for weeks 5–6</strong> — what experiments remain, what you'll write up</li>
+      </ol>
+    </div>
+  </div>
+  <div class="day-block">
+    <div class="day-title">🎯 Day 2 Task</div>
+    <div class="day-body">
+      <p>Run the same 20 scenarios with <code>--strategy formal</code> and <code>--strategy rag_bm25</code>. Compare accuracy. Are there rows where RAG helps? Where does it hurt? Write 3 sentences summarizing what you observe.</p>
+    </div>
+  </div>
+
+  <h2>Day 3 — Friday, July 17: Chunking, Embedding Models, and Limits</h2>
+  <div class="day-block">
+    <div class="day-title">📦 Topics</div>
+    <div class="day-body">
+      <div class="grid-2">
+        <div>
+          <h4>Chunking Strategies</h4>
+          <ul>
+            <li>Fixed-size: split every N tokens. Simple but breaks sentences</li>
+            <li>Sentence-based: split on punctuation. Cleaner but variable size</li>
+            <li>Semantic: group sentences by topic. Best quality, slower</li>
+            <li>For legal text: section-based is often best (HIPAA § per chunk)</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Embedding Model Choices</h4>
+          <ul>
+            <li><code>all-MiniLM-L6-v2</code>: fast, small, good for short text</li>
+            <li><code>all-mpnet-base-v2</code>: slower, higher quality</li>
+            <li><code>text-embedding-3-small</code> (OpenAI): very good, not free</li>
+            <li>Legal-specific models: <code>legal-bert</code>, <code>law-ai/InLegalBERT</code></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2>Week 4 Deliverable</h2>
+  <div class="card card-crimson">
+    <h3>Due: Wednesday, July 16 (pitch) + Friday, July 18 (written)</h3>
+    <p><strong>1. Mid-point pitch (5 min)</strong> — Wednesday morning. See structure above.</p>
+    <p style="margin-top:10px;"><strong>2. Experiment log + preliminary results</strong> — Friday. A structured log of every experiment you've run:</p>
+    <ul style="margin-top:8px;">
+      <li>Date, experiment name, configuration (model, strategy, rows)</li>
+      <li>Result (accuracy or relevant metric)</li>
+      <li>Observation (1 sentence: what did you learn?)</li>
+    </ul>
+    <p style="margin-top:10px;">Also: at least 1 result table or chart — even if preliminary. Something visual showing a comparison between conditions.</p>
+  </div>
+
+  <h2>Recommended Reading This Week</h2>
+  <ul>
+    <li><strong>Lewis et al. — "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks" (2020)</strong> — The original RAG paper. Read abstract, intro, and Section 2.</li>
+    <li><strong>LangChain documentation — Retrieval section</strong> — The conceptual overview of how chains and retrievers work together. (~10 minute read)</li>
+  </ul>
+
+  <footer>ComplianceGPT Lab · AI Innovation &amp; Diffusion REU 2026 · Stony Brook University</footer>
+</div>
+</main>
+</body>
+</html>

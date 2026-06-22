@@ -1,0 +1,355 @@
+/* ── ComplianceGPT Lab REU 2026 — Shared Stylesheet ── */
+
+:root {
+  --crimson:  #990000;
+  --navy:     #003366;
+  --gold:     #f0a500;
+  --light-bg: #f8f9fa;
+  --border:   #dee2e6;
+  --text:     #212529;
+  --muted:    #6c757d;
+  --sidebar-w: 230px;
+  --code-bg:  #1e1e2e;
+  --code-fg:  #cdd6f4;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: Georgia, 'Times New Roman', serif;
+  color: var(--text);
+  background: #fff;
+  display: flex;
+  min-height: 100vh;
+  line-height: 1.7;
+}
+
+/* ── Sidebar ── */
+#sidebar {
+  width: var(--sidebar-w);
+  min-width: var(--sidebar-w);
+  background: var(--navy);
+  color: #fff;
+  padding: 0;
+  position: fixed;
+  top: 0; left: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+#sidebar .logo {
+  padding: 20px 18px 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+}
+
+#sidebar .logo .lab-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.3;
+}
+
+#sidebar .logo .lab-sub {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.55);
+  margin-top: 2px;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+#sidebar nav {
+  padding: 8px 0 24px;
+}
+
+#sidebar nav .nav-section {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  padding: 14px 18px 4px;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+#sidebar nav a {
+  display: block;
+  color: rgba(255,255,255,0.75);
+  text-decoration: none;
+  padding: 5px 18px 5px 20px;
+  font-size: 0.83rem;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+  line-height: 1.4;
+}
+
+#sidebar nav a:hover,
+#sidebar nav a.active {
+  color: #fff;
+  background: rgba(255,255,255,0.08);
+  border-left-color: var(--gold);
+}
+
+/* ── Main Content ── */
+#main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  padding: 0;
+  min-height: 100vh;
+}
+
+.page-header {
+  background: var(--navy);
+  color: #fff;
+  padding: 40px 60px 32px;
+}
+
+.page-header .breadcrumb {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.5);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  margin-bottom: 10px;
+}
+
+.page-header h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #fff;
+}
+
+.page-header .subtitle {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.7);
+  margin-top: 8px;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.content {
+  padding: 48px 60px;
+  max-width: 1100px;
+}
+
+/* ── Typography ── */
+h1 { font-size: 2rem; color: var(--crimson); margin-bottom: 16px; line-height: 1.3; }
+h2 { font-size: 1.45rem; color: var(--navy); margin: 36px 0 14px; line-height: 1.3; border-bottom: 2px solid var(--border); padding-bottom: 6px; }
+h3 { font-size: 1.1rem; color: var(--crimson); margin: 24px 0 10px; }
+h4 { font-size: 0.95rem; color: var(--navy); margin: 16px 0 8px; font-style: italic; }
+
+p { margin-bottom: 16px; }
+p:last-child { margin-bottom: 0; }
+
+ul, ol { padding-left: 24px; margin-bottom: 16px; }
+li { margin-bottom: 5px; line-height: 1.6; }
+
+a { color: var(--navy); }
+a:hover { color: var(--crimson); }
+
+strong { color: var(--text); }
+em { color: var(--muted); }
+
+/* ── Cards ── */
+.card {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 20px 24px;
+  margin-bottom: 16px;
+  background: #fff;
+}
+
+.card-crimson { border-left: 4px solid var(--crimson); }
+.card-navy    { border-left: 4px solid var(--navy); }
+.card-gold    { border-left: 4px solid var(--gold); background: #fffdf5; }
+
+.card h3 { margin-top: 0; }
+
+/* ── Grid ── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+/* ── Table ── */
+table { width: 100%; border-collapse: collapse; font-size: 0.92rem; font-family: 'Segoe UI', system-ui, sans-serif; margin-bottom: 24px; }
+th { background: var(--navy); color: #fff; padding: 10px 14px; text-align: left; font-weight: 600; font-size: 0.85rem; }
+td { padding: 9px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+tr:nth-child(even) td { background: var(--light-bg); }
+tr:hover td { background: #e8f0fe; }
+
+/* ── Code ── */
+code {
+  font-family: 'Courier New', Consolas, monospace;
+  font-size: 0.87em;
+  background: var(--light-bg);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 1px 5px;
+  color: var(--crimson);
+}
+
+pre {
+  background: var(--code-bg);
+  color: var(--code-fg);
+  border-radius: 6px;
+  padding: 18px 22px;
+  font-family: 'Courier New', Consolas, monospace;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  overflow-x: auto;
+  margin-bottom: 20px;
+}
+
+pre code { background: none; border: none; color: inherit; padding: 0; font-size: inherit; }
+
+/* ── Blockquote ── */
+blockquote {
+  border-left: 4px solid var(--crimson);
+  padding: 14px 20px;
+  background: #fff5f5;
+  color: var(--text);
+  font-style: italic;
+  margin: 20px 0;
+  border-radius: 0 6px 6px 0;
+}
+
+blockquote cite { display: block; margin-top: 8px; font-style: normal; font-size: 0.85rem; color: var(--muted); }
+
+/* ── Badges / Pills ── */
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  letter-spacing: 0.03em;
+  background: var(--navy);
+  color: #fff;
+  margin-right: 4px;
+  margin-top: 10px;
+}
+.badge-crimson { background: var(--crimson); color: #fff; }
+.badge-navy    { background: var(--navy);    color: #fff; }
+.badge-gold    { background: var(--gold);    color: #000; }
+.badge-green   { background: #1f7a3c;        color: #fff; }
+.badge-outline { border: 1px solid var(--border); color: var(--muted); }
+
+/* ── Week Header ── */
+.week-header {
+  background: linear-gradient(135deg, var(--navy) 0%, #005599 100%);
+  color: #fff;
+  padding: 18px 24px;
+  border-radius: 6px;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.week-header .week-num {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--gold);
+  line-height: 1;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.week-header .week-info h2 {
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: #fff;
+  font-size: 1.3rem;
+}
+
+.week-header .week-info p {
+  color: rgba(255,255,255,0.65);
+  font-size: 0.88rem;
+  margin: 4px 0 0;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+/* ── Day block ── */
+.day-block {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.day-block .day-title {
+  background: var(--light-bg);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 18px;
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: var(--navy);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.day-block .day-body { padding: 16px 18px; }
+
+/* ── Schedule table ── */
+.sched-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+.sched-row:last-child { border-bottom: none; }
+.sched-time {
+  padding: 10px 14px;
+  background: var(--light-bg);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--navy);
+  border-right: 1px solid var(--border);
+}
+.sched-activity { padding: 10px 16px; font-size: 0.88rem; }
+
+/* ── Section anchor ── */
+.section-anchor { scroll-margin-top: 24px; }
+
+/* ── Project card ── */
+.project-card {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.project-card .proj-title { font-size: 1.05rem; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+.project-card .proj-meta { font-size: 0.8rem; color: var(--muted); font-family: 'Segoe UI', system-ui, sans-serif; margin-bottom: 10px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.project-card p { font-size: 0.92rem; }
+
+/* ── Reading item ── */
+.reading-item { padding: 14px 0; border-bottom: 1px solid var(--border); }
+.reading-item:last-child { border-bottom: none; }
+.reading-item .r-title { font-weight: 700; color: var(--text); }
+.reading-item .r-author { color: var(--muted); font-size: 0.88rem; font-style: italic; }
+.reading-item .r-note { font-size: 0.85rem; color: var(--muted); margin-top: 3px; font-family: 'Segoe UI', system-ui, sans-serif; }
+/* semantic aliases used in readings.html */
+.reading-item .reading-meta { font-size: 0.75rem; font-weight: 700; font-family: 'Segoe UI', system-ui, sans-serif; color: #fff; background: var(--navy); display: inline-block; padding: 2px 8px; border-radius: 3px; margin-bottom: 5px; }
+.reading-item .reading-title { font-weight: 700; font-size: 0.97rem; color: var(--text); margin-bottom: 2px; }
+.reading-item .reading-desc  { font-size: 0.87rem; color: var(--muted); font-family: 'Segoe UI', system-ui, sans-serif; margin-top: 3px; }
+
+/* ── Footer ── */
+footer {
+  margin-top: 60px;
+  padding: 24px 0;
+  border-top: 1px solid var(--border);
+  font-size: 0.82rem;
+  color: var(--muted);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  text-align: center;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  #sidebar { display: none; }
+  #main { margin-left: 0; }
+  .content { padding: 24px; }
+  .page-header { padding: 24px; }
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+}

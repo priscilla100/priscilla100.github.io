@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reading List — ComplianceGPT Lab REU 2026</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside id="sidebar">
+  <div class="logo"><div class="lab-name">ComplianceGPT Lab</div><div class="lab-sub">AI Innovation &amp; Diffusion REU 2026<br>Stony Brook University</div></div>
+  <nav>
+    <div class="nav-section">Program</div>
+    <a href="index.html">Welcome</a><a href="schedule.html">Weekly Schedule</a><a href="slides-week1.html">Week 1 Slides</a><a href="slides-week2.html">Week 2 Slides</a>
+    <div class="nav-section">Foundations</div>
+    <a href="setup.html">Setup &amp; Tools</a><a href="foundations.html">AI Fundamentals</a><a href="foundations.html#regulations">Regulations</a>
+    <div class="nav-section">Curriculum</div>
+    <a href="week1.html">Week 1 — Intro to AI</a><a href="week2.html">Week 2 — Language &amp; Law</a><a href="week3.html">Week 3 — Prompt Eng.</a><a href="week4.html">Week 4 — RAG</a><a href="week5.html">Week 5 — ComplianceGPT</a><a href="week6.html">Week 6 — Communication</a>
+    <div class="nav-section">Research</div>
+    <a href="projects.html">Student Projects</a><a href="readings.html" class="active">Reading List</a><a href="assignments.html">Assignments</a>
+  </nav>
+</aside>
+<main id="main">
+<div class="page-header">
+  <div class="breadcrumb">Research</div>
+  <h1>Reading List</h1>
+  <p class="subtitle">Curated papers, videos, and regulation texts — with direct links</p>
+</div>
+<div class="content">
+
+  <div class="card card-gold">
+    <h3>How to use this list</h3>
+    <p>Items marked <strong>[REQUIRED]</strong> must be completed by the listed week. Items marked <strong>[RECOMMENDED]</strong> will deepen your understanding but are not required. Items marked <strong>[OPTIONAL]</strong> are for students who want to go further or whose project aligns with that area. Use Keshav's 3-pass method: first pass = abstract + intro + conclusion; second pass = full reading; third pass = you could present it.</p>
+  </div>
+
+  <h2>Videos</h2>
+
+  <div class="reading-item">
+    <div class="reading-meta">[REQUIRED] Week 1</div>
+    <div class="reading-title"><a href="https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi" target="_blank">3Blue1Brown — Neural Networks Series</a> (YouTube · 4 videos · ~20 min each)</div>
+    <div class="reading-desc">Best visual explanation of how neural networks learn. Covers gradient descent, backprop, and why depth helps. Watch all 4 before Wednesday of Week 1.</div>
+  </div>
+
+  <div class="reading-item">
+    <div class="reading-meta">[RECOMMENDED] Week 1</div>
+    <div class="reading-title"><a href="https://www.coursera.org/learn/ai-for-everyone" target="_blank">Andrew Ng — AI For Everyone</a> (Coursera · ~6 hours · free to audit)</div>
+    <div class="reading-desc">Non-technical overview of AI in organizations. Excellent for understanding what AI can and cannot do. Good if you're not from a CS background.</div>
+  </div>
+
+  <div class="reading-item">
+    <div class="reading-meta">[RECOMMENDED] Week 2</div>
+    <div class="reading-title"><a href="https://www.youtube.com/playlist?list=PL-osiE80TeTsWmV9i9c58mdDCSskIFdDS" target="_blank">Corey Schafer — Pandas Tutorial Series</a> (YouTube · 10 videos)</div>
+    <div class="reading-desc">The most direct pandas tutorial for this project. Covers loading CSVs, filtering, groupby, and basic analysis — exactly what you need for your experiments.</div>
+  </div>
+
+  <div class="reading-item">
+    <div class="reading-meta">[RECOMMENDED] Any week</div>
+    <div class="reading-title"><a href="https://www.youtube.com/watch?v=zjkBMFhNj_g" target="_blank">Andrej Karpathy — "The State of GPT"</a> (Microsoft Build 2023 · ~45 min)</div>
+    <div class="reading-desc">How GPT-style models are trained: pre-training, RLHF, instruction fine-tuning. Very accessible. Useful for Week 3 context on prompt engineering.</div>
+  </div>
+
+  <div class="reading-item">
+    <div class="reading-meta">[OPTIONAL]</div>
+    <div class="reading-title"><a href="https://www.youtube.com/watch?v=kCc8FmEb1nY" target="_blank">Andrej Karpathy — "Let's Build GPT from Scratch"</a> (YouTube · ~2 hours)</div>
+    <div class="reading-desc">You will genuinely understand transformers after watching this. Builds a character-level GPT from scratch in ~200 lines of PyTorch. Strongly recommended if your project involves model behavior.</div>
+  </div>
+
+  <h2>Programming and Tooling</h2>
+
+  <div class="reading-item">
+    <div class="reading-meta">[REQUIRED] Complete before June 22</div>
+    <div class="reading-title">Python Crash Course — Eric Matthes (Chapters 1–6)</div>
+    <div class="reading-desc">Variables, lists, dicts, functions, loops, files. Everything you need. Skip the pygame chapters. Available at most libraries and free as a PDF online.</div>
+  </div>
+
+  <div class="reading-item">
+    <div class="reading-meta">[RECOMMENDED] Week 1</div>
+    <div class="reading-title"><a href="https://cs50.harvard.edu/python/2022/" target="_blank">CS50P — Harvard Python Course</a> (edX · free to audit · Weeks 0–4)</div>
+    <div class="reading-desc">High production quality. Problem sets are excellent practice. Do Weeks 0–4 if new to Python.</div>
+  </div>
+
+  <h2>NLP and Transformers</h2>
+
+  <div class="reading-item">
+    <div class="reading-meta">[REQUIRED] Week 2</div>
+    <div class="reading-title"><a href="https://arxiv.org/abs/1706.03762" target="_blank">Vaswani et al. — "Attention Is All You Need"</a> (2017, NeurIPS)</div>
+    <div class="reading-desc">The foundational transformer paper. Read: abstract, Section 1 (intro), Figure 1 (architecture diagram). Every modern LLM descends from this architecture.</div>
+  </div>
+
+  <div class="reading-item">
+    <div class="reading-meta">[RECOMMENDED] Week 2</div>
+    <div class="reading-title"><a href="https://arxiv.org/abs/1810.04805" target="_blank">Devlin et al. — "BERT: Pre-training of Deep Bidirectional Transformers"</a> (2018)</div>
+    <div class="reading-desc">First model to show pre-training then fine-tuning works dramatically better than task-specific training. Read: abstract, intro, Section 2 (model architecture).</div>
+  </div>
+
+  <div class="reading-item">
+    <div class="reading-meta">[REQUIRED] Week 3</div>
+    <div class="reading-title"><a href="https://arxiv.org/abs/2005.14165" target="_blank">Brown et al. — "Language Models are Few-Shot Learners"</a> (GPT-3, 2020, NeurIPS)</div>
+    <div class="reading-desc">Introduced few-shot prompting as a concept. Read: abstract, Section 1 (intro), Section 2 (few-shot learning definition). Conceptual foundation for all prompt engineering.</div>
+  </div>
+
+  <div class="reading-item">
+    <div class="reading-meta">[REQUIRED] Week 3</div>
+    <div class="reading-title"><a href="https://arxiv.org/abs/2201.11903" target="_blank">Wei et al. — "Chain-of-Thought Prompting Elicits Reasoning in LLMs"</a> (2022, NeurIPS)</div>
+    <div class="reading-desc">Short paper showing "think step by step" dramatically improves reasoning accuracy. Read the introduction and Figure 1. Directly applicable to your prompting experiments.</div>
+  </div>
+
+  <div class="reading-item">
+    <div class="reading-meta">[REQUIRED] Week 4</div>
+    <div class="reading-title"><a href="https://arxiv.org/abs/2005.11401" target="_blank">Lewis et al. — "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks"</a> (2020)</div>
+    <div class="reading-desc">The original RAG paper. Read: abstract, intro, Section 2 (RAG model definition). Sections 3–5 if you're doing the RAG or cross-regulation project.</div>
+  </div>
+
+  <h2>Research Methods</h2>
+
+  <div class="reading-item">
+    <div class="reading-meta">[REQUIRED] Week 5</div>
+    <div class="reading-title"><a href="https://web.stanford.edu/class/ee384m/Handouts/HowtoReadPaper.pdf" target="_blank">Keshav — "How to Read a Paper"</a> (2007, ACM SIGCOMM · 3 pages)</div>
+    <div class="reading-desc">Apply the 3-pass method to every paper on this list. Also apply it to your own write-up: would it survive someone's first-pass reading?</div>
+  </div>
+
+  <div class="reading-item">
+    <div class="reading-meta">[REQUIRED] Week 3</div>
+    <div class="reading-title"><a href="https://www.darpa.mil/work-with-us/heilmeier-catechism" target="_blank">Heilmeier Catechism</a> (DARPA · 1 page)</div>
+    <div class="reading-desc">8 questions every research proposal must answer: What are you trying to do? How is it done today? What is new? Who cares? Read before writing your Week 3 project proposal.</div>
+  </div>
+
+  <h2>Regulations</h2>
+
+  <div class="reading-item">
+    <div class="reading-meta">[REQUIRED] Week 1–2</div>
+    <div class="reading-title"><a href="https://www.hhs.gov/hipaa/for-professionals/privacy/laws-regulations/index.html" target="_blank">HHS — HIPAA Privacy Rule Summary</a> (hhs.gov · 2 pages)</div>
+    <div class="reading-desc">The official HHS summary of the HIPAA Privacy Rule. Read before Week 2. You don't need the full regulation — just the summary to understand the structure and key exceptions.</div>
+  </div>
+
+  <div class="reading-item">
+    <div class="reading-meta">[REQUIRED] Week 2</div>
+    <div class="reading-title"><a href="https://www.hhs.gov/hipaa/for-professionals/privacy/guidance/permitteduses/index.html" target="_blank">HHS — Permitted Uses and Disclosures</a> (fact sheet)</div>
+    <div class="reading-desc">Lists all ~15 permitted disclosure categories. Reference document — don't memorize it, but know where to look when a scenario triggers one of these categories.</div>
+  </div>
+
+  <div class="reading-item">
+    <div class="reading-meta">[RECOMMENDED] Week 2</div>
+    <div class="reading-title"><a href="https://gdpr-info.eu/art-6-gdpr/" target="_blank">GDPR — Article 6: Lawful Bases for Processing</a> (EUR-Lex) + <a href="https://gdpr-info.eu/art-9-gdpr/" target="_blank">Article 9: Special Categories</a></div>
+    <div class="reading-desc">Article 6: the six lawful bases (consent, contract, legal obligation, vital interests, public task, legitimate interest). Article 9: health data, biometric data, genetic data — the categories that overlap most with HIPAA.</div>
+  </div>
+
+  <div class="reading-item">
+    <div class="reading-meta">[RECOMMENDED] Week 2</div>
+    <div class="reading-title"><a href="https://oag.ca.gov/privacy/ccpa" target="_blank">CCPA — California Consumer Privacy Act</a> (California Attorney General)</div>
+    <div class="reading-desc">Consumer rights: right to know, right to delete, right to opt-out of sale. Read the summary page. Relevant for the cross-regulation project — "can I delete my records?" hits CCPA and GDPR simultaneously.</div>
+  </div>
+
+  <div class="reading-item">
+    <div class="reading-meta">[OPTIONAL] Cross-regulation project</div>
+    <div class="reading-title"><a href="https://www.ftc.gov/business-guidance/privacy-security/gramm-leach-bliley-act" target="_blank">GLBA — Gramm-Leach-Bliley Act Overview</a> (FTC)</div>
+    <div class="reading-desc">Financial institutions must protect customers' non-public personal information. Analogous to HIPAA but for banks and insurers. Relevant when a health insurer's billing data crosses financial and medical categories.</div>
+  </div>
+
+  <div class="reading-item">
+    <div class="reading-meta">[OPTIONAL] Cross-regulation project</div>
+    <div class="reading-title"><a href="https://www.ftc.gov/business-guidance/privacy-security/childrens-privacy" target="_blank">COPPA — Children's Online Privacy Protection Act</a> (FTC)</div>
+    <div class="reading-desc">Requires parental consent before collecting data on children under 13. Overlaps with HIPAA and GDPR when the patient is a minor.</div>
+  </div>
+
+  <h2>AI and Law</h2>
+
+  <div class="reading-item">
+    <div class="reading-meta">[RECOMMENDED] Any week</div>
+    <div class="reading-title"><a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3299512" target="_blank">Surden — "Artificial Intelligence and Law: An Overview"</a> (Georgia Law Review, 2019)</div>
+    <div class="reading-desc">Accessible overview of how AI intersects with legal systems. ~30 pages but skimmable. Useful for writing your project motivation section.</div>
+  </div>
+
+  <div class="reading-item">
+    <div class="reading-meta">[REQUIRED] Week 5</div>
+    <div class="reading-title"><a href="https://arxiv.org/abs/2405.15175" target="_blank">GoldCoin — "GOLDCOIN: Grounding Large Language Models in Privacy Laws through Contextual Integrity"</a> (2024)</div>
+    <div class="reading-desc">The benchmark paper for the dataset you will work with. 137 real HIPAA enforcement scenarios with expert-validated ground truth. Read: abstract, Section 2 (dataset construction), Section 4 (results). This is the paper closest to what you are doing.</div>
+  </div>
+
+  <div class="reading-item">
+    <div class="reading-meta">[OPTIONAL] Publication preparation</div>
+    <div class="reading-title"><a href="https://arxiv.org/abs/2010.02903" target="_blank">Zhong et al. — "How Does NLP Benefit Legal System?"</a> (ACL, 2020)</div>
+    <div class="reading-desc">Survey of NLP applications in legal tasks: judgment prediction, legal question answering, court summarization. Good for situating your project in the broader research field.</div>
+  </div>
+
+  <footer>ComplianceGPT Lab · AI Innovation &amp; Diffusion REU 2026 · Stony Brook University</footer>
+</div>
+</main>
+</body>
+</html>

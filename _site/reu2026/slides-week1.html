@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 1 Kickoff Slides — ComplianceGPT Lab REU 2026</title>
+<style>
+:root {
+  --crimson: #990000;
+  --navy:    #003366;
+  --gold:    #f0a500;
+  --light:   #f8f9fa;
+  --border:  #dee2e6;
+  --muted:   #6c757d;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: Georgia, 'Times New Roman', serif;
+  background: #1a1a2e;
+  color: #fff;
+}
+
+/* ── Slide nav ── */
+.slide-controls {
+  position: fixed; bottom: 24px; right: 28px; z-index: 999;
+  display: flex; gap: 8px;
+}
+.slide-controls button {
+  background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.25);
+  padding: 8px 18px; border-radius: 6px; cursor: pointer; font-size: 0.9rem;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  backdrop-filter: blur(4px);
+}
+.slide-controls button:hover { background: rgba(255,255,255,0.3); }
+.slide-controls.on-light button {
+  background: rgba(0,51,102,0.1); color: #003366; border: 1px solid rgba(0,51,102,0.25);
+}
+.slide-controls.on-light button:hover { background: rgba(0,51,102,0.2); }
+#slide-counter {
+  position: fixed; bottom: 30px; left: 28px; z-index: 999;
+  font-family: 'Segoe UI', system-ui, sans-serif; font-size: 0.8rem;
+  color: rgba(255,255,255,0.45);
+}
+#slide-counter.on-light { color: rgba(0,0,0,0.3); }
+#progress-bar {
+  position: fixed; top: 0; left: 0; height: 3px; background: var(--gold);
+  transition: width 0.3s; z-index: 999;
+}
+
+/* ── Slides container ── */
+.deck { position: relative; }
+
+.slide {
+  display: none;
+  min-height: 100vh;
+  padding: 60px 80px;
+  position: relative;
+  flex-direction: column;
+  justify-content: center;
+}
+.slide.active { display: flex; }
+
+/* ── Slide themes ── */
+.slide-dark     { background: #0d1b3e; }
+.slide-crimson  { background: linear-gradient(135deg, #6b0000 0%, #990000 100%); }
+.slide-navy     { background: linear-gradient(135deg, #001f4d 0%, #003366 100%); }
+.slide-white    { background: #fff; color: #212529; }
+.slide-light    { background: var(--light); color: #212529; }
+
+/* ── Typography ── */
+.slide-label {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--gold); margin-bottom: 12px;
+}
+.slide h1 { font-size: 3.2rem; line-height: 1.15; font-weight: 700; margin-bottom: 20px; }
+.slide h2 { font-size: 2rem; line-height: 1.2; font-weight: 700; margin-bottom: 16px; }
+.slide h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 10px; }
+.slide p  { font-size: 1.1rem; line-height: 1.7; margin-bottom: 12px; }
+.slide ul { padding-left: 20px; }
+.slide li { font-size: 1.05rem; line-height: 1.65; margin-bottom: 8px; }
+.slide-white h2, .slide-white h3, .slide-light h2, .slide-light h3 { color: var(--navy); }
+.slide-white .slide-label, .slide-light .slide-label { color: var(--crimson); }
+
+.subtitle { font-size: 1.3rem; color: rgba(255,255,255,0.65); font-style: italic; }
+.subtitle-dark { color: var(--muted); font-style: italic; font-size: 1.1rem; }
+
+/* ── Components ── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 20px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-top: 20px; }
+
+.card {
+  border-radius: 8px; padding: 20px 22px;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+.card-glass  { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); }
+.card-white  { background: #fff; color: #212529; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+.card-navy   { background: var(--navy); color: #fff; }
+.card-gold   { background: #fffdf5; border-left: 4px solid var(--gold); color: #212529; }
+.card-crimson{ background: #fff5f5; border-left: 4px solid var(--crimson); color: #212529; }
+.card-green  { background: #f0fff4; border-left: 4px solid #1f7a3c; color: #212529; }
+
+.card h3 { font-size: 1rem; margin-bottom: 8px; }
+.card p, .card li { font-size: 0.92rem; line-height: 1.6; }
+.card ul { padding-left: 16px; }
+
+.big-stat {
+  font-size: 3.5rem; font-weight: 900; font-family: 'Segoe UI', system-ui, sans-serif;
+  color: var(--gold); line-height: 1;
+}
+.stat-label { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 0.85rem; color: rgba(255,255,255,0.55); margin-top: 4px; }
+
+.highlight {
+  background: var(--gold); color: #000; padding: 2px 8px; border-radius: 4px;
+  font-weight: 700;
+}
+.highlight-red {
+  background: var(--crimson); color: #fff; padding: 2px 8px; border-radius: 4px;
+  font-weight: 700;
+}
+.highlight-green {
+  background: #1f7a3c; color: #fff; padding: 2px 8px; border-radius: 4px;
+  font-weight: 700;
+}
+
+/* ── Pipeline diagram ── */
+.pipeline {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  margin: 24px 0; font-family: 'Segoe UI', system-ui, sans-serif;
+}
+.pipe-box {
+  border-radius: 8px; padding: 12px 18px; text-align: center; min-width: 130px;
+}
+.pipe-box .pb-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.7; }
+.pipe-box .pb-name  { font-size: 1rem; font-weight: 700; margin: 4px 0; }
+.pipe-box .pb-sub   { font-size: 0.78rem; opacity: 0.7; }
+.pipe-arrow { font-size: 1.5rem; color: var(--gold); }
+
+/* ── Reg overlap table ── */
+.reg-table { width: 100%; border-collapse: collapse; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 0.88rem; margin-top: 16px; }
+.reg-table th { background: var(--navy); color: #fff; padding: 8px 12px; text-align: left; }
+.reg-table td { padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.1); vertical-align: top; }
+.slide-white .reg-table td { border-bottom: 1px solid var(--border); }
+.reg-table tr:nth-child(even) td { background: rgba(255,255,255,0.04); }
+.slide-white .reg-table tr:nth-child(even) td { background: var(--light); }
+.tick { color: #2ecc71; font-weight: 700; text-align: center; }
+.dash { color: rgba(255,255,255,0.2); text-align: center; }
+.slide-white .dash { color: #ccc; }
+
+/* ── Link list ── */
+.resource-list { list-style: none; padding: 0; }
+.resource-list li {
+  padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.1);
+  font-family: 'Segoe UI', system-ui, sans-serif; font-size: 0.92rem;
+  display: flex; align-items: baseline; gap: 10px;
+}
+.resource-list li:last-child { border-bottom: none; }
+.slide-white .resource-list li, .slide-light .resource-list li {
+  border-bottom: 1px solid var(--border);
+}
+.resource-list a { color: #60a5fa; text-decoration: none; word-break: break-all; font-size: 0.82rem; }
+.slide-white .resource-list a, .slide-light .resource-list a { color: var(--navy); }
+.resource-list a:hover { text-decoration: underline; }
+.r-tag {
+  font-size: 0.68rem; font-weight: 700; background: var(--gold); color: #000;
+  padding: 1px 6px; border-radius: 3px; white-space: nowrap;
+}
+.r-tag-red { background: var(--crimson); color: #fff; }
+.r-tag-green { background: #1f7a3c; color: #fff; }
+
+.slide-num-indicator {
+  position: absolute; top: 24px; right: 32px;
+  font-family: 'Segoe UI', system-ui, sans-serif; font-size: 0.78rem;
+  color: rgba(255,255,255,0.2);
+}
+.slide-white .slide-num-indicator, .slide-light .slide-num-indicator { color: rgba(0,0,0,0.2); }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div id="slide-counter">1 / 14</div>
+<div class="slide-controls">
+  <button onclick="prevSlide()">← Prev</button>
+  <button onclick="nextSlide()">Next →</button>
+</div>
+
+<div class="deck" id="deck">
+
+<!-- ── SLIDE 1: TITLE ── -->
+<div class="slide slide-navy active">
+  <span class="slide-num-indicator">1</span>
+  <div class="slide-label">ComplianceGPT Lab · AI Innovation &amp; Diffusion REU 2026</div>
+  <h1>Welcome to the Lab</h1>
+  <p class="subtitle">Six weeks. Real research. Real AI.</p>
+  <div style="margin-top:48px;display:flex;gap:40px;font-family:'Segoe UI',system-ui,sans-serif;">
+    <div>
+      <div style="font-size:0.75rem;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;">Dates</div>
+      <div style="font-size:1rem;color:rgba(255,255,255,0.9);">June 22 – July 31, 2026</div>
+    </div>
+    <div>
+      <div style="font-size:0.75rem;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;">Lab</div>
+      <div style="font-size:1rem;color:rgba(255,255,255,0.9);">NCS Room 242</div>
+    </div>
+    <div>
+      <div style="font-size:0.75rem;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;">Mentor</div>
+      <div style="font-size:1rem;color:rgba(255,255,255,0.9);">Priscilla Kyei Danso</div>
+    </div>
+    <div>
+      <div style="font-size:0.75rem;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;">Final Presentation</div>
+      <div style="font-size:1rem;color:rgba(255,255,255,0.9);">July 31</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SLIDE 2: ONE BIG QUESTION ── -->
+<div class="slide slide-crimson">
+  <span class="slide-num-indicator">2</span>
+  <div class="slide-label">The Research Problem</div>
+  <h1>One Big Question</h1>
+  <div style="margin-top:28px;" class="card card-glass">
+    <p style="font-size:1.4rem;line-height:1.6;font-style:italic;color:rgba(255,255,255,0.9);">
+      "Can we build AI systems that make <strong>reliable, explainable decisions</strong> about whether an action complies with a legal regulation?"
+    </p>
+  </div>
+  <div class="grid-3" style="margin-top:32px;">
+    <div class="card card-glass">
+      <h3>The Challenge</h3>
+      <p>Legal compliance is expensive, error-prone, and requires expert knowledge. Hospitals spend billions on compliance staff.</p>
+    </div>
+    <div class="card card-glass">
+      <h3>The Opportunity</h3>
+      <p>LLMs can read legal text and extract structured information. But they hallucinate. We need a way to make them reliable.</p>
+    </div>
+    <div class="card card-glass">
+      <h3>Our Approach</h3>
+      <p>Combine LLM extraction with formal logic. The LLM reads the scenario. A rule engine makes the verdict. Separate the concerns.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── SLIDE 3: THE OVERLAP PROBLEM ── -->
+<div class="slide slide-white">
+  <span class="slide-num-indicator">3</span>
+  <div class="slide-label">The Core Research Insight</div>
+  <h2>A Question Can Touch Many Laws at Once</h2>
+  <p class="subtitle-dark">The same patient question can trigger obligations under multiple regulations simultaneously.</p>
+
+  <table class="reg-table" style="margin-top:24px;">
+    <thead>
+      <tr>
+        <th>Patient Question</th>
+        <th>HIPAA</th>
+        <th>GDPR</th>
+        <th>CCPA</th>
+        <th>COPPA</th>
+        <th>SOX</th>
+        <th>GLBA</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>"Can I see my medical records?"</strong></td>
+        <td class="tick">✓</td>
+        <td class="tick">✓</td>
+        <td class="tick">✓</td>
+        <td class="dash">–</td>
+        <td class="dash">–</td>
+        <td class="dash">–</td>
+      </tr>
+      <tr>
+        <td><strong>"Can I delete my records?"</strong></td>
+        <td class="tick">✓</td>
+        <td class="tick">✓</td>
+        <td class="tick">✓</td>
+        <td class="tick">✓</td>
+        <td class="tick">✓</td>
+        <td class="tick">✓</td>
+      </tr>
+      <tr>
+        <td><strong>"Who can share my health data?"</strong></td>
+        <td class="tick">✓</td>
+        <td class="tick">✓</td>
+        <td class="tick">✓</td>
+        <td class="tick">✓</td>
+        <td class="dash">–</td>
+        <td class="dash">–</td>
+      </tr>
+      <tr>
+        <td><strong>"Can my bank share my health info?"</strong></td>
+        <td class="tick">✓</td>
+        <td class="tick">✓</td>
+        <td class="tick">✓</td>
+        <td class="dash">–</td>
+        <td class="dash">–</td>
+        <td class="tick">✓</td>
+      </tr>
+      <tr>
+        <td><strong>"Do I have the right to be forgotten?"</strong></td>
+        <td class="dash">–</td>
+        <td class="tick">✓</td>
+        <td class="tick">✓</td>
+        <td class="tick">✓</td>
+        <td class="tick">✓</td>
+        <td class="dash">–</td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="margin-top:16px;font-size:0.88rem;color:var(--muted);font-family:'Segoe UI',system-ui,sans-serif;">Each ✓ means that regulation has something to say about this question. Answering correctly requires knowing which laws apply, and what each one requires.</p>
+</div>
+
+<!-- ── SLIDE 4: THE REGULATIONS ── -->
+<div class="slide slide-dark">
+  <span class="slide-num-indicator">4</span>
+  <div class="slide-label">Foundational Knowledge</div>
+  <h2>The Six Regulations You Need to Know</h2>
+  <div class="grid-2" style="margin-top:24px;">
+    <div class="card card-glass">
+      <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:8px;">
+        <span style="font-size:1.1rem;font-weight:700;color:var(--gold);">HIPAA</span>
+        <span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">Health Insurance Portability &amp; Accountability Act · US · 1996</span>
+      </div>
+      <p style="font-size:0.9rem;">Protects <em>Protected Health Information (PHI)</em> — health data that can identify a patient. Governs hospitals, clinics, pharmacies, insurers. Permits disclosures for treatment, payment, operations, and specific legal exceptions.</p>
+    </div>
+    <div class="card card-glass">
+      <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:8px;">
+        <span style="font-size:1.1rem;font-weight:700;color:var(--gold);">GDPR</span>
+        <span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">General Data Protection Regulation · EU · 2018</span>
+      </div>
+      <p style="font-size:0.9rem;">Covers <em>all</em> personal data of EU residents — not just health. Key rights: right of access, right to erasure, right to portability. Requires a lawful basis for processing. Fines up to 4% of global revenue.</p>
+    </div>
+    <div class="card card-glass">
+      <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:8px;">
+        <span style="font-size:1.1rem;font-weight:700;color:var(--gold);">CCPA</span>
+        <span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">California Consumer Privacy Act · California · 2020</span>
+      </div>
+      <p style="font-size:0.9rem;">California residents' rights: know what data is collected, delete it, opt out of sale. Similar in spirit to GDPR but narrower scope and US-specific. Amended by CPRA (2023).</p>
+    </div>
+    <div class="card card-glass">
+      <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:8px;">
+        <span style="font-size:1.1rem;font-weight:700;color:var(--gold);">COPPA</span>
+        <span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">Children's Online Privacy Protection Act · US · 1998</span>
+      </div>
+      <p style="font-size:0.9rem;">Protects children under 13. Requires parental consent before collecting personal data from minors. Overlaps with GDPR and HIPAA when the patient is a child.</p>
+    </div>
+    <div class="card card-glass">
+      <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:8px;">
+        <span style="font-size:1.1rem;font-weight:700;color:var(--gold);">SOX</span>
+        <span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">Sarbanes-Oxley Act · US · 2002</span>
+      </div>
+      <p style="font-size:0.9rem;">Corporate financial integrity law. Public companies must keep accurate financial records and can't destroy them (Section 802). Relevant when health data overlaps with billing and financial audit trails.</p>
+    </div>
+    <div class="card card-glass">
+      <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:8px;">
+        <span style="font-size:1.1rem;font-weight:700;color:var(--gold);">GLBA</span>
+        <span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">Gramm-Leach-Bliley Act · US · 1999</span>
+      </div>
+      <p style="font-size:0.9rem;">Financial institutions must protect customers' <em>non-public personal information (NPI)</em>. Analogous to HIPAA but for banks and insurers. Overlap with HIPAA when a health insurer is also a financial institution.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── SLIDE 5: COMPLIANCEGPT SYSTEM ── -->
+<div class="slide slide-navy">
+  <span class="slide-num-indicator">5</span>
+  <div class="slide-label">The System You Will Work With</div>
+  <h2>ComplianceGPT — How It Works</h2>
+  <p style="color:rgba(255,255,255,0.7);">A neuro-symbolic pipeline: neural language model extracts structure, a formal logic engine checks compliance.</p>
+
+  <div class="pipeline" style="margin-top:32px;">
+    <div class="pipe-box" style="background:rgba(153,0,0,0.5);border:2px solid var(--crimson);">
+      <div class="pb-label">Input</div>
+      <div class="pb-name">Scenario</div>
+      <div class="pb-sub">Real court case text</div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-box" style="background:rgba(240,165,0,0.2);border:2px solid var(--gold);">
+      <div class="pb-label" style="color:var(--gold);">Your Research ★</div>
+      <div class="pb-name">LLM₁ Extraction</div>
+      <div class="pb-sub">Gemma / Llama / Qwen<br>Extracts structured JSON</div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-box" style="background:rgba(255,255,255,0.06);border:2px solid rgba(255,255,255,0.2);">
+      <div class="pb-label" style="color:rgba(255,255,255,0.4);">Black Box</div>
+      <div class="pb-name" style="color:rgba(255,255,255,0.6);">Datalog Engine</div>
+      <div class="pb-sub">Formal logic rules<br>You call via API</div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-box" style="background:rgba(0,51,102,0.8);border:2px solid #6699cc;">
+      <div class="pb-label">Output</div>
+      <div class="pb-name">Verdict + Proof</div>
+      <div class="pb-sub">PERMITTED / DENIED<br>+ statutory citation</div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-top:24px;">
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">What you control</h3>
+      <ul>
+        <li>Which LLM does the extraction</li>
+        <li>The prompt that guides extraction</li>
+        <li>How you analyze and fix errors</li>
+        <li>Whether a different prompting strategy works better</li>
+      </ul>
+    </div>
+    <div class="card card-glass" style="border-color:rgba(255,255,255,0.15);">
+      <h3 style="color:rgba(255,255,255,0.5);">The black box (not your concern)</h3>
+      <ul style="color:rgba(255,255,255,0.55);">
+        <li>Internal Datalog rules for HIPAA §164.502–.530</li>
+        <li>How the proof tree is generated</li>
+        <li>The Soufflé compiler internals</li>
+        <li>The formalization of each regulatory section</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ── SLIDE 6: ORACLE PREDICATES ── -->
+<div class="slide slide-light">
+  <span class="slide-num-indicator">6</span>
+  <div class="slide-label">Key Technical Concept</div>
+  <h2>What the LLM Actually Extracts</h2>
+  <p class="subtitle-dark">The LLM must extract a structured JSON "scenario" from the narrative. The most critical fields are called <strong>oracle predicates</strong>.</p>
+
+  <div class="grid-2" style="margin-top:24px;">
+    <div>
+      <div class="card card-white" style="margin-bottom:14px;">
+        <h3>The Narrative (Input)</h3>
+        <p style="font-style:italic;font-size:0.9rem;color:#444;">"A hospital responded to a police officer's request for a patient's billing records. The officer presented a subpoena signed by a judge requiring disclosure."</p>
+      </div>
+      <div class="card card-gold">
+        <h3>What the LLM must extract</h3>
+        <pre style="background:#f5f5f5;border-radius:4px;padding:12px;font-size:0.8rem;color:#212529;margin:8px 0 0;overflow-x:auto;">{
+  "sender": "hospital",
+  "receiver": "police_officer",
+  "phi_type": "billing_records",
+  "purpose": "law_enforcement",
+  "has_court_order": <span style="color:#1f7a3c;font-weight:700;">true</span>   ← oracle predicate
+}</pre>
+      </div>
+    </div>
+    <div>
+      <div class="card card-white" style="margin-bottom:14px;">
+        <h3>Why oracle predicates matter</h3>
+        <p>Oracle predicates are boolean flags for HIPAA enabling conditions. The formal engine cannot grant PERMITTED without them.</p>
+        <ul style="margin-top:10px;font-size:0.9rem;">
+          <li><code style="font-size:0.82rem;">has_court_order</code> — is there a real court order?</li>
+          <li><code style="font-size:0.82rem;">obtained_authorization</code> — did the patient consent?</li>
+          <li><code style="font-size:0.82rem;">is_required_by_law</code> — is disclosure legally mandated?</li>
+        </ul>
+      </div>
+      <div class="card card-crimson">
+        <h3>The adversarial risk</h3>
+        <p>If an LLM <em>halluccinates</em> <code>has_court_order: true</code> when no court order exists, the system issues a false PERMITTED verdict — a potential HIPAA violation.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SLIDE 7: BENCHMARK RESULTS ── -->
+<div class="slide slide-dark">
+  <span class="slide-num-indicator">7</span>
+  <div class="slide-label">Current Results</div>
+  <h2>Where We Are</h2>
+  <div class="grid-3" style="margin-top:28px;">
+    <div style="text-align:center;">
+      <div class="big-stat">94.2%</div>
+      <div class="stat-label">Accuracy on 137 real HIPAA cases<br>(Gemma3:4B + Claude Sonnet)</div>
+    </div>
+    <div style="text-align:center;">
+      <div class="big-stat">100%</div>
+      <div class="stat-label">Oracle ceiling — the formalization is provably correct when given gold facts</div>
+    </div>
+    <div style="text-align:center;">
+      <div class="big-stat">5</div>
+      <div class="stat-label">Models evaluated: Gemma, Claude, Qwen, GPT-OSS, Llama</div>
+    </div>
+  </div>
+  <div class="card card-glass" style="margin-top:32px;">
+    <h3 style="color:var(--gold);">The surprising finding</h3>
+    <p>A <strong>4B parameter local model (Gemma3)</strong> ties a <strong>~200B frontier model (Claude Sonnet)</strong> at 94.2% accuracy. Model size doesn't win — <em>extraction quality</em> does. This is what your research will explore.</p>
+  </div>
+  <div class="card card-glass" style="margin-top:16px;">
+    <h3 style="color:var(--gold);">The gap</h3>
+    <p>5.8 percentage points separate our best model from the oracle ceiling. All remaining errors are extraction failures — the LLM reading the scenario wrong — not formalization errors. This is fixable.</p>
+  </div>
+</div>
+
+<!-- ── SLIDE 8: YOUR PROJECTS ── -->
+<div class="slide slide-white">
+  <span class="slide-num-indicator">8</span>
+  <div class="slide-label">Research Projects</div>
+  <h2>Six Directions — One For You</h2>
+  <p class="subtitle-dark">You will propose your project in Week 3. Until then, explore all of them.</p>
+  <div class="grid-2" style="margin-top:20px;">
+    <div class="card card-white" style="border:1px solid var(--border);">
+      <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:6px;">
+        <span style="background:var(--crimson);color:#fff;font-size:0.72rem;font-weight:700;padding:1px 7px;border-radius:3px;">P1</span>
+        <strong>Benchmark Comparison</strong>
+      </div>
+      <p>Gemma vs. Llama vs. Qwen — which model makes which errors? Build a systematic error taxonomy.</p>
+    </div>
+    <div class="card card-white" style="border:1px solid var(--border);">
+      <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:6px;">
+        <span style="background:var(--crimson);color:#fff;font-size:0.72rem;font-weight:700;padding:1px 7px;border-radius:3px;">P2</span>
+        <strong>Adversarial Robustness</strong>
+      </div>
+      <p>Can you craft scenarios that fool the system into a false PERMITTED verdict? What makes an attack succeed?</p>
+    </div>
+    <div class="card card-white" style="border:1px solid var(--border);">
+      <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:6px;">
+        <span style="background:var(--navy);color:#fff;font-size:0.72rem;font-weight:700;padding:1px 7px;border-radius:3px;">P3</span>
+        <strong>Prompt Engineering</strong>
+      </div>
+      <p>Zero-shot vs. few-shot vs. chain-of-thought vs. schema-constrained. Which prompting strategy wins on compliance extraction?</p>
+    </div>
+    <div class="card card-white" style="border:1px solid var(--border);">
+      <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:6px;">
+        <span style="background:var(--navy);color:#fff;font-size:0.72rem;font-weight:700;padding:1px 7px;border-radius:3px;">P4</span>
+        <strong>Explanation Quality</strong>
+      </div>
+      <p>Are the natural-language explanations ComplianceGPT generates actually correct and useful? Rate 50 explanations on a rubric.</p>
+    </div>
+    <div class="card card-white" style="border:1px solid var(--border);">
+      <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:6px;">
+        <span style="background:var(--gold);color:#000;font-size:0.72rem;font-weight:700;padding:1px 7px;border-radius:3px;">P5</span>
+        <strong>Cross-Regulation Transfer</strong>
+      </div>
+      <p>Does a prompt that works for HIPAA also work for GDPR? What happens when the same question triggers both laws?</p>
+    </div>
+    <div class="card card-white" style="border:1px solid var(--border);">
+      <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:6px;">
+        <span style="background:var(--gold);color:#000;font-size:0.72rem;font-weight:700;padding:1px 7px;border-radius:3px;">P6</span>
+        <strong>Error Taxonomy</strong>
+      </div>
+      <p>Build the first formal taxonomy of LLM extraction errors in legal compliance. Which error types can targeted prompts fix?</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── SLIDE 9: WEEK 1 AGENDA ── -->
+<div class="slide slide-navy">
+  <span class="slide-num-indicator">9</span>
+  <div class="slide-label">This Week</div>
+  <h2>Week 1 Agenda — June 22–27</h2>
+  <div class="grid-3" style="margin-top:28px;">
+    <div class="card card-glass" style="border:1px solid rgba(255,255,255,0.1);">
+      <div style="font-size:0.72rem;font-weight:700;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">Monday June 22 — Today (Kickoff)</div>
+      <h3>Welcome &amp; Orientation</h3>
+      <ul style="font-size:0.88rem;">
+        <li>Introductions round</li>
+        <li>Live pipeline demo: run 3 real court cases</li>
+        <li>Lab logistics: Slack, GitHub, folder structure</li>
+        <li>The black box rule</li>
+      </ul>
+      <div style="margin-top:12px;font-size:0.8rem;color:rgba(255,255,255,0.5);">Task: setup checklist + run 5 scenarios</div>
+    </div>
+    <div class="card card-glass" style="border:2px solid var(--gold);">
+      <div style="font-size:0.72rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">Wednesday June 25 ★ Main Session (NCS 242)</div>
+      <h3>Python + AI Foundations</h3>
+      <ul style="font-size:0.88rem;">
+        <li>Live coding: load CSV, filter, compute accuracy</li>
+        <li>Pandas basics — everything you'll need this summer</li>
+        <li>Git: commit, push, read a diff</li>
+        <li>AI stack: ML → Deep Learning → LLMs → hallucination demo</li>
+        <li>Discussion: 3 wrong predictions — why did they fail?</li>
+      </ul>
+      <div style="margin-top:12px;font-size:0.8rem;color:rgba(255,255,255,0.5);">Task: Python exercises 1–4</div>
+    </div>
+    <div class="card card-glass" style="border:1px solid rgba(255,255,255,0.1);">
+      <div style="font-size:0.72rem;font-weight:700;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">Thursday–Friday June 26–27 — Remote</div>
+      <h3>Independent Work</h3>
+      <ul style="font-size:0.88rem;">
+        <li>Finish Python exercises + pipeline run</li>
+        <li>Read HIPAA Privacy Rule summary (hhs.gov)</li>
+        <li>Watch 3Blue1Brown Neural Networks videos 1–2</li>
+        <li>Write 1-page reflection (due Friday 5pm)</li>
+      </ul>
+      <div style="margin-top:12px;font-size:0.8rem;color:rgba(255,255,255,0.5);">Deliverable due Friday: pipeline run + reflection<br>Post Slack update by noon Thu &amp; Fri</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SLIDE 10: EXPECTATIONS ── -->
+<div class="slide slide-light">
+  <span class="slide-num-indicator">10</span>
+  <div class="slide-label">How This Lab Works</div>
+  <h2>The Rules</h2>
+  <div class="grid-2" style="margin-top:20px;">
+    <div>
+      <h3 style="color:var(--crimson);margin-bottom:14px;">What I expect from you</h3>
+      <ul style="font-size:0.95rem;">
+        <li style="margin-bottom:12px;"><strong>Show up prepared.</strong> Read the day's material before the session. Standups are not the time to catch up.</li>
+        <li style="margin-bottom:12px;"><strong>Communicate early.</strong> If you're stuck Monday, tell me Monday — not Friday. One message saves five days.</li>
+        <li style="margin-bottom:12px;"><strong>Finish things.</strong> A 3-week project done well beats a 6-week project abandoned at 80%. Scope down, ship it.</li>
+        <li style="margin-bottom:12px;"><strong>Be curious.</strong> Ask "why" before you ask "how to fix it." Understanding the failure mode is the research.</li>
+        <li><strong>Good lab citizenship.</strong> Give your peers honest feedback. Take notes. Share what you learned.</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="color:var(--navy);margin-bottom:14px;">What you can expect from me</h3>
+      <ul style="font-size:0.95rem;">
+        <li style="margin-bottom:12px;">Slack responses within a few hours on weekdays.</li>
+        <li style="margin-bottom:12px;">Written feedback on every deliverable within 48 hours.</li>
+        <li style="margin-bottom:12px;">Help scoping your project so you actually finish with something.</li>
+        <li style="margin-bottom:12px;">A strong letter of recommendation if you put in the work.</li>
+        <li style="margin-bottom:12px;">Co-authorship on any paper that comes from this work.</li>
+        <li>Introductions to other researchers and faculty.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ── SLIDE 11: RESOURCES — VIDEOS ── -->
+<div class="slide slide-dark">
+  <span class="slide-num-indicator">11</span>
+  <div class="slide-label">Resources · Videos</div>
+  <h2>Watch These First</h2>
+  <ul class="resource-list" style="margin-top:20px;">
+    <li>
+      <span class="r-tag">REQUIRED W1</span>
+      <div>
+        <div><strong>3Blue1Brown — Neural Networks Series</strong> (4 videos, ~20 min each)</div>
+        <a href="https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi" target="_blank">youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi</a>
+      </div>
+    </li>
+    <li>
+      <span class="r-tag">RECOMMENDED W1</span>
+      <div>
+        <div><strong>Andrew Ng — AI For Everyone</strong> (Coursera, ~6 hrs, free to audit)</div>
+        <a href="https://www.coursera.org/learn/ai-for-everyone" target="_blank">coursera.org/learn/ai-for-everyone</a>
+      </div>
+    </li>
+    <li>
+      <span class="r-tag">RECOMMENDED W2</span>
+      <div>
+        <div><strong>Corey Schafer — Pandas Tutorial Series</strong> (10 videos)</div>
+        <a href="https://www.youtube.com/playlist?list=PL-osiE80TeTsWmV9i9c58mdDCSskIFdDS" target="_blank">youtube.com/playlist?list=PL-osiE80TeTsWmV9i9c58mdDCSskIFdDS</a>
+      </div>
+    </li>
+    <li>
+      <span class="r-tag r-tag-green">OPTIONAL</span>
+      <div>
+        <div><strong>Andrej Karpathy — "Let's Build GPT from Scratch"</strong> (~2 hours)</div>
+        <a href="https://www.youtube.com/watch?v=kCc8FmEb1nY" target="_blank">youtube.com/watch?v=kCc8FmEb1nY</a>
+      </div>
+    </li>
+    <li>
+      <span class="r-tag">RECOMMENDED W1</span>
+      <div>
+        <div><strong>CS50P — Harvard Python Course</strong> (edX, free audit, Weeks 0–4)</div>
+        <a href="https://cs50.harvard.edu/python/2022/" target="_blank">cs50.harvard.edu/python/2022/</a>
+      </div>
+    </li>
+  </ul>
+</div>
+
+<!-- ── SLIDE 12: RESOURCES — PAPERS ── -->
+<div class="slide slide-dark">
+  <span class="slide-num-indicator">12</span>
+  <div class="slide-label">Resources · Papers</div>
+  <h2>Required and Recommended Papers</h2>
+  <ul class="resource-list" style="margin-top:20px;">
+    <li>
+      <span class="r-tag">REQUIRED W2</span>
+      <div>
+        <div><strong>Vaswani et al. — "Attention Is All You Need"</strong> (2017) — the transformer paper</div>
+        <a href="https://arxiv.org/abs/1706.03762" target="_blank">arxiv.org/abs/1706.03762</a>
+      </div>
+    </li>
+    <li>
+      <span class="r-tag">REQUIRED W3</span>
+      <div>
+        <div><strong>Brown et al. — "Language Models are Few-Shot Learners"</strong> (GPT-3, 2020)</div>
+        <a href="https://arxiv.org/abs/2005.14165" target="_blank">arxiv.org/abs/2005.14165</a>
+      </div>
+    </li>
+    <li>
+      <span class="r-tag">REQUIRED W3</span>
+      <div>
+        <div><strong>Wei et al. — "Chain-of-Thought Prompting Elicits Reasoning"</strong> (2022)</div>
+        <a href="https://arxiv.org/abs/2201.11903" target="_blank">arxiv.org/abs/2201.11903</a>
+      </div>
+    </li>
+    <li>
+      <span class="r-tag">REQUIRED W4</span>
+      <div>
+        <div><strong>Lewis et al. — "Retrieval-Augmented Generation"</strong> (RAG, 2020)</div>
+        <a href="https://arxiv.org/abs/2005.11401" target="_blank">arxiv.org/abs/2005.11401</a>
+      </div>
+    </li>
+    <li>
+      <span class="r-tag">REQUIRED W5</span>
+      <div>
+        <div><strong>Keshav — "How to Read a Paper"</strong> (3 pages, apply to every paper on this list)</div>
+        <a href="https://web.stanford.edu/class/ee384m/Handouts/HowtoReadPaper.pdf" target="_blank">web.stanford.edu/class/ee384m/Handouts/HowtoReadPaper.pdf</a>
+      </div>
+    </li>
+    <li>
+      <span class="r-tag r-tag-red">OUR PAPER</span>
+      <div>
+        <div><strong>GoldCoin — the benchmark you'll work with</strong> (the dataset ComplianceGPT is evaluated on)</div>
+        <a href="https://arxiv.org/abs/2405.15175" target="_blank">arxiv.org/abs/2405.15175</a>
+      </div>
+    </li>
+  </ul>
+</div>
+
+<!-- ── SLIDE 13: RESOURCES — REGULATIONS ── -->
+<div class="slide slide-dark">
+  <span class="slide-num-indicator">13</span>
+  <div class="slide-label">Resources · Regulations</div>
+  <h2>Official Sources and Regulation Texts</h2>
+  <ul class="resource-list" style="margin-top:20px;">
+    <li>
+      <span class="r-tag">REQUIRED W1–2</span>
+      <div>
+        <div><strong>HHS — HIPAA Privacy Rule Summary</strong> (2 pages, read before Week 2)</div>
+        <a href="https://www.hhs.gov/hipaa/for-professionals/privacy/laws-regulations/index.html" target="_blank">hhs.gov/hipaa/for-professionals/privacy/laws-regulations/index.html</a>
+      </div>
+    </li>
+    <li>
+      <span class="r-tag">RECOMMENDED W2</span>
+      <div>
+        <div><strong>HHS — Permitted Uses and Disclosures</strong> (all ~15 exception categories)</div>
+        <a href="https://www.hhs.gov/hipaa/for-professionals/privacy/guidance/permitteduses/index.html" target="_blank">hhs.gov/hipaa/for-professionals/privacy/guidance/permitteduses/index.html</a>
+      </div>
+    </li>
+    <li>
+      <span class="r-tag r-tag-green">OPTIONAL GDPR</span>
+      <div>
+        <div><strong>GDPR Articles 6 &amp; 9</strong> — lawful bases + special categories (health data)</div>
+        <a href="https://gdpr-info.eu/art-6-gdpr/" target="_blank">gdpr-info.eu/art-6-gdpr/</a>
+      </div>
+    </li>
+    <li>
+      <span class="r-tag r-tag-green">OPTIONAL CCPA</span>
+      <div>
+        <div><strong>CCPA Full Text — California Attorney General</strong></div>
+        <a href="https://oag.ca.gov/privacy/ccpa" target="_blank">oag.ca.gov/privacy/ccpa</a>
+      </div>
+    </li>
+    <li>
+      <span class="r-tag">RECOMMENDED W5</span>
+      <div>
+        <div><strong>Heilmeier Catechism — DARPA</strong> (8 questions every research proposal must answer)</div>
+        <a href="https://www.darpa.mil/work-with-us/heilmeier-catechism" target="_blank">darpa.mil/work-with-us/heilmeier-catechism</a>
+      </div>
+    </li>
+    <li>
+      <span class="r-tag r-tag-green">OPTIONAL</span>
+      <div>
+        <div><strong>Surden — "Artificial Intelligence and Law: An Overview"</strong> (2019)</div>
+        <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3299512" target="_blank">papers.ssrn.com/sol3/papers.cfm?abstract_id=3299512</a>
+      </div>
+    </li>
+  </ul>
+</div>
+
+<!-- ── SLIDE 14: TODAY'S TASK ── -->
+<div class="slide slide-crimson">
+  <span class="slide-num-indicator">14</span>
+  <div class="slide-label">Today — Monday June 22</div>
+  <h1>Let's Get Started</h1>
+  <div class="grid-2" style="margin-top:32px;">
+    <div class="card card-glass">
+      <h3>Right Now — Introduction Round</h3>
+      <p>Name, school, major, and: <strong>one regulation you've heard of before today.</strong></p>
+      <p style="margin-top:10px;font-size:0.9rem;opacity:0.8;">It's okay to say "HIPAA because of a doctor's office" or "GDPR because of cookie popups." That's exactly the right starting point.</p>
+    </div>
+    <div class="card card-glass">
+      <h3>Before You Leave Today</h3>
+      <ul>
+        <li>Complete the <a href="setup.html" style="color:var(--gold);">setup checklist</a> — Python, VS Code, Git</li>
+        <li>Run the pipeline on 5 real court case rows</li>
+        <li>Write down 1 thing that surprised you</li>
+        <li>Post your Slack intro in #introductions</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card card-glass" style="margin-top:20px;">
+    <h3>The Research Question That Will Guide Your Summer</h3>
+    <p style="font-size:1.15rem;font-style:italic;margin-top:6px;">"Can you figure out which regulation (or regulations) applies to a given question — and then determine what the answer actually is?"</p>
+    <p style="font-size:0.9rem;margin-top:10px;opacity:0.75;">Everything you learn this summer — prompting, RAG, error analysis, benchmarking — feeds into answering this.</p>
+  </div>
+  <div style="margin-top:28px;font-family:'Segoe UI',system-ui,sans-serif;font-size:0.88rem;opacity:0.55;text-align:center;">
+    Website: <strong>priscilladanso.github.io/reu2026</strong> &nbsp;·&nbsp; All slides, readings, and assignments are there.
+  </div>
+</div>
+
+</div><!-- /deck -->
+
+<script>
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+const counter = document.getElementById('slide-counter');
+const bar = document.getElementById('progress-bar');
+const controls = document.querySelector('.slide-controls');
+
+function showSlide(n) {
+  slides[current].classList.remove('active');
+  current = (n + slides.length) % slides.length;
+  slides[current].classList.add('active');
+  counter.textContent = (current + 1) + ' / ' + slides.length;
+  bar.style.width = ((current + 1) / slides.length * 100) + '%';
+  const light = slides[current].classList.contains('slide-white') ||
+                slides[current].classList.contains('slide-light');
+  controls.classList.toggle('on-light', light);
+  counter.classList.toggle('on-light', light);
+}
+
+function nextSlide() { showSlide(current + 1); }
+function prevSlide() { showSlide(current - 1); }
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') nextSlide();
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp') prevSlide();
+});
+</script>
+</body>
+</html>

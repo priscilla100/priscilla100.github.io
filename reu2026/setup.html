@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Software &amp; Setup — ComplianceGPT Lab REU 2026</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside id="sidebar">
+  <div class="logo"><div class="lab-name">ComplianceGPT Lab</div><div class="lab-sub">AI Innovation &amp; Diffusion REU 2026<br>Stony Brook University</div></div>
+  <nav>
+    <div class="nav-section">Program</div>
+    <a href="index.html">Welcome</a><a href="schedule.html">Weekly Schedule</a><a href="slides-week1.html">Week 1 Slides</a><a href="slides-week2.html">Week 2 Slides</a>
+    <div class="nav-section">Foundations</div>
+    <a href="setup.html" class="active">Software &amp; Setup</a><a href="setup.html#python" class="active">Python Resources</a><a href="foundations.html">AI Fundamentals</a><a href="foundations.html#nlp">NLP Fundamentals</a><a href="foundations.html#regulations">Regulations</a>
+    <div class="nav-section">Curriculum</div>
+    <a href="week1.html">Week 1 — Intro to AI</a><a href="week2.html">Week 2 — Language &amp; Law</a><a href="week3.html">Week 3 — Prompt Eng.</a><a href="week4.html">Week 4 — RAG</a><a href="week5.html">Week 5 — ComplianceGPT</a><a href="week6.html">Week 6 — Communication</a>
+    <div class="nav-section">Research</div>
+    <a href="projects.html">Student Projects</a><a href="readings.html">Reading List</a><a href="assignments.html">Assignments</a>
+  </nav>
+</aside>
+<main id="main">
+<div class="page-header">
+  <div class="breadcrumb">ComplianceGPT Lab · Summer 2026</div>
+  <h1>Software &amp; Setup</h1>
+  <p class="subtitle">Everything you need to install before Day 1, and Python resources for the program</p>
+</div>
+<div class="content">
+
+  <div class="card card-gold">
+    <h3>Complete this before June 22</h3>
+    <p>Work through the Setup checklist below before your first day. If you get stuck, post in Slack — do not wait until Day 1 to discover a broken install.</p>
+  </div>
+
+  <h2>Required Software</h2>
+  <table>
+    <thead><tr><th>Tool</th><th>Purpose</th><th>Install</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Python 3.11+</strong></td><td>Primary language for all experiments</td><td><code>python.org/downloads</code></td></tr>
+      <tr><td><strong>VS Code</strong></td><td>Code editor with Python extension</td><td><code>code.visualstudio.com</code></td></tr>
+      <tr><td><strong>Git</strong></td><td>Version control</td><td><code>git-scm.com</code></td></tr>
+      <tr><td><strong>Ollama</strong></td><td>Run LLMs locally (Gemma3, Llama, etc.)</td><td><code>ollama.com</code></td></tr>
+      <tr><td><strong>Jupyter</strong></td><td>Interactive Python notebooks</td><td><code>pip install jupyter</code></td></tr>
+      <tr><td><strong>pandas</strong></td><td>Data analysis and CSV handling</td><td><code>pip install pandas</code></td></tr>
+      <tr><td><strong>scikit-learn</strong></td><td>Evaluation metrics (F1, precision, recall)</td><td><code>pip install scikit-learn</code></td></tr>
+    </tbody>
+  </table>
+
+  <h2>Setup Checklist</h2>
+  <div class="card card-navy">
+    <h3>Step 1 — Clone the repository</h3>
+    <pre>git clone https://github.com/[repo-url]/COMPLIANCEGPT.git
+cd COMPLIANCEGPT
+pip install -r requirements.txt</pre>
+  </div>
+  <div class="card card-navy">
+    <h3>Step 2 — Install and test Ollama</h3>
+    <pre># After installing Ollama from ollama.com:
+ollama pull gemma3:4b
+ollama serve   # leave this running in a terminal</pre>
+  </div>
+  <div class="card card-navy">
+    <h3>Step 3 — Run your first experiment</h3>
+    <pre>python3 app/batch_runner.py \
+  --input data/goldcoin_hhs_merged.csv \
+  --question-col query \
+  --strategy formal \
+  --model ollama/gemma3:4b \
+  --output /tmp/my_first_run.csv \
+  --limit 3</pre>
+    <p style="margin-top:8px;font-size:0.88rem;color:rgba(205,214,244,0.7);">If you see 3 rows with PERMITTED/DENIED verdicts — you're set up correctly.</p>
+  </div>
+  <div class="card card-navy">
+    <h3>Step 4 — Inspect the results</h3>
+    <pre>import pandas as pd
+df = pd.read_csv("/tmp/my_first_run.csv")
+print(df[["question", "verdict", "ground_truth"]])</pre>
+  </div>
+
+  <h2>System Requirements</h2>
+  <ul>
+    <li>Any laptop with 8 GB RAM is sufficient for Gemma3:4b locally.</li>
+    <li>Large models (Llama 70B, Qwen 72B) run on the AI3 cluster or vast.ai GPU servers — not your laptop.</li>
+    <li>Mac, Windows, and Linux are all supported. The codebase is cross-platform.</li>
+  </ul>
+
+  <h2 id="python" class="section-anchor">Python Resources</h2>
+  <p>You don't need to be a Python expert. You need to be functional: load a CSV, loop over rows, call a function, save results. Here are the best free resources to get there fast.</p>
+
+  <h3>If you're new to Python</h3>
+  <div class="card card-crimson" style="margin-bottom:12px;">
+    <h3>Python Crash Course — Eric Matthes</h3>
+    <p>Chapters 1–6 cover everything you need. Available at most libraries or as a PDF online. Focus: variables, lists, dicts, functions, files. Skip the game development chapters for now.</p>
+  </div>
+  <div class="card" style="margin-bottom:12px;">
+    <h3>CS50P — Harvard (free on edX)</h3>
+    <p>Python course from Harvard. Excellent production quality. Each problem set takes 2–3 hours. Do Weeks 0–4 if you have time before June 22.</p>
+  </div>
+
+  <h3>If you know Python basics but want to level up</h3>
+  <div class="card" style="margin-bottom:12px;">
+    <h3>Automate the Boring Stuff with Python — Al Sweigart</h3>
+    <p>Free at <code>automatetheboringstuff.com</code>. Chapters on CSV, file I/O, and APIs are directly useful for this project.</p>
+  </div>
+  <div class="card">
+    <h3>Corey Schafer — YouTube</h3>
+    <p>Best Python tutorial series on YouTube. Clear, fast, practical. Particularly: the pandas tutorial series (10 videos) is exactly what you need for data analysis.</p>
+  </div>
+
+  <h3>The 5 things you actually need for this project</h3>
+  <pre>
+# 1. Load a CSV
+import pandas as pd
+df = pd.read_csv("results.csv")
+
+# 2. Filter rows
+wrong = df[df["verdict"] != df["ground_truth"]]
+
+# 3. Write a function
+def check_accuracy(df):
+    correct = (df["verdict"] == df["ground_truth"]).sum()
+    return correct / len(df)
+
+# 4. Loop + print
+for i, row in wrong.iterrows():
+    print(f"Row {i}: {row['verdict']} (expected {row['ground_truth']})")
+
+# 5. Save results
+df.to_csv("analysis_output.csv", index=False)
+  </pre>
+
+  <footer>ComplianceGPT Lab · AI Innovation &amp; Diffusion REU 2026 · Stony Brook University</footer>
+</div>
+</main>
+</body>
+</html>

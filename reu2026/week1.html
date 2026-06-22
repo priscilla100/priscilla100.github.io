@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 1 — ComplianceGPT Lab REU 2026</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside id="sidebar">
+  <div class="logo"><div class="lab-name">ComplianceGPT Lab</div><div class="lab-sub">AI Innovation &amp; Diffusion REU 2026<br>Stony Brook University</div></div>
+  <nav>
+    <div class="nav-section">Program</div>
+    <a href="index.html">Welcome</a><a href="schedule.html">Weekly Schedule</a><a href="slides-week1.html">Week 1 Slides</a><a href="slides-week2.html">Week 2 Slides</a>
+    <div class="nav-section">Foundations</div>
+    <a href="setup.html">Setup &amp; Tools</a><a href="foundations.html">AI Fundamentals</a><a href="foundations.html#regulations">Regulations</a>
+    <div class="nav-section">Curriculum</div>
+    <a href="week1.html" class="active">Week 1 — Intro to AI</a><a href="week2.html">Week 2 — Language &amp; Law</a><a href="week3.html">Week 3 — Prompt Eng.</a><a href="week4.html">Week 4 — RAG</a><a href="week5.html">Week 5 — ComplianceGPT</a><a href="week6.html">Week 6 — Communication</a>
+    <div class="nav-section">Research</div>
+    <a href="projects.html">Student Projects</a><a href="readings.html">Reading List</a><a href="assignments.html">Assignments</a>
+  </nav>
+</aside>
+<main id="main">
+<div class="page-header">
+  <div class="breadcrumb">Curriculum</div>
+  <h1>Week 1 — Introduction to AI Research</h1>
+  <p class="subtitle">June 22–26 · Orientation · Python · AI overview · First pipeline run</p>
+</div>
+<div class="content">
+
+  <div class="week-header">
+    <div class="week-num">W1</div>
+    <div class="week-info">
+      <h2>Introduction to AI Research</h2>
+      <p>Jun 22–26 &nbsp;·&nbsp; Orientation + Python + AI Fundamentals &nbsp;·&nbsp; Deliverable: first pipeline run + 1-page reflection</p>
+    </div>
+  </div>
+
+  <h2>Learning Goals</h2>
+  <ul>
+    <li>Understand what research is and what a typical research day looks like</li>
+    <li>Run ComplianceGPT end-to-end and see a real verdict</li>
+    <li>Understand the 5 Python constructs you'll use all summer</li>
+    <li>Know what AI, ML, deep learning, and LLMs are — and how they differ</li>
+    <li>Have a working development environment</li>
+  </ul>
+
+  <h2>Monday, June 22 — Kickoff (Orientation Day)</h2>
+  <div class="day-block">
+    <div class="day-title">📋 Topics</div>
+    <div class="day-body">
+      <div class="grid-2">
+        <div>
+          <h4>What is Research?</h4>
+          <ul>
+            <li>Research vs. coursework: the difference</li>
+            <li>What is a research question? What is a contribution?</li>
+            <li>What is a publication? What is a conference?</li>
+            <li>What is a PhD and why would someone want one?</li>
+          </ul>
+        </div>
+        <div>
+          <h4>What is ComplianceGPT?</h4>
+          <ul>
+            <li>The problem: healthcare compliance is expensive and error-prone</li>
+            <li>The solution: AI that reads scenarios and gives verdicts</li>
+            <li>Live demo: run the pipeline, see a PERMITTED / DENIED result</li>
+            <li>The pipeline diagram: NL → LLM → Engine → Verdict</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="day-block">
+    <div class="day-title">🎯 Day 1 Task</div>
+    <div class="day-body">
+      <p>Complete the <a href="setup.html">setup checklist</a>. Run the pipeline on 3 rows. Write down what surprised you. Post 1 question in Slack #questions before Wednesday.</p>
+    </div>
+  </div>
+
+  <h2>Wednesday, June 25 — Main Session: Python + AI Foundations (On campus, NCS 242)</h2>
+  <div class="day-block">
+    <div class="day-title">🐍 Topics</div>
+    <div class="day-body">
+      <p>Live coding session. Follow along — open a Jupyter notebook and type as I type.</p>
+      <div class="grid-3">
+        <div><h4>Variables &amp; Types</h4><pre style="font-size:0.78rem;">name = "hospital"
+count = 137
+is_permitted = True</pre></div>
+        <div><h4>Lists &amp; Dicts</h4><pre style="font-size:0.78rem;">models = ["gemma3", "llama3"]
+result = {
+  "verdict": "PERMITTED"
+}</pre></div>
+        <div><h4>Functions</h4><pre style="font-size:0.78rem;">def accuracy(df):
+    correct = (df["v"] ==
+               df["gt"]).sum()
+    return correct / len(df)</pre></div>
+      </div>
+      <p style="margin-top:16px;"><strong>Tools:</strong> VS Code, Jupyter notebooks, GitHub. We'll commit our first notebook together.</p>
+    </div>
+  </div>
+  <div class="day-block">
+    <div class="day-title">🎯 Day 2 Task</div>
+    <div class="day-body">
+      <p>Complete exercises 1–4 in <code>notebooks/week1_python.ipynb</code>. These cover: loading a CSV, filtering rows, writing a function, computing accuracy. Continue independently Thu/Fri — due Friday end of day.</p>
+    </div>
+  </div>
+
+  <h2>Thursday–Friday, June 26–27 — Remote Work</h2>
+  <div class="day-block">
+    <div class="day-title">🤖 Topics</div>
+    <div class="day-body">
+      <div class="grid-2">
+        <div>
+          <h4>The AI Stack</h4>
+          <ul>
+            <li><strong>AI</strong> — the broad field</li>
+            <li><strong>Machine Learning</strong> — learning from data</li>
+            <li><strong>Deep Learning</strong> — neural networks</li>
+            <li><strong>Generative AI</strong> — creating text/images/code</li>
+            <li><strong>LLMs</strong> — what we use in ComplianceGPT</li>
+          </ul>
+        </div>
+        <div>
+          <h4>What LLMs Can and Cannot Do</h4>
+          <ul>
+            <li>Can: read long text, extract structure, reason step-by-step</li>
+            <li>Cannot: guarantee factual accuracy (hallucination)</li>
+            <li>Cannot: reason perfectly about legal edge cases</li>
+            <li>Cannot: reliably follow complex instructions (sometimes)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card card-gold" style="margin-top:16px;">
+        <h3>Discussion: Where does AI fail?</h3>
+        <p>We'll look at 3 real wrong predictions from ComplianceGPT and ask: was this an AI extraction error, a reasoning error, or is the scenario genuinely ambiguous? This question will guide all of your projects.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2>Week 1 Deliverable</h2>
+  <div class="card card-crimson">
+    <h3>Due: Friday, June 27 (end of day)</h3>
+    <p><strong>1. First pipeline run</strong> — Submit the CSV output from running <code>batch_runner.py</code> on 5 rows. The file name should be <code>results/[yourname]_week1.csv</code>.</p>
+    <p style="margin-top:10px;"><strong>2. One-page reflection</strong> — Answer these 3 questions (roughly 1 paragraph each):</p>
+    <ul style="margin-top:8px;">
+      <li>What surprised you most about ComplianceGPT today?</li>
+      <li>Looking at your 5 results: did any surprise you? Why?</li>
+      <li>What question about AI and compliance are you most curious about right now?</li>
+    </ul>
+    <p style="margin-top:10px;color:var(--muted);font-size:0.85rem;">Graded on effort and engagement, not on correctness. There are no wrong answers here.</p>
+  </div>
+
+  <h2>Recommended Reading This Week</h2>
+  <ul>
+    <li><strong>3Blue1Brown — Neural Networks Series</strong> (YouTube) — Watch videos 1 and 2 before Wed.</li>
+    <li><strong>ComplianceGPT paper draft</strong> — shared via email. Skim it: just read the introduction and look at the figures.</li>
+    <li><strong>HIPAA Summary for Professionals</strong> — hhs.gov. Read the 2-page summary. This is the regulation we work with.</li>
+  </ul>
+
+  <footer>ComplianceGPT Lab · AI Innovation &amp; Diffusion REU 2026 · Stony Brook University</footer>
+</div>
+</main>
+</body>
+</html>

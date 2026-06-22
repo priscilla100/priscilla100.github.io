@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Projects — ComplianceGPT Lab REU 2026</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside id="sidebar">
+  <div class="logo"><div class="lab-name">ComplianceGPT Lab</div><div class="lab-sub">AI Innovation &amp; Diffusion REU 2026<br>Stony Brook University</div></div>
+  <nav>
+    <div class="nav-section">Program</div>
+    <a href="index.html">Welcome</a><a href="schedule.html">Weekly Schedule</a><a href="slides-week1.html">Week 1 Slides</a><a href="slides-week2.html">Week 2 Slides</a>
+    <div class="nav-section">Foundations</div>
+    <a href="setup.html">Setup &amp; Tools</a><a href="foundations.html">AI Fundamentals</a><a href="foundations.html#regulations">Regulations</a>
+    <div class="nav-section">Curriculum</div>
+    <a href="week1.html">Week 1 — Intro to AI</a><a href="week2.html">Week 2 — Language &amp; Law</a><a href="week3.html">Week 3 — Prompt Eng.</a><a href="week4.html">Week 4 — RAG</a><a href="week5.html">Week 5 — ComplianceGPT</a><a href="week6.html">Week 6 — Communication</a>
+    <div class="nav-section">Research</div>
+    <a href="projects.html" class="active">Student Projects</a><a href="readings.html">Reading List</a><a href="assignments.html">Assignments</a>
+  </nav>
+</aside>
+<main id="main">
+<div class="page-header">
+  <div class="breadcrumb">Research</div>
+  <h1>Student Projects</h1>
+  <p class="subtitle">Seven research directions — all purely NLP/AI, no compliance engine required</p>
+</div>
+<div class="content">
+
+  <div class="card card-navy" style="margin-bottom:28px;">
+    <h3>How projects work — no engine access required</h3>
+    <p>All student research happens entirely at the <strong>LLM extraction layer</strong>. The Soufflé compliance engine lives on Priscilla's local machine and is not installed on research servers. Here is how it fits together:</p>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:16px 0;font-family:'Segoe UI',system-ui,sans-serif;font-size:0.88rem;">
+      <div style="border:2px solid #a8d8ff;border-radius:6px;padding:10px 14px;background:rgba(255,255,255,0.08);">
+        <div style="color:#a8d8ff;font-weight:700;margin-bottom:3px;">Input</div>
+        Natural language scenario<br><span style="opacity:0.6;font-size:0.8rem;">(GoldCoin court case)</span>
+      </div>
+      <div style="color:#f0a500;font-size:1.3rem;">→</div>
+      <div style="border:2px solid #f0a500;border-radius:6px;padding:10px 14px;background:rgba(240,165,0,0.12);">
+        <div style="color:#f0a500;font-weight:700;margin-bottom:3px;">★ Your research</div>
+        LLM extracts JSON<br><span style="opacity:0.6;font-size:0.8rem;">(prompt / fine-tune / RAG)</span>
+      </div>
+      <div style="color:#f0a500;font-size:1.3rem;">→</div>
+      <div style="border:2px solid rgba(255,255,255,0.2);border-radius:6px;padding:10px 14px;background:rgba(255,255,255,0.05);">
+        <div style="color:rgba(255,255,255,0.5);font-weight:700;margin-bottom:3px;">★ Your metric</div>
+        Field-level JSON accuracy<br><span style="opacity:0.6;font-size:0.8rem;">(compare vs. gold annotations)</span>
+      </div>
+      <div style="color:rgba(255,255,255,0.3);font-size:1.3rem;">→</div>
+      <div style="border:2px dashed rgba(255,255,255,0.2);border-radius:6px;padding:10px 14px;background:rgba(255,255,255,0.03);">
+        <div style="color:rgba(255,255,255,0.35);font-weight:700;margin-bottom:3px;">After REU (local)</div>
+        Soufflé engine → verdict<br><span style="opacity:0.5;font-size:0.8rem;">(Priscilla runs this part)</span>
+      </div>
+    </div>
+    <p style="margin-top:4px;">Your deliverable is an improved extraction model (better prompt, fine-tuned weights, or new dataset). Priscilla connects it to the engine locally to compute the final verdict-level accuracy — the publishable number. <strong>Everything you do during the REU is 100% Python + HuggingFace + Ollama.</strong></p>
+  </div>
+
+  <div class="card card-gold" style="margin-bottom:28px;">
+    <h3>What "field-level accuracy" means</h3>
+    <p>Instead of asking "did the pipeline give the right verdict?", you ask: "did the model extract the right value for each JSON field?" Gold JSON annotations are provided for all 137 GoldCoin cases. You compare your model's output field by field:</p>
+    <div style="font-family:'Courier New',monospace;font-size:0.83rem;background:#1e1e2e;color:#cdd6f4;border-radius:6px;padding:14px 18px;margin:12px 0;">
+      compare(predicted_json, gold_json) →<br>
+      &nbsp;&nbsp;sender_role: ✓ &nbsp; receiver_role: ✗ &nbsp; purpose: ✓ &nbsp; has_court_order: ✗ &nbsp; …<br>
+      &nbsp;&nbsp;field accuracy: 6/8 = 75% &nbsp;|&nbsp; oracle accuracy: 4/5 = 80%
+    </div>
+    <p>This lets you pinpoint <em>which</em> fields fail — not just whether the final answer was wrong. That's more informative than verdict accuracy and doesn't require the engine.</p>
+  </div>
+
+  <h2>Project 1 — LLM Extraction Benchmark</h2>
+  <div class="project-card">
+    <h3>Research Question</h3>
+    <p>How do Gemma3:4B, Llama3.1:8B, and Qwen2.5:7B compare on <em>field-level extraction accuracy</em> for HIPAA compliance scenarios, and which specific fields and failure types are model-specific vs. universal?</p>
+    <h3>Background</h3>
+    <p>Prior work compares models on verdict accuracy (correct/wrong). But verdict accuracy hides <em>where</em> models fail. Two models can both get the wrong verdict for completely different reasons — one hallucinated a court order, the other misidentified the sender. Field-level comparison at the extraction layer reveals this.</p>
+    <h3>Method</h3>
+    <ul>
+      <li>Run all 3 models on the same 50-scenario subset (diverse HIPAA exception categories)</li>
+      <li>For each model output: compare extracted JSON against gold annotations field by field</li>
+      <li>Compute per-field accuracy: sender role, receiver role, purpose, each oracle predicate</li>
+      <li>Build an error taxonomy: role error, purpose error, oracle hallucination, oracle under-extraction, format failure</li>
+      <li>Analyze: which fields fail most? Which errors are model-specific? Which are universal?</li>
+    </ul>
+    <h3>Deliverable</h3>
+    <p>Results table: 3 models × field-level accuracy breakdown. Error taxonomy. 2-page write-up. Poster.</p>
+    <p style="margin-top:8px;"><strong>Engine connection:</strong> Priscilla runs your 3-model JSON outputs through Soufflé locally → adds verdict-level accuracy column to your results table.</p>
+    <div class="badge">3 weeks feasible</div><div class="badge badge-gold">Publication potential</div>
+  </div>
+
+  <h2>Project 2 — Adversarial Robustness Study</h2>
+  <div class="project-card">
+    <h3>Research Question</h3>
+    <p>Can adversarial perturbations to a HIPAA scenario narrative flip the LLM's extraction of oracle predicates — and which predicates are most vulnerable to which attack types?</p>
+    <h3>Background</h3>
+    <p>Oracle predicates (e.g. <code>has_court_order</code>, <code>is_required_by_law</code>) are boolean flags that enable HIPAA exceptions. If an adversarial narrative can flip one from False to True without a corresponding legal fact, the entire pipeline is exploitable. The attack happens at the NLP layer — no engine access needed to study it.</p>
+    <h3>Method</h3>
+    <ul>
+      <li>Write 30 adversarial scenarios in 3 categories (10 each):
+        <ul>
+          <li><strong>P1 — Injection:</strong> narrative implies an enabling legal fact that doesn't actually exist (e.g. "acting pursuant to what may be a court order")</li>
+          <li><strong>P2 — Stripping:</strong> narrative omits an enabling fact that is present in the original</li>
+          <li><strong>R — Rhetorical framing:</strong> legally suggestive language without a concrete enabling fact</li>
+        </ul>
+      </li>
+      <li>Run each adversarial scenario through the extraction model; compare oracle predicates to original</li>
+      <li>Attack Success Rate (ASR) = % of scenarios where the target predicate flipped</li>
+      <li>Analyze: which predicates are most vulnerable? Which attack type is most effective?</li>
+    </ul>
+    <h3>Deliverable</h3>
+    <p>30-scenario adversarial dataset with labels + ASR table by attack type × predicate. 2-page write-up. Poster.</p>
+    <p style="margin-top:8px;"><strong>Engine connection:</strong> Priscilla pipes your adversarial JSON outputs through Soufflé to show verdict-level impact.</p>
+    <div class="badge">3 weeks feasible</div><div class="badge badge-gold">Publication potential</div>
+  </div>
+
+  <h2>Project 3 — Prompt Engineering for Extraction</h2>
+  <div class="project-card">
+    <h3>Research Question</h3>
+    <p>Which prompting strategy — zero-shot, few-shot, chain-of-thought, role-play, or schema-constrained — produces the highest field-level extraction accuracy for HIPAA compliance scenarios?</p>
+    <h3>Background</h3>
+    <p>Prompt engineering is the fastest lever for improving LLM extraction without retraining. ComplianceGPT uses a multi-rule schema-constrained prompt. Whether chain-of-thought or few-shot examples improve <em>extraction accuracy</em> specifically (not just verdict accuracy) in the legal domain has not been studied.</p>
+    <h3>Method</h3>
+    <ul>
+      <li>Define 5 prompt variants: zero-shot, 2-shot examples, chain-of-thought ("think step by step before filling each field"), role-play ("you are a HIPAA compliance analyst"), schema-constrained (JSON schema in system prompt with field definitions)</li>
+      <li>Run all 5 on 30 scenarios with Gemma3:4B</li>
+      <li>Measure field-level extraction accuracy per prompt type vs. gold annotations</li>
+      <li>Analyze: does CoT help more on oracle predicates? Do examples help more on rare HIPAA exceptions?</li>
+    </ul>
+    <h3>Deliverable</h3>
+    <p>5-way field-level accuracy comparison + breakdown by field type and HIPAA category. 2-page write-up. Poster.</p>
+    <p style="margin-top:8px;"><strong>Engine connection:</strong> Priscilla runs best-prompt outputs through Soufflé to confirm field-level gains translate to verdict-level gains.</p>
+    <div class="badge">3 weeks feasible</div><div class="badge badge-gold">Publication potential</div>
+  </div>
+
+  <h2>Project 4 — Explanation Quality Study</h2>
+  <div class="project-card">
+    <h3>Research Question</h3>
+    <p>Are the natural language explanations generated by the LLM for a HIPAA compliance decision accurate, faithful to the underlying legal logic, and useful to non-expert users?</p>
+    <h3>Background</h3>
+    <p>ComplianceGPT generates a natural language explanation alongside each verdict. This explanation is LLM-generated — it is not guaranteed to correctly reflect the formal reasoning that produced the verdict. Evaluating and improving explanation quality is a purely NLP task: you annotate, score, and improve LLM-generated text against a rubric.</p>
+    <h3>Method</h3>
+    <ul>
+      <li>Use pre-computed verdict results (provided by Priscilla) as ground truth for 50 scenarios</li>
+      <li>Prompt the LLM to generate an explanation for each verdict given the scenario</li>
+      <li>Develop a 4-dimension rubric: <strong>correctness</strong> (factually accurate?), <strong>faithfulness</strong> (aligned with actual verdict logic?), <strong>usefulness</strong> (would a non-expert understand?), <strong>completeness</strong> (cites the right HIPAA provision?)</li>
+      <li>Score all 50 explanations on the rubric (1–5 scale per dimension)</li>
+      <li>Test: does a revised LLM prompt improve rubric scores?</li>
+    </ul>
+    <h3>Deliverable</h3>
+    <p>Explanation quality rubric + 50-item annotated dataset + before/after scores with improved prompt. 2-page write-up. Poster.</p>
+    <div class="badge">3 weeks feasible</div><div class="badge badge-gold">Publication potential — explainability in legal AI is a top research priority</div>
+  </div>
+
+  <h2>Project 5 — Multi-Regulation Applicability Classifier</h2>
+  <div class="project-card">
+    <h3>Research Question</h3>
+    <p>Given a user question about health or financial data, can an LLM reliably identify <em>which</em> regulations apply — and does it get the right extraction under each applicable regulation when prompted separately?</p>
+    <h3>Background</h3>
+    <p>A question like "Can I delete my medical records?" simultaneously touches HIPAA, GDPR (EU residents), CCPA (California), COPPA (minors), and SOX (financial records at public institutions). No existing system maps a question to its full regulatory footprint before answering. This is a pure NLP classification and extraction task — no engine needed for the classification step.</p>
+    <h3>Example Overlap Questions</h3>
+    <ul>
+      <li><strong>"Can I request my medical records?"</strong> — HIPAA §164.524, GDPR Art. 15, CCPA §1798.100</li>
+      <li><strong>"Can I delete my records?"</strong> — HIPAA (limited), GDPR (right to erasure), CCPA, COPPA (if minor), SOX §802</li>
+      <li><strong>"Can a bank share my health insurance data?"</strong> — HIPAA, GLBA, CCPA</li>
+      <li><strong>"Can a school share my child's health records?"</strong> — HIPAA, COPPA, FERPA</li>
+    </ul>
+    <h3>Method</h3>
+    <ul>
+      <li>Create 20 overlap questions spanning 2–4 regulations each</li>
+      <li>Manually annotate ground truth: which regulations apply, and what each requires</li>
+      <li>Task 1 — <strong>Applicability classification:</strong> prompt LLM to output which regulations apply to each question; measure recall (does it catch all applicable regulations?)</li>
+      <li>Task 2 — <strong>Cross-regulation extraction:</strong> for each applicable regulation, prompt the LLM to extract the relevant CI schema fields using that regulation's schema; measure field-level accuracy per regulation</li>
+      <li>Analyze: which regulations are most often missed? Where do extracted fields conflict across regulations?</li>
+    </ul>
+    <h3>Deliverable</h3>
+    <p>20-question multi-regulation dataset + applicability labels + per-regulation extraction accuracy table. 2-page write-up. Poster.</p>
+    <p style="margin-top:8px;"><strong>Engine connection:</strong> Priscilla runs each regulation's extracted JSON through the corresponding local engine to produce verdict-level cross-regulation comparison.</p>
+    <div class="badge">3 weeks feasible</div><div class="badge badge-gold">Publication potential — multi-regulation compliance is an open problem with no prior systematic study</div>
+  </div>
+
+  <h2>Project 6 — Error Taxonomy for Legal Extraction</h2>
+  <div class="project-card">
+    <h3>Research Question</h3>
+    <p>What is a complete, reproducible taxonomy of LLM extraction errors in HIPAA compliance reasoning, and does knowing the error type predict which prompt intervention fixes it?</p>
+    <h3>Background</h3>
+    <p>ComplianceGPT's wrong predictions cluster into patterns. A formal taxonomy would let future researchers quickly characterize their model's failure modes without doing exhaustive case-by-case analysis. Taxonomies are citable, reusable research contributions that don't require a new model or dataset to publish.</p>
+    <h3>Method</h3>
+    <ul>
+      <li>Start with pre-existing wrong predictions from 2–3 model runs (results CSVs provided)</li>
+      <li>Manually annotate each wrong prediction with a primary error type using an inductive process: read cases, notice patterns, group into categories, write definitions, re-annotate with stable categories</li>
+      <li>Validate taxonomy: compute inter-annotator agreement on a 20-case subset with a second annotator</li>
+      <li>For each error type: design a targeted prompt fix (e.g. for oracle hallucination, add an explicit negation guard); measure whether the fix reduces that error type's rate on a held-out set</li>
+    </ul>
+    <h3>Deliverable</h3>
+    <p>Error taxonomy (definitions + examples) + annotated dataset + per-type fix results table. 2-page write-up. Poster.</p>
+    <div class="badge">3 weeks feasible</div><div class="badge badge-gold">Publication potential — taxonomies are highly citable contributions</div>
+  </div>
+
+  <h2>Project 7 — Fine-Tuning for Compliance Extraction</h2>
+  <div class="project-card">
+    <h3>Research Question</h3>
+    <p>Can parameter-efficient fine-tuning (LoRA) on the GoldCoin extraction task substantially improve a small model's field-level accuracy over prompting alone — and does improvement on oracle predicate extraction specifically translate to verdict accuracy gains when connected to the engine?</p>
+    <h3>Background</h3>
+    <p>Prompting is fast but has a ceiling — the model was not trained on legal compliance extraction. Fine-tuning adapts the model's weights to the task. LoRA (Low-Rank Adaptation) makes fine-tuning feasible on a single GPU with a model as small as 4B parameters. This project creates a task-specific model that Priscilla can permanently integrate into the pipeline.</p>
+    <h3>Method</h3>
+    <ul>
+      <li><strong>Dataset preparation:</strong> from the 137 GoldCoin cases, create (scenario, gold_json) training pairs; split into 110 train / 27 test</li>
+      <li><strong>Baseline:</strong> run Gemma3:4B or Llama3.1:8B with the current prompt on the 27-case test set; record field-level accuracy per field</li>
+      <li><strong>Fine-tuning:</strong> use HuggingFace PEFT + LoRA to fine-tune on the 110 training pairs (supervised: input = scenario, target = gold JSON string)</li>
+      <li><strong>Evaluation:</strong> run fine-tuned model on the 27-case test set; compare field-level accuracy before vs. after fine-tuning</li>
+      <li><strong>Analysis:</strong> which fields improved most? Did oracle predicate accuracy improve? What does the fine-tuned model still get wrong?</li>
+    </ul>
+    <h3>Tools</h3>
+    <p style="font-size:0.9rem;"><code>transformers</code>, <code>peft</code>, <code>bitsandbytes</code> (4-bit quantization for memory efficiency), <code>datasets</code>. All installable via pip. Works on any GPU with ≥8GB VRAM — university HPC, Google Colab Pro, or a shared lab GPU.</p>
+    <h3>Deliverable</h3>
+    <p>Fine-tuned LoRA adapter weights + before/after field-level accuracy table + error analysis of remaining failures. 2-page write-up. Poster.</p>
+    <p style="margin-top:8px;"><strong>Engine connection:</strong> Priscilla loads your fine-tuned adapter locally, runs the test set through the full pipeline (extraction → Soufflé → verdict), and computes the verdict-level accuracy improvement — the headline number for your paper.</p>
+    <div class="badge">3 weeks feasible</div><div class="badge badge-gold">Publication potential — task-specific fine-tuning for legal NLP is a well-studied and publishable direction</div>
+  </div>
+
+  <div class="card card-gold" style="margin-top:32px;">
+    <h3>How to choose a project</h3>
+    <p>Pick the one that makes you most curious — not the one that sounds most impressive. All seven have a clear 3-week execution path and a real research contribution. If you have a background in ML/deep learning, P7 (fine-tuning) is the most technically ambitious. If you're stronger in analysis and writing, P6 (taxonomy) or P4 (explanation quality) are high-value and more accessible. P2 (adversarial) and P5 (multi-regulation) are the most novel research directions. Confirm your choice by Friday Jul 3 — see <a href="assignments.html">Assignments</a> for details.</p>
+  </div>
+
+  <footer>ComplianceGPT Lab · AI Innovation &amp; Diffusion REU 2026 · Stony Brook University</footer>
+</div>
+</main>
+</body>
+</html>

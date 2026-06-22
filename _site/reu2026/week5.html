@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 5 — ComplianceGPT Lab REU 2026</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside id="sidebar">
+  <div class="logo"><div class="lab-name">ComplianceGPT Lab</div><div class="lab-sub">AI Innovation &amp; Diffusion REU 2026<br>Stony Brook University</div></div>
+  <nav>
+    <div class="nav-section">Program</div>
+    <a href="index.html">Welcome</a><a href="schedule.html">Weekly Schedule</a><a href="slides-week1.html">Week 1 Slides</a><a href="slides-week2.html">Week 2 Slides</a>
+    <div class="nav-section">Foundations</div>
+    <a href="setup.html">Setup &amp; Tools</a><a href="foundations.html">AI Fundamentals</a><a href="foundations.html#regulations">Regulations</a>
+    <div class="nav-section">Curriculum</div>
+    <a href="week1.html">Week 1 — Intro to AI</a><a href="week2.html">Week 2 — Language &amp; Law</a><a href="week3.html">Week 3 — Prompt Eng.</a><a href="week4.html">Week 4 — RAG</a><a href="week5.html" class="active">Week 5 — ComplianceGPT</a><a href="week6.html">Week 6 — Communication</a>
+    <div class="nav-section">Research</div>
+    <a href="projects.html">Student Projects</a><a href="readings.html">Reading List</a><a href="assignments.html">Assignments</a>
+  </nav>
+</aside>
+<main id="main">
+<div class="page-header">
+  <div class="breadcrumb">Curriculum</div>
+  <h1>Week 5 — ComplianceGPT Deep Dive</h1>
+  <p class="subtitle">July 21–24 · Error analysis · Final experiments · Poster draft · Writing up</p>
+</div>
+<div class="content">
+
+  <div class="week-header">
+    <div class="week-num">W5</div>
+    <div class="week-info">
+      <h2>ComplianceGPT Deep Dive</h2>
+      <p>Jul 21–24 &nbsp;·&nbsp; Final experiments + results analysis &nbsp;·&nbsp; Deliverable: poster draft + 2-page write-up draft</p>
+    </div>
+  </div>
+
+  <h2>Learning Goals</h2>
+  <ul>
+    <li>Complete all experimental runs and have a complete results table</li>
+    <li>Understand the full pipeline end-to-end (both extraction and explanation layers)</li>
+    <li>Draft a research poster from your results</li>
+    <li>Write a 2-page research summary covering your work</li>
+  </ul>
+
+  <h2>Day 1 — Monday, July 21: Error Analysis Deep Dive</h2>
+  <div class="day-block">
+    <div class="day-title">🔬 Topics</div>
+    <div class="day-body">
+      <div class="grid-2">
+        <div>
+          <h4>Systematic Error Analysis</h4>
+          <ul>
+            <li>Filter all wrong rows: <code>df[df["verdict"] != df["ground_truth"]]</code></li>
+            <li>Group by error type: role error, purpose error, hallucination, format fail</li>
+            <li>Measure error rate per HIPAA category (LE, judicial, TPO, research...)</li>
+            <li>Look for patterns: does the same model fail on the same types?</li>
+          </ul>
+        </div>
+        <div>
+          <h4>The LLM Extraction Layer (Black Box Boundary)</h4>
+          <ul>
+            <li>LLM1: extracts structured JSON from scenario text</li>
+            <li>LLM2: generates natural language explanation for the verdict</li>
+            <li>Postprocessing: normalizes roles, injects oracle predicates</li>
+            <li>Compliance engine: applies HIPAA rules (you don't see the internals)</li>
+            <li>Your research: understand extraction quality, not engine internals</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card card-gold" style="margin-top:14px;">
+        <h3>What extraction fields matter most?</h3>
+        <p>Rank the fields by their impact on verdict accuracy: <code>sender_role</code> and <code>purpose</code> together account for ~70% of extraction errors. <code>has_authorization</code> booleans account for most of the rest. Understanding this priority order will help you write a clear "most impactful finding" for your poster.</p>
+      </div>
+    </div>
+  </div>
+  <div class="day-block">
+    <div class="day-title">🎯 Day 1 Task</div>
+    <div class="day-body">
+      <p>Run your final experiments today. All data collection should be complete by end of Day 1 so you have Tue–Fri to analyze and write. Finalize your results CSV. Compute your key metric(s). Make at least 1 table and 1 chart.</p>
+    </div>
+  </div>
+
+  <h2>Day 2 — Wednesday, July 23: Poster Draft Workshop</h2>
+  <div class="day-block">
+    <div class="day-title">🖼️ Topics</div>
+    <div class="day-body">
+      <div class="grid-2">
+        <div>
+          <h4>Poster Structure (6-foot rule)</h4>
+          <p>Your poster will be viewed by visitors who walk past. They spend 30 seconds on first pass. Structure for that scan:</p>
+          <ol>
+            <li><strong>Title</strong> — one clear claim or question (large, top)</li>
+            <li><strong>Problem + Motivation</strong> — why does this matter? (left column)</li>
+            <li><strong>Method</strong> — what did you do? One diagram helps</li>
+            <li><strong>Results</strong> — the key table or chart (center, large)</li>
+            <li><strong>Conclusion</strong> — one sentence takeaway (right bottom)</li>
+          </ol>
+        </div>
+        <div>
+          <h4>Design Rules</h4>
+          <ul>
+            <li>Minimum font: 24pt body, 36pt headers, 56pt title</li>
+            <li>Maximum text per panel: 5 sentences. Cut the rest.</li>
+            <li>Every figure needs a caption with 1 takeaway sentence</li>
+            <li>Use your main result as the visual anchor — big, centered</li>
+            <li>Tools: PowerPoint, Google Slides, Canva, LaTeX beamerposter</li>
+            <li>Size: 48×36 inches (standard research poster)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="day-block">
+    <div class="day-title">🎯 Day 2 Task</div>
+    <div class="day-body">
+      <p>Sketch a poster layout on paper or in slides. Bring it to Friday's session. It doesn't need to be polished — just have the structure: title, boxes for each section, placeholder for your main result figure.</p>
+    </div>
+  </div>
+
+  <h2>Day 3 — Friday, July 25: 2-Page Write-Up Workshop</h2>
+  <div class="day-block">
+    <div class="day-title">✍️ Topics</div>
+    <div class="day-body">
+      <h4>2-Page Research Summary Structure</h4>
+      <div class="grid-2">
+        <div>
+          <ul>
+            <li><strong>Introduction</strong> (3–4 sentences): what problem, why it matters, what you did</li>
+            <li><strong>Background</strong> (3–4 sentences): what's already known, what gap you fill</li>
+            <li><strong>Method</strong> (4–6 sentences): experiments, data, metrics — enough to reproduce</li>
+          </ul>
+        </div>
+        <div>
+          <ul>
+            <li><strong>Results</strong> (4–6 sentences): main table or figure, your key finding</li>
+            <li><strong>Discussion</strong> (3–4 sentences): what does it mean, why, what's next</li>
+            <li><strong>References</strong> (3–5 citations): papers you built on</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card card-navy" style="margin-top:14px;">
+        <h3>Writing rule: claim first, evidence second</h3>
+        <p>Every paragraph starts with a claim: "Few-shot prompting increased extraction accuracy by 8%." Then the evidence: "Table 2 shows accuracy improved from 74% to 82% across 137 scenarios when 3 examples were added to the prompt." Then analysis: "The improvement was largest for law enforcement scenarios (from 62% to 79%), suggesting few-shot examples help most when the exception category is rare in training data."</p>
+      </div>
+    </div>
+  </div>
+
+  <h2>Week 5 Deliverable</h2>
+  <div class="card card-crimson">
+    <h3>Due: Friday, July 25 (end of day)</h3>
+    <p><strong>1. Poster draft</strong> — Does not need to be final. Must have: title, all sections sketched, your main result visible (even as a rough table). Submit as PDF or Google Slides link.</p>
+    <p style="margin-top:10px;"><strong>2. 2-page write-up draft</strong> — Does not need to be polished. Must have all 5 sections (intro, background, method, results, discussion). I will give detailed written feedback by Monday morning.</p>
+    <p style="margin-top:10px;"><strong>3. Results CSV</strong> — Final, complete experiment results in <code>results/[yourname]_final.csv</code>.</p>
+  </div>
+
+  <h2>Recommended Reading This Week</h2>
+  <ul>
+    <li><strong>Keshav — "How to Read a Paper" (3-pass method)</strong> — Apply this to your own write-up: would a reader understand it in 3 passes?</li>
+    <li><strong>ComplianceGPT paper draft</strong> — Read it again now that you understand the pipeline. Notice how results tables are structured and how claims connect to evidence.</li>
+  </ul>
+
+  <footer>ComplianceGPT Lab · AI Innovation &amp; Diffusion REU 2026 · Stony Brook University</footer>
+</div>
+</main>
+</body>
+</html>

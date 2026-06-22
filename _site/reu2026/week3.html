@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 3 — ComplianceGPT Lab REU 2026</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside id="sidebar">
+  <div class="logo"><div class="lab-name">ComplianceGPT Lab</div><div class="lab-sub">AI Innovation &amp; Diffusion REU 2026<br>Stony Brook University</div></div>
+  <nav>
+    <div class="nav-section">Program</div>
+    <a href="index.html">Welcome</a><a href="schedule.html">Weekly Schedule</a><a href="slides-week1.html">Week 1 Slides</a><a href="slides-week2.html">Week 2 Slides</a>
+    <div class="nav-section">Foundations</div>
+    <a href="setup.html">Setup &amp; Tools</a><a href="foundations.html">AI Fundamentals</a><a href="foundations.html#regulations">Regulations</a>
+    <div class="nav-section">Curriculum</div>
+    <a href="week1.html">Week 1 — Intro to AI</a><a href="week2.html">Week 2 — Language &amp; Law</a><a href="week3.html" class="active">Week 3 — Prompt Eng.</a><a href="week4.html">Week 4 — RAG</a><a href="week5.html">Week 5 — ComplianceGPT</a><a href="week6.html">Week 6 — Communication</a>
+    <div class="nav-section">Research</div>
+    <a href="projects.html">Student Projects</a><a href="readings.html">Reading List</a><a href="assignments.html">Assignments</a>
+  </nav>
+</aside>
+<main id="main">
+<div class="page-header">
+  <div class="breadcrumb">Curriculum</div>
+  <h1>Week 3 — Prompt Engineering</h1>
+  <p class="subtitle">July 7–10 · Zero-shot · Few-shot · Chain-of-thought · Project proposals</p>
+</div>
+<div class="content">
+
+  <div class="week-header">
+    <div class="week-num">W3</div>
+    <div class="week-info">
+      <h2>Prompt Engineering</h2>
+      <p>Jul 7–10 &nbsp;·&nbsp; Prompting strategies for extraction &nbsp;·&nbsp; Deliverable: project proposal presentation (5 min)</p>
+    </div>
+  </div>
+
+  <h2>Learning Goals</h2>
+  <ul>
+    <li>Understand zero-shot, few-shot, and chain-of-thought prompting</li>
+    <li>Know why structured output (JSON) is hard to get reliably</li>
+    <li>Modify a prompt and measure whether it helps or hurts</li>
+    <li>Present a clear, scoped research proposal to the group</li>
+  </ul>
+
+  <h2>Day 1 — Monday, July 7: Prompting Strategies</h2>
+  <div class="day-block">
+    <div class="day-title">💬 Topics</div>
+    <div class="day-body">
+      <div class="grid-3">
+        <div>
+          <h4>Zero-Shot</h4>
+          <p>Give the model only instructions, no examples. Fastest to iterate. Works surprisingly well for familiar tasks. Fails on novel formats or edge cases.</p>
+          <pre style="font-size:0.75rem;">Extract from this scenario:
+{scenario}
+Return JSON with:
+sender_role, receiver_role,
+purpose, phi_involved</pre>
+        </div>
+        <div>
+          <h4>Few-Shot</h4>
+          <p>Provide 2–5 worked examples before the query. Dramatically improves consistency of format. Key: examples must cover edge cases you care about.</p>
+          <pre style="font-size:0.75rem;">Example 1:
+Scenario: ...
+JSON: {...}
+
+Example 2:
+Scenario: ...
+JSON: {...}
+
+Now extract:
+{scenario}</pre>
+        </div>
+        <div>
+          <h4>Chain-of-Thought</h4>
+          <p>Ask the model to reason step-by-step before answering. Adds tokens but reduces errors on complex reasoning. "Let's think step by step: first identify who is sending..."</p>
+          <pre style="font-size:0.75rem;">Think step by step:
+1. Who is the sender?
+2. What is the purpose?
+3. Is PHI involved?
+Then output JSON.</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="day-block">
+    <div class="day-title">🎯 Day 1 Task</div>
+    <div class="day-body">
+      <p>Take 1 wrong prediction from your Week 2 batch. Write 3 different prompts (zero-shot, few-shot with 2 examples, chain-of-thought). Run all 3 using <code>notebooks/week3_prompting.ipynb</code>. Does any version fix the error? Record your findings.</p>
+    </div>
+  </div>
+
+  <h2>Day 2 — Wednesday, July 9: Project Proposals</h2>
+  <div class="day-block">
+    <div class="day-title">🎤 Proposal Presentations</div>
+    <div class="day-body">
+      <p>Each student presents a 5-minute project proposal. This is informal — slides are optional. The goal is to get early feedback before you commit to a direction.</p>
+      <h4>Proposal structure (5 minutes):</h4>
+      <ol>
+        <li><strong>Problem</strong> (1 min): What question are you investigating? Why is it interesting?</li>
+        <li><strong>Method</strong> (2 min): What experiments will you run? What variables will you change? What will you measure?</li>
+        <li><strong>Expected result</strong> (1 min): What do you expect to find?</li>
+        <li><strong>Scope</strong> (1 min): What can realistically be done in 3 weeks? What's your Week 5 deliverable?</li>
+      </ol>
+      <div class="card card-gold" style="margin-top:14px;">
+        <h3>Feedback norms</h3>
+        <p>After each proposal: 2 minutes of questions. We ask "is this feasible in 3 weeks?" and "what's the one most important thing to nail?" Criticism is direct but not harsh. The goal is to help, not to impress.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2>Day 3 — Friday, July 10: The Extraction Task in Depth</h2>
+  <div class="day-block">
+    <div class="day-title">🔍 Topics</div>
+    <div class="day-body">
+      <div class="grid-2">
+        <div>
+          <h4>Why Extraction is Hard</h4>
+          <ul>
+            <li>Legal text is dense and ambiguous by design</li>
+            <li>Role ambiguity: "the hospital's social worker" — is the social worker a provider or an individual?</li>
+            <li>Implicit purpose: "called to discuss the situation" — what is the purpose?</li>
+            <li>Hallucination: model invents fields that aren't in the scenario</li>
+            <li>Format failures: model outputs prose instead of JSON</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Prompt Engineering Levers</h4>
+          <ul>
+            <li>Temperature — lower = more consistent, higher = more creative</li>
+            <li>System prompt — instructions before the scenario</li>
+            <li>Output format constraints — JSON schema, strict mode</li>
+            <li>Negative examples — "do NOT put X in extra_facts"</li>
+            <li>Reasoning traces — ask model to explain its choices</li>
+          </ul>
+        </div>
+      </div>
+      <p style="margin-top:14px;"><strong>Live coding:</strong> Open <code>connector/llm1_extractor.py</code> (prompt section only — lines 87–270). We'll read the existing rules together and discuss which ones address which failure modes.</p>
+    </div>
+  </div>
+
+  <h2>Week 3 Deliverable</h2>
+  <div class="card card-crimson">
+    <h3>Due: Wednesday, July 9 (proposal) + Friday, July 11 (written)</h3>
+    <p><strong>1. Proposal presentation (5 min)</strong> — Wednesday morning. See structure above.</p>
+    <p style="margin-top:10px;"><strong>2. Written proposal (1 page)</strong> — Due Friday. Structure:</p>
+    <ul style="margin-top:8px;">
+      <li><strong>Research question</strong> — one clear sentence ending in a question mark</li>
+      <li><strong>Background</strong> — 2 sentences on what's already known</li>
+      <li><strong>Method</strong> — what experiments, what variables, what you'll measure</li>
+      <li><strong>Expected results</strong> — your hypothesis</li>
+      <li><strong>Timeline</strong> — Week 4, Week 5, Week 6 milestones</li>
+    </ul>
+  </div>
+
+  <h2>Project Options</h2>
+  <p>Choose one — or propose your own with my approval. See <a href="projects.html">Student Projects</a> for full descriptions.</p>
+  <div class="grid-2">
+    <div class="card">
+      <h3>LLM Benchmark Comparison</h3>
+      <p>Compare Gemma3, Llama, Qwen on the same 137-row HIPAA benchmark. Analyze where each model fails. What failure modes are model-specific vs. universal?</p>
+    </div>
+    <div class="card">
+      <h3>Adversarial Scenarios</h3>
+      <p>Write 30 edge cases that are legally permitted but sound like violations (or vice versa). Test whether models can handle them. Analyze failure patterns.</p>
+    </div>
+    <div class="card">
+      <h3>Prompt Engineering Study</h3>
+      <p>Systematically test 5 prompting strategies (zero-shot, few-shot, CoT, system prompts, schema constraints) on 30 scenarios. Which strategy maximizes extraction accuracy?</p>
+    </div>
+    <div class="card">
+      <h3>Explanation Quality Study</h3>
+      <p>ComplianceGPT generates explanations for its verdicts. Are they correct? Faithful? Useful? Build a rubric and rate 50 explanations. What makes a good AI explanation?</p>
+    </div>
+    <div class="card">
+      <h3>GDPR Generalization Study</h3>
+      <p>Does prompting strategy transfer from HIPAA to GDPR? Run the same 5 prompts on both regulations. Measure whether cross-regulation transfer holds or breaks.</p>
+    </div>
+    <div class="card">
+      <h3>Error Taxonomy</h3>
+      <p>Categorize all wrong predictions from 3 models into a taxonomy (role error, purpose error, hallucination, etc.). Is there a systematic pattern? Does it predict which prompts will fix it?</p>
+    </div>
+  </div>
+
+  <h2>Recommended Reading This Week</h2>
+  <ul>
+    <li><strong>Brown et al. — "Language Models are Few-Shot Learners" (GPT-3, 2020)</strong> — Read abstract and Section 2 (few-shot learning definition).</li>
+    <li><strong>Wei et al. — "Chain-of-Thought Prompting Elicits Reasoning in LLMs" (2022)</strong> — Short paper. Read the introduction and Figure 1.</li>
+  </ul>
+
+  <footer>ComplianceGPT Lab · AI Innovation &amp; Diffusion REU 2026 · Stony Brook University</footer>
+</div>
+</main>
+</body>
+</html>

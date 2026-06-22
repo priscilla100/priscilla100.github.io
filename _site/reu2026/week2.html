@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 2 — ComplianceGPT Lab REU 2026</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside id="sidebar">
+  <div class="logo"><div class="lab-name">ComplianceGPT Lab</div><div class="lab-sub">AI Innovation &amp; Diffusion REU 2026<br>Stony Brook University</div></div>
+  <nav>
+    <div class="nav-section">Program</div>
+    <a href="index.html">Welcome</a><a href="schedule.html">Weekly Schedule</a><a href="slides-week1.html">Week 1 Slides</a><a href="slides-week2.html">Week 2 Slides</a>
+    <div class="nav-section">Foundations</div>
+    <a href="setup.html">Setup &amp; Tools</a><a href="foundations.html">AI Fundamentals</a><a href="foundations.html#regulations">Regulations</a>
+    <div class="nav-section">Curriculum</div>
+    <a href="week1.html">Week 1 — Intro to AI</a><a href="week2.html" class="active">Week 2 — Language &amp; Law</a><a href="week3.html">Week 3 — Prompt Eng.</a><a href="week4.html">Week 4 — RAG</a><a href="week5.html">Week 5 — ComplianceGPT</a><a href="week6.html">Week 6 — Communication</a>
+    <div class="nav-section">Research</div>
+    <a href="projects.html">Student Projects</a><a href="readings.html">Reading List</a><a href="assignments.html">Assignments</a>
+  </nav>
+</aside>
+<main id="main">
+<div class="page-header">
+  <div class="breadcrumb">Curriculum</div>
+  <h1>Week 2 — Language and Regulations</h1>
+  <p class="subtitle">June 29 – July 3 · NLP tokens &amp; embeddings · HIPAA deep dive · First extraction task</p>
+</div>
+<div class="content">
+
+  <div class="week-header">
+    <div class="week-num">W2</div>
+    <div class="week-info">
+      <h2>Language and Regulations</h2>
+      <p>Jun 29 – Jul 3 &nbsp;·&nbsp; NLP + HIPAA/GDPR/GLBA &nbsp;·&nbsp; Deliverable: error analysis of 2 wrong predictions</p>
+    </div>
+  </div>
+
+  <h2>Learning Goals</h2>
+  <ul>
+    <li>Understand what tokens, embeddings, and transformers are at an intuitive level</li>
+    <li>Know the core structure of HIPAA and why it's hard for AI</li>
+    <li>Run a batch extraction experiment and inspect the raw JSON outputs</li>
+    <li>Write your first substantive error analysis</li>
+  </ul>
+
+  <h2>Day 1 — Monday, June 29: How LLMs Read Text</h2>
+  <div class="day-block">
+    <div class="day-title">🧠 Topics</div>
+    <div class="day-body">
+      <div class="grid-2">
+        <div>
+          <h4>Tokenization</h4>
+          <ul>
+            <li>LLMs process tokens, not words: "anti-inflammatory" = 3 tokens</li>
+            <li>Token limits: Gemma3:4b has an 8k context window</li>
+            <li>Why this matters: longer scenarios may get truncated</li>
+            <li>Interactive demo: run the tokenizer on a HIPAA scenario</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Embeddings &amp; Attention</h4>
+          <ul>
+            <li>Embeddings: words as points in high-dimensional space</li>
+            <li>Similar words are geometrically close</li>
+            <li>Attention: "he signed the <u>order</u>" — court order or coffee order?</li>
+            <li>This is why transformers handle legal context well (usually)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card card-gold" style="margin-top:16px;">
+        <h3>Live Coding: Inspect LLM Outputs</h3>
+        <p>We'll open a raw JSON extraction from ComplianceGPT and examine what the LLM actually output for a HIPAA scenario. We'll look at the fields: <code>sender_role</code>, <code>receiver_role</code>, <code>purpose</code>, <code>phi_involved</code>. What did the model get right? What did it miss or make up?</p>
+      </div>
+    </div>
+  </div>
+  <div class="day-block">
+    <div class="day-title">🎯 Day 1 Task</div>
+    <div class="day-body">
+      <p>Run <code>batch_runner.py</code> on 20 rows from <code>data/goldcoin_hhs_merged.csv</code>. Save results to <code>results/[yourname]_week2_batch.csv</code>. Open it in a spreadsheet. Find 1 wrong prediction and write 2 sentences about why you think it's wrong.</p>
+    </div>
+  </div>
+
+  <h2>Day 2 — Wednesday, July 1: HIPAA Deep Dive</h2>
+  <div class="day-block">
+    <div class="day-title">⚖️ Topics</div>
+    <div class="day-body">
+      <div class="grid-2">
+        <div>
+          <h4>HIPAA Structure</h4>
+          <ul>
+            <li>Who must comply: covered entities (CEs) and business associates</li>
+            <li>What is PHI: 18 identifiers under the Privacy Rule</li>
+            <li>The general rule: no disclosure without authorization</li>
+            <li>The exceptions: ~15 permitted disclosure categories</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Key Permitted Disclosures</h4>
+          <ul>
+            <li>Treatment, payment, healthcare operations (TPO) — most common</li>
+            <li>Patient authorization — explicit written consent</li>
+            <li>Law enforcement — with specific legal instruments</li>
+            <li>Judicial proceedings — court orders, subpoenas</li>
+            <li>Research — with IRB waiver or de-identification</li>
+            <li>Public health — disease reporting, FDA, CDC</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card card-navy" style="margin-top:16px;">
+        <h3>The Minimum Necessary Rule</h3>
+        <p>Even permitted disclosures must use only the <em>minimum necessary</em> PHI for the stated purpose. A hospital can share a diagnosis for treatment, but not an entire medical history. ComplianceGPT checks this as a sub-condition on many disclosure categories.</p>
+      </div>
+    </div>
+  </div>
+  <div class="day-block">
+    <div class="day-title">🎯 Day 2 Task</div>
+    <div class="day-body">
+      <p>Read the HIPAA Summary document (link on readings page). For 3 wrong predictions from your batch, categorize the HIPAA exception that applies: TPO, law enforcement, judicial, research, or public health. Write 1 sentence per scenario explaining which exception is relevant and whether the model got the category right.</p>
+    </div>
+  </div>
+
+  <h2>Day 3 — Friday, July 3: GDPR and GLBA Overview</h2>
+  <div class="day-block">
+    <div class="day-title">🌍 Topics</div>
+    <div class="day-body">
+      <div class="grid-2">
+        <div>
+          <h4>GDPR</h4>
+          <ul>
+            <li>Covers all personal data of EU residents (not just health)</li>
+            <li>Lawful basis: consent, contract, legal obligation, vital interests, public task, legitimate interest</li>
+            <li>Data subject rights: access, erasure, portability, objection</li>
+            <li>Maximum fine: 4% global revenue or €20M</li>
+          </ul>
+        </div>
+        <div>
+          <h4>GLBA</h4>
+          <ul>
+            <li>US financial privacy law (1999)</li>
+            <li>Banks must protect customer NPI (non-public personal info)</li>
+            <li>Customers have opt-out rights for sharing with third parties</li>
+            <li>Analogy: HIPAA for finance — same structure, different domain</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card card-gold" style="margin-top:16px;">
+        <h3>Discussion: Transferability</h3>
+        <p>ComplianceGPT was built for HIPAA and extended to GDPR, GLBA, and SOX. Your project might study: does a model that's good at HIPAA also transfer well to GDPR? Or do different regulations require different prompting strategies? We'll explore this question together.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2>Week 2 Deliverable</h2>
+  <div class="card card-crimson">
+    <h3>Due: Friday, July 4 (Independence Day — submit by end of July 3)</h3>
+    <p><strong>1. Python exercise set</strong> — Complete exercises 5–8 in <code>notebooks/week2_nlp.ipynb</code>: token counting, batch accuracy computation, precision/recall calculation, results filtering.</p>
+    <p style="margin-top:10px;"><strong>2. Error analysis (1 page)</strong> — Pick 2 wrong predictions from your batch run. For each:</p>
+    <ul style="margin-top:8px;">
+      <li>What was the scenario? (1 sentence summary)</li>
+      <li>What did the model predict? What was the correct answer?</li>
+      <li>Looking at the raw JSON extraction — what field was wrong? (<code>sender_role</code>? <code>purpose</code>? <code>phi_involved</code>?)</li>
+      <li>What would you change about the prompt or the model to fix it?</li>
+    </ul>
+  </div>
+
+  <h2>Recommended Reading This Week</h2>
+  <ul>
+    <li><strong>HIPAA Privacy Rule Summary</strong> (hhs.gov) — The 2-page summary is enough. The full regulation is 100+ pages; you don't need it all.</li>
+    <li><strong>Vaswani et al. — "Attention Is All You Need" (2017)</strong> — Section 1 (introduction) and Section 3 (architecture diagram) only. This is the foundational transformer paper.</li>
+    <li><strong>Andrej Karpathy — "Let's Build GPT from Scratch"</strong> (YouTube) — Optional but strongly recommended. You will genuinely understand transformers after this.</li>
+  </ul>
+
+  <footer>ComplianceGPT Lab · AI Innovation &amp; Diffusion REU 2026 · Stony Brook University</footer>
+</div>
+</main>
+</body>
+</html>

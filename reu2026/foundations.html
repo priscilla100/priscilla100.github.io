@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foundations — ComplianceGPT Lab REU 2026</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside id="sidebar">
+  <div class="logo"><div class="lab-name">ComplianceGPT Lab</div><div class="lab-sub">AI Innovation &amp; Diffusion REU 2026<br>Stony Brook University</div></div>
+  <nav>
+    <div class="nav-section">Program</div>
+    <a href="index.html">Welcome</a><a href="schedule.html">Weekly Schedule</a><a href="slides-week1.html">Week 1 Slides</a><a href="slides-week2.html">Week 2 Slides</a>
+    <div class="nav-section">Foundations</div>
+    <a href="setup.html">Software &amp; Setup</a><a href="setup.html#python">Python Resources</a><a href="foundations.html" class="active">AI Fundamentals</a><a href="foundations.html#nlp" class="active">NLP Fundamentals</a><a href="foundations.html#regulations" class="active">Regulations</a>
+    <div class="nav-section">Curriculum</div>
+    <a href="week1.html">Week 1 — Intro to AI</a><a href="week2.html">Week 2 — Language &amp; Law</a><a href="week3.html">Week 3 — Prompt Eng.</a><a href="week4.html">Week 4 — RAG</a><a href="week5.html">Week 5 — ComplianceGPT</a><a href="week6.html">Week 6 — Communication</a>
+    <div class="nav-section">Research</div>
+    <a href="projects.html">Student Projects</a><a href="readings.html">Reading List</a><a href="assignments.html">Assignments</a>
+  </nav>
+</aside>
+<main id="main">
+<div class="page-header">
+  <div class="breadcrumb">ComplianceGPT Lab · Summer 2026</div>
+  <h1>Foundations</h1>
+  <p class="subtitle">AI, NLP, and Regulatory background — the conceptual ground for everything you'll do this summer</p>
+</div>
+<div class="content">
+
+  <h2>AI Fundamentals</h2>
+  <p>You don't need to understand every detail of how neural networks work. You need a mental model accurate enough to reason about why AI systems fail and how to improve them.</p>
+
+  <div class="grid-2" style="margin-bottom:24px;">
+    <div class="card card-crimson">
+      <h3>Artificial Intelligence (AI)</h3>
+      <p>Systems that perform tasks normally requiring human intelligence: recognizing images, understanding language, making decisions. AI is an umbrella term — it includes everything below.</p>
+    </div>
+    <div class="card card-crimson">
+      <h3>Machine Learning (ML)</h3>
+      <p>AI that learns from data rather than from hand-written rules. You show it millions of examples, it learns the pattern. The pattern is a mathematical function (the model).</p>
+    </div>
+    <div class="card card-crimson">
+      <h3>Deep Learning (DL)</h3>
+      <p>ML using layered artificial neural networks. Especially powerful for language and images. GPT-4, Gemma, Llama are all deep learning models.</p>
+    </div>
+    <div class="card card-crimson">
+      <h3>Large Language Models (LLMs)</h3>
+      <p>Deep learning models trained on trillions of words from the internet. They predict the next token given the previous tokens. Emergent behavior: they can read, summarize, reason, and generate text.</p>
+    </div>
+  </div>
+
+  <h3>What is a Token?</h3>
+  <p>LLMs don't process characters or words — they process <strong>tokens</strong>, which are roughly word-pieces. "compliance" might be one token; "anti-inflammatory" might be three. GPT-4 was trained on ~13 trillion tokens. This matters for your research: the cost of running a model scales with token count, so shorter prompts = faster experiments.</p>
+
+  <h3>What is Hallucination?</h3>
+  <p>LLMs generate plausible-sounding text — but plausible does not mean accurate. A model might confidently cite a HIPAA subsection that doesn't exist, or invent a fictional court case. This is called <strong>hallucination</strong>. One of your projects directly studies this phenomenon in the legal compliance context.</p>
+
+  <h3>Recommended Videos</h3>
+  <ul>
+    <li><strong>3Blue1Brown — Neural Networks series</strong>: 4 videos, each ~20 min. Best visual explanation of how neural networks learn. Watch before Week 1.</li>
+    <li><strong>Andrej Karpathy — "Let's Build GPT from Scratch"</strong>: 2 hours. You will understand transformers after this. Optional but highly recommended.</li>
+    <li><strong>Andrew Ng — AI For Everyone</strong>: 6-hour Coursera course. Non-technical, very accessible. Great for understanding AI in context.</li>
+  </ul>
+
+  <h2 id="nlp" class="section-anchor">NLP Fundamentals</h2>
+  <p>Natural Language Processing (NLP) is the field of AI that deals with human language. Your research is applied NLP.</p>
+
+  <h3>Key Concepts</h3>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Embeddings</h3>
+      <p>A way to represent words (or sentences) as points in a high-dimensional space. Similar words are close together. "Hospital" and "clinic" are near each other; "hospital" and "lawsuit" are far. Embeddings are the foundation of semantic search and RAG.</p>
+    </div>
+    <div class="card">
+      <h3>Transformers</h3>
+      <p>The architecture underlying every modern LLM (GPT, Gemma, Llama, BERT). Key mechanism: <strong>attention</strong> — the model weighs how much each word should attend to every other word when computing its meaning. "He signed the <u>order</u>" — is "order" a court order or a food order? Attention uses context to decide.</p>
+    </div>
+    <div class="card">
+      <h3>Structured Output</h3>
+      <p>Making an LLM output a specific format (JSON, CSV, XML) rather than free text. Critical for ComplianceGPT: we need the model to extract fields like <code>sender_role</code> and <code>purpose</code> reliably. JSON mode, structured output APIs, and careful prompting all help.</p>
+    </div>
+    <div class="card">
+      <h3>Information Extraction (IE)</h3>
+      <p>The task of identifying specific entities and relationships in text. Named entity recognition (NER), relation extraction, event extraction. Our LLM extraction task is a form of IE: given a scenario, extract who, what, why, and how.</p>
+    </div>
+  </div>
+
+  <h3>Why NLP is Hard for Legal Text</h3>
+  <ul>
+    <li><strong>Precision matters</strong> — "the hospital may disclose" vs. "the hospital must disclose" have opposite compliance implications.</li>
+    <li><strong>Long documents</strong> — legal regulations are hundreds of pages. LLMs have context limits.</li>
+    <li><strong>Cross-references</strong> — "as permitted under §164.512(b)" requires knowing what §164.512(b) says.</li>
+    <li><strong>Ambiguity is intentional</strong> — legislators sometimes write vague rules on purpose. Courts interpret them. AI must navigate that ambiguity.</li>
+    <li><strong>Out-of-distribution</strong> — LLMs were trained on web text, not HIPAA enforcement decisions. Legal language is a specialized distribution they've seen less of.</li>
+  </ul>
+
+  <h2 id="regulations" class="section-anchor">Regulations</h2>
+  <p>You don't need to become a lawyer. You need to understand the structure of each regulation well enough to recognize when a scenario might trigger an exception or violation.</p>
+
+  <h3>HIPAA — Health Insurance Portability and Accountability Act (1996)</h3>
+  <div class="card card-navy">
+    <h3>What it protects</h3>
+    <p>Protected Health Information (PHI): any health information that can identify a patient. Diagnoses, treatments, test results, billing records, appointment dates.</p>
+    <h3 style="margin-top:14px;">Who must comply</h3>
+    <p>Covered Entities (CEs): hospitals, clinics, health plans, pharmacies, clearinghouses. Business Associates: anyone handling PHI on a CE's behalf.</p>
+    <h3 style="margin-top:14px;">The core rule</h3>
+    <p>A CE may not disclose PHI <em>except</em> under one of ~15 permitted exceptions: treatment, payment, healthcare operations, patient authorization, law enforcement, public health, research, judicial process, etc.</p>
+    <h3 style="margin-top:14px;">Why it's hard for AI</h3>
+    <p>Each exception has sub-conditions, qualifications, and edge cases. Law enforcement disclosures require specific legal instruments. Research disclosures require IRB approval or patient waiver. A model must track all of these simultaneously.</p>
+  </div>
+
+  <h3>GDPR — General Data Protection Regulation (EU, 2018)</h3>
+  <div class="card card-navy">
+    <p>Covers all personal data (not just health) of EU residents. Key concepts: lawful basis (consent, legitimate interest, legal obligation, vital interests, public task, contract), data minimization, right to erasure, data processor vs. controller. Maximum fine: 4% of global revenue or €20M, whichever is higher.</p>
+  </div>
+
+  <h3>GLBA — Gramm-Leach-Bliley Act (US, 1999)</h3>
+  <div class="card card-navy">
+    <p>US financial privacy law. Banks and financial institutions must protect customer non-public personal information (NPI). Customers have opt-out rights. Analogous to HIPAA but for finance: covered entity = financial institution, PHI = NPI.</p>
+  </div>
+
+  <h3>SOX — Sarbanes-Oxley Act (US, 2002)</h3>
+  <div class="card card-navy">
+    <p>Corporate governance and financial reporting. Public companies must maintain accurate financial records, implement internal controls (Section 404), and prohibit retaliation against whistleblowers (Section 806). Not a privacy law — more about financial integrity and audit trails.</p>
+    <p style="margin-top:10px;"><strong>Overlap with HIPAA:</strong> A patient asking a public hospital to delete their billing records runs into both HIPAA (limited deletion rights) and SOX §802 (records tied to financial audits cannot be destroyed). When both apply, the more restrictive rule governs.</p>
+  </div>
+
+  <h3>CCPA — California Consumer Privacy Act (US, 2020)</h3>
+  <div class="card card-navy">
+    <p>California's comprehensive consumer privacy law. Applies to for-profit businesses that collect personal information from California residents above certain size/revenue thresholds.</p>
+    <h3 style="margin-top:14px;">Key rights</h3>
+    <ul>
+      <li><strong>Right to know</strong> — consumers can request disclosure of what personal information a business has collected and who it was shared with</li>
+      <li><strong>Right to delete</strong> — consumers can request deletion of their personal information (with exceptions)</li>
+      <li><strong>Right to opt-out</strong> — consumers can stop the sale of their personal information to third parties</li>
+      <li><strong>Right to non-discrimination</strong> — businesses cannot penalize consumers for exercising CCPA rights</li>
+    </ul>
+    <h3 style="margin-top:14px;">Overlap with HIPAA</h3>
+    <p>HIPAA-covered entities are partially exempt from CCPA for PHI they hold <em>as</em> a covered entity. But the same organization may hold non-PHI data about the same patient (marketing data, website cookies, app analytics) that falls under CCPA only. A question like <em>"Can I delete my records?"</em> may require answering both laws separately for different data categories.</p>
+    <h3 style="margin-top:14px;">Why it matters for this project</h3>
+    <p>Project 5 (Cross-Regulation Overlap Study) directly tests whether ComplianceGPT can recognize when CCPA applies alongside HIPAA. A California patient asking to delete their health data is not a pure HIPAA question.</p>
+  </div>
+
+  <h3>COPPA — Children's Online Privacy Protection Act (US, 1998)</h3>
+  <div class="card card-navy">
+    <p>Federal law protecting the online privacy of children under 13. Enforced by the FTC.</p>
+    <h3 style="margin-top:14px;">Core requirement</h3>
+    <p>Operators of websites and online services directed at children (or with actual knowledge they are collecting data from children under 13) must obtain <strong>verifiable parental consent</strong> before collecting, using, or disclosing personal information from those children.</p>
+    <h3 style="margin-top:14px;">What counts as personal information under COPPA</h3>
+    <ul>
+      <li>Name, address, phone number, email, date of birth</li>
+      <li>Social Security number, photos, videos, audio files</li>
+      <li>Geolocation data, persistent identifiers (device IDs, cookies)</li>
+      <li>Health information collected online</li>
+    </ul>
+    <h3 style="margin-top:14px;">Overlap with HIPAA</h3>
+    <p>A pediatric patient portal at a hospital must comply with <em>both</em> HIPAA (as a covered entity handling PHI) and COPPA (as an online service collecting data from children under 13). Disclosing a 10-year-old's medical records to a school requires navigating HIPAA §164.512, COPPA parental consent rules, and potentially FERPA (Family Educational Rights and Privacy Act) — three separate regulatory frameworks simultaneously.</p>
+    <h3 style="margin-top:14px;">Why it matters for this project</h3>
+    <p>When a scenario involves a minor patient, COPPA may activate in addition to HIPAA. Current ComplianceGPT formalization handles HIPAA only — recognizing when COPPA applies is an open research question for Project 5.</p>
+  </div>
+
+  <div class="card card-gold" style="margin-top:24px;">
+    <h3>The Regulatory Overlap Principle</h3>
+    <p>A single patient action — <em>"Can I request my medical records?"</em> — can simultaneously activate HIPAA, GDPR (for EU residents), and CCPA (for California residents). <em>"Can I delete my health data?"</em> can activate HIPAA, GDPR, CCPA, SOX (if billing records), GLBA (if at a health insurer), and COPPA (if the patient is a minor). The answer to each question differs by regulation. ComplianceGPT currently handles one regulation at a time — handling overlap is the frontier.</p>
+  </div>
+
+  <footer>ComplianceGPT Lab · AI Innovation &amp; Diffusion REU 2026 · Stony Brook University</footer>
+</div>
+</main>
+</body>
+</html>
