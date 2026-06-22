@@ -66,23 +66,29 @@
     <p>This lets you pinpoint <em>which</em> fields fail — not just whether the final answer was wrong. That's more informative than verdict accuracy and doesn't require the engine.</p>
   </div>
 
-  <h2>Project 1 — LLM Extraction Benchmark</h2>
+  <h2>Project 1 — Benchmark Comparison + Error Taxonomy</h2>
   <div class="project-card">
     <h3>Research Question</h3>
-    <p>How do Gemma3:4B, Llama3.1:8B, and Qwen2.5:7B compare on <em>field-level extraction accuracy</em> for HIPAA compliance scenarios, and which specific fields and failure types are model-specific vs. universal?</p>
+    <p>How do Gemma3:4B, Llama3.1:8B, and Qwen2.5:7B compare on field-level extraction accuracy for HIPAA compliance scenarios — and can a formal error taxonomy, combined with targeted prompt interventions, reduce the most common failure types?</p>
     <h3>Background</h3>
-    <p>Prior work compares models on verdict accuracy (correct/wrong). But verdict accuracy hides <em>where</em> models fail. Two models can both get the wrong verdict for completely different reasons — one hallucinated a court order, the other misidentified the sender. Field-level comparison at the extraction layer reveals this.</p>
+    <p>Prior work compares models on verdict accuracy alone (correct/wrong). But two models can reach the wrong verdict for completely different reasons — one hallucinated a court order, the other misidentified the sender. You can't fix what you haven't named. This project builds the first formal taxonomy of LLM extraction errors in legal compliance and tests whether knowing the error type predicts which prompt fix resolves it.</p>
     <h3>Method</h3>
     <ul>
       <li>Run all 3 models on the same 50-scenario subset (diverse HIPAA exception categories)</li>
-      <li>For each model output: compare extracted JSON against gold annotations field by field</li>
-      <li>Compute per-field accuracy: sender role, receiver role, purpose, each oracle predicate</li>
-      <li>Build an error taxonomy: role error, purpose error, oracle hallucination, oracle under-extraction, format failure</li>
-      <li>Analyze: which fields fail most? Which errors are model-specific? Which are universal?</li>
+      <li>Compare each model's extracted JSON against gold annotations field by field; compute per-field accuracy</li>
+      <li>Collect all wrong extractions across all 3 models; inductively build a taxonomy:
+        <ul>
+          <li>Read cases, notice patterns, group into categories, write definitions, re-annotate until stable</li>
+          <li>Category candidates: role error, purpose OOV, oracle hallucination, oracle under-extraction, format failure, direction flip</li>
+        </ul>
+      </li>
+      <li>Validate taxonomy: compute inter-annotator agreement on a 20-case subset</li>
+      <li>For each error type: design a targeted prompt fix; measure whether it reduces that error type's rate on a held-out set</li>
+      <li>Analyze: which error types are model-specific? Which are universal across all three?</li>
     </ul>
     <h3>Deliverable</h3>
-    <p>Results table: 3 models × field-level accuracy breakdown. Error taxonomy. 2-page write-up. Poster.</p>
-    <p style="margin-top:8px;"><strong>Engine connection:</strong> Priscilla runs your 3-model JSON outputs through Soufflé locally → adds verdict-level accuracy column to your results table.</p>
+    <p>3-model field-level accuracy comparison table + formal error taxonomy (definitions, examples, inter-annotator agreement) + per-type prompt fix results. 2-page write-up. Poster.</p>
+    <p style="margin-top:8px;"><strong>Engine connection:</strong> Priscilla runs all 3 models' JSON outputs through Soufflé locally to add verdict-level accuracy as the headline number.</p>
     <div class="badge">3 weeks feasible</div><div class="badge badge-gold">Publication potential</div>
   </div>
 
@@ -176,25 +182,7 @@
     <div class="badge">3 weeks feasible</div><div class="badge badge-gold">Publication potential — multi-regulation compliance is an open problem with no prior systematic study</div>
   </div>
 
-  <h2>Project 6 — Error Taxonomy for Legal Extraction</h2>
-  <div class="project-card">
-    <h3>Research Question</h3>
-    <p>What is a complete, reproducible taxonomy of LLM extraction errors in HIPAA compliance reasoning, and does knowing the error type predict which prompt intervention fixes it?</p>
-    <h3>Background</h3>
-    <p>ComplianceGPT's wrong predictions cluster into patterns. A formal taxonomy would let future researchers quickly characterize their model's failure modes without doing exhaustive case-by-case analysis. Taxonomies are citable, reusable research contributions that don't require a new model or dataset to publish.</p>
-    <h3>Method</h3>
-    <ul>
-      <li>Start with pre-existing wrong predictions from 2–3 model runs (results CSVs provided)</li>
-      <li>Manually annotate each wrong prediction with a primary error type using an inductive process: read cases, notice patterns, group into categories, write definitions, re-annotate with stable categories</li>
-      <li>Validate taxonomy: compute inter-annotator agreement on a 20-case subset with a second annotator</li>
-      <li>For each error type: design a targeted prompt fix (e.g. for oracle hallucination, add an explicit negation guard); measure whether the fix reduces that error type's rate on a held-out set</li>
-    </ul>
-    <h3>Deliverable</h3>
-    <p>Error taxonomy (definitions + examples) + annotated dataset + per-type fix results table. 2-page write-up. Poster.</p>
-    <div class="badge">3 weeks feasible</div><div class="badge badge-gold">Publication potential — taxonomies are highly citable contributions</div>
-  </div>
-
-  <h2>Project 7 — Fine-Tuning for Compliance Extraction</h2>
+  <h2>Project 6 — Fine-Tuning for Compliance Extraction</h2>
   <div class="project-card">
     <h3>Research Question</h3>
     <p>Can parameter-efficient fine-tuning (LoRA) on the GoldCoin extraction task substantially improve a small model's field-level accuracy over prompting alone — and does improvement on oracle predicate extraction specifically translate to verdict accuracy gains when connected to the engine?</p>
@@ -217,8 +205,20 @@
   </div>
 
   <div class="card card-gold" style="margin-top:32px;">
-    <h3>How to choose a project</h3>
-    <p>Pick the one that makes you most curious — not the one that sounds most impressive. All seven have a clear 3-week execution path and a real research contribution. If you have a background in ML/deep learning, P7 (fine-tuning) is the most technically ambitious. If you're stronger in analysis and writing, P6 (taxonomy) or P4 (explanation quality) are high-value and more accessible. P2 (adversarial) and P5 (multi-regulation) are the most novel research directions. Confirm your choice by Friday Jul 3 — see <a href="assignments.html">Assignments</a> for details.</p>
+    <h3>How to choose</h3>
+    <p>Pick the one that makes you most curious — not the one that sounds most impressive. All six have a clear 3-week execution path and a real research contribution.</p>
+    <ul style="margin-top:10px;">
+      <li><strong>Most technically ambitious:</strong> P6 (fine-tuning) — requires ML background and GPU access</li>
+      <li><strong>Most novel research direction:</strong> P2 (adversarial), P5 (multi-regulation)</li>
+      <li><strong>Best for analysis + writing strength:</strong> P1 (taxonomy), P4 (explanation quality)</li>
+      <li><strong>Best entry point:</strong> P3 (prompt engineering) — structured, fast feedback loop</li>
+    </ul>
+    <p style="margin-top:10px;">Confirm your choice by Friday Jul 3 — see <a href="assignments.html">Assignments</a> for details.</p>
+  </div>
+
+  <div class="card" style="margin-top:16px;border:2px dashed var(--border);">
+    <h3>Have your own idea?</h3>
+    <p>These six projects are starting points, not a fixed menu. If you arrive with a research question of your own — something you read, something you noticed in the pipeline, something you're curious about from a different angle — bring it. The requirement is that it: (1) touches the LLM extraction layer, (2) produces a measurable result, and (3) is completable in 3 weeks. Pitch it during Week 1 and we'll scope it together.</p>
   </div>
 
   <footer>ComplianceGPT Lab · AI Innovation &amp; Diffusion REU 2026 · Stony Brook University</footer>
