@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Software &amp; Setup — ComplianceGPT Lab REU 2026</title>
+<title>Installation &amp; Setup — ComplianceGPT Lab REU 2026</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,7 +13,7 @@
     <div class="nav-section">Program</div>
     <a href="index.html">Welcome</a><a href="schedule.html">Weekly Schedule</a><a href="slides-week1.html">Week 1 Slides</a><a href="slides-week2.html">Week 2 Slides</a>
     <div class="nav-section">Foundations</div>
-    <a href="setup.html" class="active">Software &amp; Setup</a><a href="setup.html#python" class="active">Python Resources</a><a href="foundations.html">AI Fundamentals</a><a href="foundations.html#nlp">NLP Fundamentals</a><a href="foundations.html#regulations">Regulations</a>
+    <a href="setup.html" class="active">Installation &amp; Setup</a><a href="foundations.html">AI Fundamentals</a><a href="foundations.html#regulations">Regulations</a>
     <div class="nav-section">Curriculum</div>
     <a href="week1.html">Week 1 — Intro to AI</a><a href="week2.html">Week 2 — Language &amp; Law</a><a href="week3.html">Week 3 — Prompt Eng.</a><a href="week4.html">Week 4 — RAG</a><a href="week5.html">Week 5 — ComplianceGPT</a><a href="week6.html">Week 6 — Communication</a>
     <div class="nav-section">Research</div>
@@ -22,116 +22,410 @@
 </aside>
 <main id="main">
 <div class="page-header">
-  <div class="breadcrumb">ComplianceGPT Lab · Summer 2026</div>
-  <h1>Software &amp; Setup</h1>
-  <p class="subtitle">Everything you need to install before Day 1, and Python resources for the program</p>
+  <div class="breadcrumb">Foundations</div>
+  <h1>Installation &amp; Setup</h1>
+  <p class="subtitle">Step-by-step for Mac and Windows — work through this before the installation session</p>
 </div>
 <div class="content">
 
-  <div class="card card-gold">
-    <h3>Complete this before June 22</h3>
-    <p>Work through the Setup checklist below before your first day. If you get stuck, post in Slack — do not wait until Day 1 to discover a broken install.</p>
+  <div class="card card-crimson" style="margin-bottom:24px;">
+    <h3>What you are installing</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin-top:10px;font-family:'Segoe UI',system-ui,sans-serif;font-size:0.88rem;">
+      <div><strong>Anaconda</strong><br><span style="color:#212529;">Python + package manager. Install this first — it replaces a bare Python install.</span></div>
+      <div><strong>VS Code</strong><br><span style="color:#212529;">Code editor. Where you write Python, open notebooks, and browse the repo.</span></div>
+      <div><strong>Git</strong><br><span style="color:#212529;">Version control. How you submit work and sync with the lab repo.</span></div>
+      <div><strong>Ollama</strong><br><span style="color:#212529;">Runs LLMs locally (Gemma3:4B). Required for Week 1 pipeline run.</span></div>
+    </div>
   </div>
 
-  <h2>Required Software</h2>
-  <table>
-    <thead><tr><th>Tool</th><th>Purpose</th><th>Install</th></tr></thead>
-    <tbody>
-      <tr><td><strong>Python 3.11+</strong></td><td>Primary language for all experiments</td><td><code>python.org/downloads</code></td></tr>
-      <tr><td><strong>VS Code</strong></td><td>Code editor with Python extension</td><td><code>code.visualstudio.com</code></td></tr>
-      <tr><td><strong>Git</strong></td><td>Version control</td><td><code>git-scm.com</code></td></tr>
-      <tr><td><strong>Ollama</strong></td><td>Run LLMs locally (Gemma3, Llama, etc.)</td><td><code>ollama.com</code></td></tr>
-      <tr><td><strong>Jupyter</strong></td><td>Interactive Python notebooks</td><td><code>pip install jupyter</code></td></tr>
-      <tr><td><strong>pandas</strong></td><td>Data analysis and CSV handling</td><td><code>pip install pandas</code></td></tr>
-      <tr><td><strong>scikit-learn</strong></td><td>Evaluation metrics (F1, precision, recall)</td><td><code>pip install scikit-learn</code></td></tr>
-    </tbody>
-  </table>
+  <!-- ═══ SECTION TABS ═══ -->
+  <div style="display:flex;gap:0;margin-bottom:0;font-family:'Segoe UI',system-ui,sans-serif;">
+    <button onclick="showOS('mac')" id="tab-mac"
+      style="padding:10px 28px;border:2px solid var(--crimson);border-bottom:none;border-radius:6px 6px 0 0;background:var(--crimson);color:#fff;font-weight:700;cursor:pointer;font-size:0.9rem;">
+       Mac
+    </button>
+    <button onclick="showOS('win')" id="tab-win"
+      style="padding:10px 28px;border:2px solid var(--border);border-bottom:none;border-radius:6px 6px 0 0;background:#fff;color:var(--navy);font-weight:700;cursor:pointer;font-size:0.9rem;margin-left:4px;">
+       Windows
+    </button>
+  </div>
 
-  <h2>Setup Checklist</h2>
-  <div class="card card-navy">
-    <h3>Step 1 — Clone the repository</h3>
-    <pre>git clone https://github.com/[repo-url]/COMPLIANCEGPT.git
-cd COMPLIANCEGPT
-pip install -r requirements.txt</pre>
+  <!-- ═══ MAC ═══ -->
+  <div id="os-mac" style="border:2px solid var(--crimson);border-radius:0 6px 6px 6px;padding:28px;margin-bottom:28px;">
+
+    <h2 style="margin-bottom:20px;">Mac Installation</h2>
+
+    <div class="card card-navy" style="margin-bottom:14px;">
+      <h3>Step 1 — Install Anaconda</h3>
+      <p>Anaconda gives you Python 3.11 + conda package manager + Jupyter all at once. Do not install bare Python separately — it causes conflicts.</p>
+      <ol style="margin-top:10px;">
+        <li>Go to <strong>anaconda.com/download</strong></li>
+        <li>Download the <strong>macOS graphical installer</strong> (choose Apple Silicon / M1/M2/M3 if your Mac is 2020 or newer; Intel otherwise)</li>
+        <li>Open the <code>.pkg</code> file and follow the installer — click through all defaults</li>
+        <li>When the installer finishes, <strong>open a new Terminal</strong> (Cmd+Space → type "Terminal")</li>
+        <li>Verify: <code>conda --version</code> should print a version number</li>
+      </ol>
+      <pre style="margin-top:10px;">conda --version
+# Expected: conda 24.x.x or similar</pre>
+    </div>
+
+    <div class="card card-navy" style="margin-bottom:14px;">
+      <h3>Step 2 — Create the lab environment</h3>
+      <p>This creates an isolated Python environment called <code>compliancegpt</code>. All packages go here — nothing pollutes your system Python.</p>
+      <pre>conda create -n compliancegpt python=3.11 -y
+conda activate compliancegpt</pre>
+      <p style="margin-top:8px;font-size:0.85rem;color:#212529;">You should see <code>(compliancegpt)</code> appear at the start of your terminal prompt. Run <code>conda activate compliancegpt</code> every time you open a new terminal for this project.</p>
+    </div>
+
+    <div class="card card-navy" style="margin-bottom:14px;">
+      <h3>Step 3 — Install packages</h3>
+      <pre>pip install pandas numpy matplotlib seaborn scikit-learn \
+            jupyter ipykernel \
+            transformers datasets tokenizers huggingface_hub \
+            peft bitsandbytes accelerate trl \
+            tiktoken requests httpx ollama</pre>
+      <p style="margin-top:8px;font-size:0.85rem;color:#212529;">This takes 3–5 minutes. If you see any red error lines, copy them and post in Slack.</p>
+    </div>
+
+    <div class="card card-navy" style="margin-bottom:14px;">
+      <h3>Step 4 — Install VS Code</h3>
+      <ol>
+        <li>Go to <strong>code.visualstudio.com</strong> and download the Mac version</li>
+        <li>Drag VS Code to your Applications folder</li>
+        <li>Open VS Code → press <strong>Cmd+Shift+X</strong> → search <strong>Python</strong> → install the Microsoft Python extension</li>
+        <li>Also install: <strong>Jupyter</strong> extension (search "Jupyter" in extensions)</li>
+        <li>Press <strong>Cmd+Shift+P</strong> → type "Python: Select Interpreter" → choose <code>compliancegpt</code></li>
+      </ol>
+    </div>
+
+    <div class="card card-navy" style="margin-bottom:14px;">
+      <h3>Step 5 — Install Git</h3>
+      <p>Mac may already have Git. Check first:</p>
+      <pre>git --version</pre>
+      <p style="margin-top:8px;">If it prints a version — you're done. If not, install via Homebrew:</p>
+      <pre># Install Homebrew first if you don't have it:
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Then install git:
+brew install git</pre>
+      <p style="margin-top:8px;">Then configure your identity (use your real name and university email):</p>
+      <pre>git config --global user.name "Your Name"
+git config --global user.email "you@university.edu"</pre>
+    </div>
+
+    <div class="card card-navy" style="margin-bottom:14px;">
+      <h3>Step 6 — Install Ollama</h3>
+      <ol>
+        <li>Go to <strong>ollama.com</strong> → click Download → download the Mac version</li>
+        <li>Open the <code>.dmg</code> and drag Ollama to Applications</li>
+        <li>Open Ollama from Applications — it runs as a menu bar icon</li>
+        <li>In Terminal, pull Gemma3:4B (3–5 min download):</li>
+      </ol>
+      <pre>ollama pull gemma3:4b</pre>
+      <p style="margin-top:8px;">Test it:</p>
+      <pre>ollama run gemma3:4b "What is HIPAA?"
+# Should print a short answer. Type /bye to exit.</pre>
+    </div>
+
+    <div class="card card-gold" style="color:#212529;">
+      <h3>Mac — Verification</h3>
+      <p>Run all of these in Terminal with <code>(compliancegpt)</code> active. Every line should succeed:</p>
+      <pre style="background:#1e1e2e;color:#cdd6f4;border-radius:4px;padding:12px;margin-top:8px;">python --version          # Python 3.11.x
+conda activate compliancegpt
+python -c "import pandas; print(pandas.__version__)"
+python -c "import transformers; print(transformers.__version__)"
+python -c "import peft; print(peft.__version__)"
+git --version
+ollama list               # should show gemma3:4b</pre>
+    </div>
   </div>
-  <div class="card card-navy">
-    <h3>Step 2 — Install and test Ollama</h3>
-    <pre># After installing Ollama from ollama.com:
-ollama pull gemma3:4b
-ollama serve   # leave this running in a terminal</pre>
+
+  <!-- ═══ WINDOWS ═══ -->
+  <div id="os-win" style="display:none;border:2px solid var(--navy);border-radius:0 6px 6px 6px;padding:28px;margin-bottom:28px;">
+
+    <h2 style="margin-bottom:20px;">Windows Installation</h2>
+
+    <div class="card card-navy" style="margin-bottom:14px;">
+      <h3>Step 1 — Install Anaconda</h3>
+      <p>Anaconda gives you Python 3.11 + conda package manager + Jupyter. Do not install bare Python from the Microsoft Store — it causes PATH conflicts with conda.</p>
+      <ol style="margin-top:10px;">
+        <li>Go to <strong>anaconda.com/download</strong></li>
+        <li>Download the <strong>Windows 64-bit graphical installer</strong></li>
+        <li>Run the <code>.exe</code> installer — on the "Advanced Options" screen, check <strong>"Add Anaconda to my PATH environment variable"</strong></li>
+        <li>Click through all other defaults and finish installation</li>
+        <li>Open <strong>Anaconda Prompt</strong> from the Start menu (search "Anaconda Prompt" — use this, not regular Command Prompt)</li>
+        <li>Verify: <code>conda --version</code> should print a version number</li>
+      </ol>
+      <pre style="margin-top:10px;">conda --version
+# Expected: conda 24.x.x or similar</pre>
+    </div>
+
+    <div class="card card-navy" style="margin-bottom:14px;">
+      <h3>Step 2 — Create the lab environment</h3>
+      <p>Run these in <strong>Anaconda Prompt</strong>:</p>
+      <pre>conda create -n compliancegpt python=3.11 -y
+conda activate compliancegpt</pre>
+      <p style="margin-top:8px;font-size:0.85rem;color:#212529;">You should see <code>(compliancegpt)</code> at the start of your prompt. Run <code>conda activate compliancegpt</code> every time you open a new Anaconda Prompt.</p>
+    </div>
+
+    <div class="card card-navy" style="margin-bottom:14px;">
+      <h3>Step 3 — Install packages</h3>
+      <p>Still in Anaconda Prompt with <code>(compliancegpt)</code> active:</p>
+      <pre>pip install pandas numpy matplotlib seaborn scikit-learn ^
+            jupyter ipykernel ^
+            transformers datasets tokenizers huggingface_hub ^
+            peft accelerate trl ^
+            tiktoken requests httpx ollama</pre>
+      <p style="margin-top:8px;font-size:0.85rem;color:#212529;"><strong>Note on bitsandbytes:</strong> On Windows, install the Windows-compatible build separately:</p>
+      <pre>pip install bitsandbytes --prefer-binary</pre>
+      <p style="margin-top:6px;font-size:0.85rem;color:#212529;">If that fails, skip it for now — it's only needed for P6 (fine-tuning). Post in Slack.</p>
+    </div>
+
+    <div class="card card-navy" style="margin-bottom:14px;">
+      <h3>Step 4 — Install VS Code</h3>
+      <ol>
+        <li>Go to <strong>code.visualstudio.com</strong> → download the Windows installer</li>
+        <li>Run the <code>.exe</code> — on "Select Additional Tasks", check <strong>"Add to PATH"</strong> and <strong>"Register Code as editor for supported file types"</strong></li>
+        <li>Open VS Code → press <strong>Ctrl+Shift+X</strong> → search <strong>Python</strong> → install the Microsoft Python extension</li>
+        <li>Also install: <strong>Jupyter</strong> extension</li>
+        <li>Press <strong>Ctrl+Shift+P</strong> → type "Python: Select Interpreter" → choose <code>compliancegpt</code></li>
+      </ol>
+    </div>
+
+    <div class="card card-navy" style="margin-bottom:14px;">
+      <h3>Step 5 — Install Git</h3>
+      <ol>
+        <li>Go to <strong>git-scm.com/download/win</strong> → download the 64-bit installer</li>
+        <li>Run the installer — on "Choosing the default editor", select <strong>VS Code</strong></li>
+        <li>On "Adjusting your PATH", select <strong>"Git from the command line and also from 3rd-party software"</strong></li>
+        <li>Leave all other options as default and finish</li>
+        <li>Open <strong>Git Bash</strong> from the Start menu and configure your identity:</li>
+      </ol>
+      <pre>git config --global user.name "Your Name"
+git config --global user.email "you@university.edu"</pre>
+      <p style="margin-top:8px;font-size:0.85rem;color:#212529;">Use Git Bash (not Command Prompt) for all git commands on Windows.</p>
+    </div>
+
+    <div class="card card-navy" style="margin-bottom:14px;">
+      <h3>Step 6 — Install Ollama</h3>
+      <ol>
+        <li>Go to <strong>ollama.com</strong> → click Download → download the Windows version</li>
+        <li>Run the installer (it installs and starts automatically as a background service)</li>
+        <li>Open <strong>Anaconda Prompt</strong> and pull Gemma3:4B:</li>
+      </ol>
+      <pre>ollama pull gemma3:4b</pre>
+      <p style="margin-top:8px;">Test it:</p>
+      <pre>ollama run gemma3:4b "What is HIPAA?"
+# Should print a short answer. Type /bye to exit.</pre>
+      <p style="margin-top:8px;font-size:0.85rem;color:#212529;">If Ollama doesn't respond, make sure it is running in the system tray (bottom-right of taskbar).</p>
+    </div>
+
+    <div class="card card-gold" style="color:#212529;">
+      <h3>Windows — Verification</h3>
+      <p>Run all of these in <strong>Anaconda Prompt</strong> with <code>(compliancegpt)</code> active:</p>
+      <pre style="background:#1e1e2e;color:#cdd6f4;border-radius:4px;padding:12px;margin-top:8px;">python --version          # Python 3.11.x
+python -c "import pandas; print(pandas.__version__)"
+python -c "import transformers; print(transformers.__version__)"
+python -c "import peft; print(peft.__version__)"
+git --version
+ollama list               # should show gemma3:4b</pre>
+    </div>
   </div>
-  <div class="card card-navy">
-    <h3>Step 3 — Run your first experiment</h3>
-    <pre>python3 app/batch_runner.py \
+
+  <!-- ═══ SHARED: REPO + TEST ═══ -->
+  <h2>After Installation — Clone the Repo &amp; Run the Pipeline</h2>
+  <p>These steps are the same on Mac and Windows. Run them in Terminal (Mac) or Anaconda Prompt (Windows) with <code>(compliancegpt)</code> active.</p>
+
+  <div class="card card-navy" style="margin-bottom:14px;">
+    <h3>Step 7 — Clone the lab repository</h3>
+    <pre>git clone https://github.com/priscilla100/COMPLIANCEGPT.git
+cd COMPLIANCEGPT</pre>
+    <p style="margin-top:8px;font-size:0.85rem;color:#212529;">If you don't have access yet, you'll receive an invite link on Slack. Accept it, then clone.</p>
+  </div>
+
+  <div class="card card-navy" style="margin-bottom:14px;">
+    <h3>Step 8 — Install from requirements.txt</h3>
+    <pre>pip install -r requirements.txt</pre>
+    <p style="margin-top:8px;font-size:0.85rem;color:#212529;">This installs exact pinned versions to ensure reproducibility. If any package fails, install the rest first and post the error in Slack.</p>
+  </div>
+
+  <div class="card card-navy" style="margin-bottom:14px;">
+    <h3>Step 9 — Run your first experiment</h3>
+    <pre># Make sure Ollama is running first (open Ollama app / check system tray)
+python app/batch_runner.py \
   --input data/goldcoin_hhs_merged.csv \
   --question-col query \
   --strategy formal \
   --model ollama/gemma3:4b \
-  --output /tmp/my_first_run.csv \
+  --output results/my_first_run.csv \
   --limit 3</pre>
-    <p style="margin-top:8px;font-size:0.88rem;color:rgba(205,214,244,0.7);">If you see 3 rows with PERMITTED/DENIED verdicts — you're set up correctly.</p>
+    <p style="margin-top:8px;">If you see 3 rows with PERMITTED or DENIED verdicts — <strong>you are set up correctly.</strong></p>
   </div>
+
+  <div class="card card-navy" style="margin-bottom:28px;">
+    <h3>Step 10 — Open the starter notebook</h3>
+    <pre>jupyter notebook notebooks/week1_python.ipynb</pre>
+    <p style="margin-top:8px;font-size:0.85rem;color:#212529;">This opens in your browser. Run the first cell — if it prints "Setup complete", you're ready for Week 1.</p>
+  </div>
+
+  <!-- ═══ SERVER ═══ -->
+  <h2>Slurm Server Access</h2>
+  <div class="card card-gold" style="color:#212529;margin-bottom:14px;">
+    <h3>Server access is handled by the program — you don't set this up yourself</h3>
+    <p>You will receive SSH credentials from the program coordinator. Once you have them, connect as follows.</p>
+  </div>
+
+  <div class="card card-navy" style="margin-bottom:14px;">
+    <h3>Connecting via SSH</h3>
+    <p><strong>Mac / Linux:</strong> open Terminal and run:</p>
+    <pre>ssh yournetid@[server-address]
+# Enter your password when prompted</pre>
+    <p style="margin-top:10px;"><strong>Windows:</strong> open <strong>Git Bash</strong> (not Anaconda Prompt) and run the same command. Alternatively, install <a href="https://www.putty.org" target="_blank" style="color:#89dceb;">PuTTY</a> as a GUI SSH client.</p>
+  </div>
+
+  <div class="card card-navy" style="margin-bottom:14px;">
+    <h3>Running a job on the cluster</h3>
+    <p>The server uses <strong>Slurm</strong> for job scheduling. You do not run Python directly — you submit a job script.</p>
+    <pre># Example job script: save as run_experiment.sh
+#!/bin/bash
+#SBATCH --job-name=compliancegpt
+#SBATCH --output=logs/%j.out
+#SBATCH --error=logs/%j.err
+#SBATCH --time=02:00:00
+#SBATCH --gres=gpu:1
+#SBATCH --mem=16G
+
+conda activate compliancegpt
+python app/batch_runner.py \
+  --input data/goldcoin_hhs_merged.csv \
+  --strategy formal \
+  --model ollama/gemma3:4b \
+  --output results/server_run.csv</pre>
+    <pre># Submit it:
+sbatch run_experiment.sh
+
+# Check status:
+squeue --me
+
+# View output when done:
+cat logs/[job-id].out</pre>
+    <p style="margin-top:8px;font-size:0.85rem;color:#212529;">You will walk through this together with Priscilla. Do not submit jobs before the session — you may queue jobs that conflict with others.</p>
+  </div>
+
+  <!-- ═══ REQUIREMENTS.TXT ═══ -->
+  <h2>requirements.txt</h2>
+  <p>This file lives in the root of the repository. It pins exact versions so every student's environment is identical. For reference:</p>
+  <pre style="background:#1e1e2e;color:#cdd6f4;border-radius:6px;padding:20px;font-size:0.83rem;line-height:1.7;overflow-x:auto;"># ── Core data science ──────────────────────────────────────────
+pandas>=2.1.0
+numpy>=1.26.0
+matplotlib>=3.8.0
+seaborn>=0.13.0
+scikit-learn>=1.4.0
+
+# ── Jupyter ──────────────────────────────────────────────────
+jupyter>=1.0.0
+ipykernel>=6.29.0
+nbformat>=5.9.0
+
+# ── HuggingFace ecosystem ────────────────────────────────────
+transformers>=4.40.0
+datasets>=2.19.0
+tokenizers>=0.19.0
+huggingface_hub>=0.22.0
+
+# ── Parameter-efficient fine-tuning (P6) ────────────────────
+peft>=0.10.0
+bitsandbytes>=0.43.0
+accelerate>=0.28.0
+trl>=0.8.6
+
+# ── Tokenization / utilities ─────────────────────────────────
+tiktoken>=0.6.0
+nltk>=3.8.0
+
+# ── HTTP / API ────────────────────────────────────────────────
+requests>=2.31.0
+httpx>=0.27.0
+
+# ── Ollama Python client ──────────────────────────────────────
+ollama>=0.2.0</pre>
+
+  <!-- ═══ CHECKLIST ═══ -->
+  <h2>Final Checklist</h2>
   <div class="card card-navy">
-    <h3>Step 4 — Inspect the results</h3>
-    <pre>import pandas as pd
-df = pd.read_csv("/tmp/my_first_run.csv")
-print(df[["question", "verdict", "ground_truth"]])</pre>
+    <p>Before the installation session ends, confirm every item:</p>
+    <ul style="margin-top:10px;line-height:2.2;">
+      <li>☐ <code>conda activate compliancegpt</code> — prompt shows <code>(compliancegpt)</code></li>
+      <li>☐ <code>python --version</code> → 3.11.x</li>
+      <li>☐ <code>import pandas, transformers, peft</code> — no errors</li>
+      <li>☐ VS Code opens, Python extension installed, interpreter set to <code>compliancegpt</code></li>
+      <li>☐ <code>git --version</code> works, name and email configured</li>
+      <li>☐ <code>ollama list</code> shows <code>gemma3:4b</code></li>
+      <li>☐ <code>git clone</code> of the lab repo succeeded</li>
+      <li>☐ <code>pip install -r requirements.txt</code> completed with no fatal errors</li>
+      <li>☐ <code>batch_runner.py --limit 3</code> produced a CSV with verdicts</li>
+      <li>☐ <code>notebooks/week1_python.ipynb</code> opened in browser and first cell ran</li>
+      <li>☐ SSH login to the Slurm server works</li>
+    </ul>
+    <p style="margin-top:12px;font-size:0.88rem;color:#212529;">If any item is unchecked at the end of the session, post specifically what failed in Slack before Thursday. Include the full error message.</p>
   </div>
 
-  <h2>System Requirements</h2>
-  <ul>
-    <li>Any laptop with 8 GB RAM is sufficient for Gemma3:4b locally.</li>
-    <li>Large models (Llama 70B, Qwen 72B) run on the AI3 cluster or vast.ai GPU servers — not your laptop.</li>
-    <li>Mac, Windows, and Linux are all supported. The codebase is cross-platform.</li>
-  </ul>
-
+  <!-- ═══ PYTHON RESOURCES ═══ -->
   <h2 id="python" class="section-anchor">Python Resources</h2>
-  <p>You don't need to be a Python expert. You need to be functional: load a CSV, loop over rows, call a function, save results. Here are the best free resources to get there fast.</p>
-
-  <h3>If you're new to Python</h3>
-  <div class="card card-crimson" style="margin-bottom:12px;">
-    <h3>Python Crash Course — Eric Matthes</h3>
-    <p>Chapters 1–6 cover everything you need. Available at most libraries or as a PDF online. Focus: variables, lists, dicts, functions, files. Skip the game development chapters for now.</p>
-  </div>
-  <div class="card" style="margin-bottom:12px;">
-    <h3>CS50P — Harvard (free on edX)</h3>
-    <p>Python course from Harvard. Excellent production quality. Each problem set takes 2–3 hours. Do Weeks 0–4 if you have time before June 22.</p>
-  </div>
-
-  <h3>If you know Python basics but want to level up</h3>
-  <div class="card" style="margin-bottom:12px;">
-    <h3>Automate the Boring Stuff with Python — Al Sweigart</h3>
-    <p>Free at <code>automatetheboringstuff.com</code>. Chapters on CSV, file I/O, and APIs are directly useful for this project.</p>
-  </div>
-  <div class="card">
-    <h3>Corey Schafer — YouTube</h3>
-    <p>Best Python tutorial series on YouTube. Clear, fast, practical. Particularly: the pandas tutorial series (10 videos) is exactly what you need for data analysis.</p>
+  <p>You don't need to be a Python expert. You need to be functional: load a CSV, loop over rows, call a function, save results. Here are the fastest paths to get there.</p>
+  <div class="grid-2">
+    <div class="card card-crimson">
+      <h3>New to Python</h3>
+      <ul>
+        <li><strong>CS50P</strong> (Harvard, free on edX) — Weeks 0–4. Each problem set is 2–3 hours. Best structured intro.</li>
+        <li><strong>Python Crash Course</strong> — Matthes. Chapters 1–6. Available at most libraries.</li>
+      </ul>
+    </div>
+    <div class="card card-crimson">
+      <h3>Know basics, need data skills</h3>
+      <ul>
+        <li><strong>Corey Schafer — Pandas series</strong> (YouTube, 10 videos). Exactly what you need for CSV analysis.</li>
+        <li><strong>Automate the Boring Stuff</strong> — free at automatetheboringstuff.com. Chapters on file I/O and CSV.</li>
+      </ul>
+    </div>
   </div>
 
-  <h3>The 5 things you actually need for this project</h3>
-  <pre>
-# 1. Load a CSV
-import pandas as pd
-df = pd.read_csv("results.csv")
+  <h3 style="margin-top:20px;">The 5 patterns you use all summer</h3>
+  <pre style="background:#1e1e2e;color:#cdd6f4;border-radius:6px;padding:18px;font-size:0.85rem;line-height:1.7;">import pandas as pd, json
 
-# 2. Filter rows
-wrong = df[df["verdict"] != df["ground_truth"]]
+# 1. Load results
+df = pd.read_csv("results/my_run.csv")
 
-# 3. Write a function
-def check_accuracy(df):
-    correct = (df["verdict"] == df["ground_truth"]).sum()
-    return correct / len(df)
+# 2. Find wrong predictions
+wrong = df[df["verdict_norm"] != df["ground_truth"]]
 
-# 4. Loop + print
-for i, row in wrong.iterrows():
-    print(f"Row {i}: {row['verdict']} (expected {row['ground_truth']})")
+# 3. Inspect extraction JSON
+row = wrong.iloc[0]
+sj  = json.loads(row["scenario_json"])
+print(sj["sender_role"], sj["has_court_order"])
 
-# 5. Save results
-df.to_csv("analysis_output.csv", index=False)
-  </pre>
+# 4. Compute accuracy
+accuracy = (df["verdict_norm"] == df["ground_truth"]).mean()
+print(f"Accuracy: {accuracy:.1%}")
+
+# 5. Save annotated output
+df.to_csv("results/annotated.csv", index=False)</pre>
 
   <footer>ComplianceGPT Lab · AI Innovation &amp; Diffusion REU 2026 · Stony Brook University</footer>
 </div>
 </main>
+
+<script>
+function showOS(os) {
+  document.getElementById('os-mac').style.display = os === 'mac' ? 'block' : 'none';
+  document.getElementById('os-win').style.display = os === 'win' ? 'block' : 'none';
+  document.getElementById('tab-mac').style.background = os === 'mac' ? 'var(--crimson)' : '#fff';
+  document.getElementById('tab-mac').style.color      = os === 'mac' ? '#fff' : 'var(--navy)';
+  document.getElementById('tab-mac').style.borderColor= os === 'mac' ? 'var(--crimson)' : 'var(--border)';
+  document.getElementById('tab-win').style.background = os === 'win' ? 'var(--navy)' : '#fff';
+  document.getElementById('tab-win').style.color      = os === 'win' ? '#fff' : 'var(--navy)';
+  document.getElementById('tab-win').style.borderColor= os === 'win' ? 'var(--navy)' : 'var(--border)';
+}
+</script>
 </body>
 </html>
