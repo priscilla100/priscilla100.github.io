@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python Fundamentals — ComplianceGPT Lab REU 2026</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside id="sidebar">
+  <div class="logo"><div class="lab-name">ComplianceGPT Lab</div><div class="lab-sub">AI Innovation &amp; Diffusion REU 2026<br>Stony Brook University</div></div>
+  <nav>
+    <div class="nav-section">Program</div>
+    <a href="index.html">Welcome</a><a href="schedule.html">Weekly Schedule</a><a href="slides-week1.html">Week 1 Slides</a><a href="slides-week2.html">Week 2 Slides</a>
+    <div class="nav-section">Foundations</div>
+    <a href="setup.html">Setup &amp; Tools</a><a href="python.html" class="active">Python Fundamentals</a><a href="foundations.html">AI Fundamentals</a><a href="foundations.html#regulations">Regulations</a>
+    <div class="nav-section">Curriculum</div>
+    <a href="week1.html">Week 1 — Intro to AI</a><a href="week2.html">Week 2 — Language &amp; Law</a><a href="week3.html">Week 3 — Prompt Eng.</a><a href="week4.html">Week 4 — RAG</a><a href="week5.html">Week 5 — ComplianceGPT</a><a href="week6.html">Week 6 — Communication</a>
+    <div class="nav-section">Research</div>
+    <a href="projects.html">Student Projects</a><a href="readings.html">Reading List</a><a href="assignments.html">Assignments</a>
+  </nav>
+</aside>
+<main id="main">
+<div class="page-header">
+  <div class="breadcrumb">Foundations</div>
+  <h1>Python Fundamentals</h1>
+  <p class="subtitle">The six building blocks you will use every day this summer — with examples from real ComplianceGPT data</p>
+</div>
+<div class="content">
+
+  <!-- Download box -->
+  <div class="card card-crimson" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:32px;">
+    <div>
+      <h3 style="margin:0 0 4px;">Starter Notebook — Week 1</h3>
+      <p style="margin:0;font-size:0.88rem;color:var(--muted);">Six guided exercises. Open in Jupyter or VS Code. Complete before Friday.</p>
+    </div>
+    <a href="notebooks/week1_python.ipynb" download
+       style="display:inline-block;background:var(--crimson);color:#fff;font-family:'Segoe UI',system-ui,sans-serif;font-weight:700;font-size:0.9rem;padding:12px 28px;border-radius:6px;text-decoration:none;white-space:nowrap;">
+      Download Notebook (.ipynb)
+    </a>
+  </div>
+
+  <div class="card card-gold" style="margin-bottom:32px;">
+    <h3>How to open the notebook</h3>
+    <p>Once downloaded, open a terminal (Mac) or Anaconda Prompt (Windows), activate your environment, and run:</p>
+    <pre style="margin-top:8px;margin-bottom:0;">conda activate compliancegpt
+jupyter notebook week1_python.ipynb</pre>
+    <p style="margin-top:8px;font-size:0.88rem;color:#212529;">A browser tab will open. Run each cell with <strong>Shift + Enter</strong>. Read each markdown cell before running the code below it.</p>
+  </div>
+
+  <!-- ─── 1. Variables & Types ─────────────────────────────────────────── -->
+  <h2 id="variables" class="section-anchor">1 — Variables and Types</h2>
+  <p>A variable is a named container. Python figures out the type automatically — you never write <code>int x = 5</code> like in Java.</p>
+
+  <div class="grid-2" style="margin-bottom:8px;">
+    <div>
+      <h4>The four types you will use</h4>
+      <table style="margin-bottom:0;">
+        <thead><tr><th>Type</th><th>Example</th><th>What it is</th></tr></thead>
+        <tbody>
+          <tr><td><code>str</code></td><td><code>"hospital"</code></td><td>Text</td></tr>
+          <tr><td><code>int</code></td><td><code>137</code></td><td>Whole number</td></tr>
+          <tr><td><code>float</code></td><td><code>0.942</code></td><td>Decimal number</td></tr>
+          <tr><td><code>bool</code></td><td><code>True</code> / <code>False</code></td><td>Yes or No</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <h4>Live example</h4>
+      <pre style="margin-bottom:0;">hospital_name = "Stony Brook Medicine"
+num_cases     = 137
+best_accuracy = 0.942
+is_permitted  = True
+
+print(hospital_name)      # Stony Brook Medicine
+print(type(num_cases))    # &lt;class 'int'&gt;
+print(is_permitted)       # True</pre>
+    </div>
+  </div>
+
+  <div class="card card-navy" style="margin-top:16px;">
+    <h3>Key rule: strings need quotes, numbers do not</h3>
+    <p><code>"137"</code> is text — you cannot do math with it. <code>137</code> is a number — you can. This is the most common beginner mistake. If you see a <code>TypeError</code> when adding or comparing, check for accidental strings.</p>
+  </div>
+
+  <!-- ─── 2. Lists & Dicts ─────────────────────────────────────────────── -->
+  <h2 id="collections" class="section-anchor">2 — Lists and Dictionaries</h2>
+  <p>These are the two data structures you will use constantly. Lists are ordered sequences. Dictionaries map keys to values.</p>
+
+  <div class="grid-2">
+    <div>
+      <h4>Lists — ordered, indexed from 0</h4>
+      <pre>models = ["gemma3:4b", "llama3.1:8b", "qwen2.5:72b"]
+
+print(models[0])      # gemma3:4b
+print(models[-1])     # qwen2.5:72b  (last)
+print(len(models))    # 3
+
+models.append("claude-sonnet")
+print(len(models))    # 4</pre>
+    </div>
+    <div>
+      <h4>Dictionaries — key → value pairs</h4>
+      <pre>result = {
+    "scenario_id": "HHS-001",
+    "verdict":     "PERMITTED",
+    "correct":     True,
+    "accuracy":    0.942
+}
+
+print(result["verdict"])   # PERMITTED
+print(result["correct"])   # True
+
+result["model"] = "gemma3:4b"  # add a key</pre>
+    </div>
+  </div>
+
+  <div class="card card-gold" style="margin-top:4px;">
+    <h3>Why this matters for ComplianceGPT</h3>
+    <p>Every row the pipeline processes becomes a Python dictionary. The scenario text, the extracted facts, and the verdict are all keys in that dict. When you analyze results, you read rows as dicts and columns as keys.</p>
+  </div>
+
+  <!-- ─── 3. Conditionals ──────────────────────────────────────────────── -->
+  <h2 id="conditionals" class="section-anchor">3 — Conditionals (if / elif / else)</h2>
+  <p>Conditionals let your program make decisions. Indentation is not optional in Python — it defines what is inside the block.</p>
+
+  <pre>verdict = "DENIED"
+ground_truth = "PERMITTED"
+
+if verdict == ground_truth:
+    print("Correct prediction")
+elif verdict == "DENIED" and ground_truth == "PERMITTED":
+    print("False negative — system wrongly denied a permitted disclosure")
+else:
+    print("False positive — system wrongly permitted a denied disclosure")</pre>
+
+  <div class="grid-2">
+    <div class="card card-navy">
+      <h3>Comparison operators</h3>
+      <ul style="margin:0;">
+        <li><code>==</code> &nbsp; equal to</li>
+        <li><code>!=</code> &nbsp; not equal to</li>
+        <li><code>&gt;</code> &nbsp; greater than</li>
+        <li><code>&lt;=</code> &nbsp; less than or equal</li>
+        <li><code>in</code> &nbsp; membership: <code>"cat" in ["cat","dog"]</code></li>
+      </ul>
+    </div>
+    <div class="card card-navy">
+      <h3>Boolean logic</h3>
+      <ul style="margin:0;">
+        <li><code>and</code> — both must be True</li>
+        <li><code>or</code> — at least one must be True</li>
+        <li><code>not</code> — flips True/False</li>
+        <li><code>not True</code> → <code>False</code></li>
+        <li><code>True and False</code> → <code>False</code></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ─── 4. Loops ─────────────────────────────────────────────────────── -->
+  <h2 id="loops" class="section-anchor">4 — For Loops</h2>
+  <p>A for loop runs the same block of code once for each item in a collection. You will use this to process rows of results.</p>
+
+  <pre>verdicts = ["PERMITTED", "DENIED", "PERMITTED", "DENIED", "PERMITTED"]
+correct_gt = ["PERMITTED", "PERMITTED", "PERMITTED", "DENIED", "PERMITTED"]
+
+correct_count = 0
+
+for i in range(len(verdicts)):
+    if verdicts[i] == correct_gt[i]:
+        correct_count += 1
+
+accuracy = correct_count / len(verdicts)
+print(f"Accuracy: {accuracy:.1%}")   # Accuracy: 80.0%</pre>
+
+  <div class="card card-crimson">
+    <h3>f-strings — the clean way to print</h3>
+    <p>Put an <code>f</code> before the quote, then use <code>{ }</code> to embed variables. <code>:.1%</code> formats a decimal as a percentage with 1 decimal place.</p>
+    <pre style="margin-top:8px;margin-bottom:0;">name = "Gemma3"
+acc  = 0.942
+print(f"{name} accuracy: {acc:.1%}")   # Gemma3 accuracy: 94.2%</pre>
+  </div>
+
+  <!-- ─── 5. Functions ──────────────────────────────────────────────────── -->
+  <h2 id="functions" class="section-anchor">5 — Functions</h2>
+  <p>A function packages reusable logic under a name. You define it once with <code>def</code>, then call it as many times as you need.</p>
+
+  <pre>def compute_accuracy(predicted, ground_truth):
+    """Return the fraction of predictions that match ground truth."""
+    correct = sum(p == g for p, g in zip(predicted, ground_truth))
+    return correct / len(predicted)
+
+
+# Use it:
+preds = ["PERMITTED", "DENIED", "PERMITTED", "DENIED", "PERMITTED"]
+gts   = ["PERMITTED", "PERMITTED", "PERMITTED", "DENIED", "PERMITTED"]
+
+acc = compute_accuracy(preds, gts)
+print(f"Accuracy: {acc:.1%}")   # 80.0%</pre>
+
+  <div class="grid-2">
+    <div class="card card-navy">
+      <h3>Anatomy of a function</h3>
+      <ul style="margin:0;">
+        <li><code>def</code> — starts the definition</li>
+        <li><strong>name</strong> — what you call it</li>
+        <li><strong>parameters</strong> — inputs in parentheses</li>
+        <li><code>return</code> — what it hands back</li>
+        <li>Indentation — everything inside must be indented</li>
+      </ul>
+    </div>
+    <div class="card card-navy">
+      <h3>zip() — pairing two lists</h3>
+      <p><code>zip(list1, list2)</code> pairs up items by position. Use it whenever you need to compare two lists element by element.</p>
+      <pre style="font-size:0.8rem;margin-bottom:0;">for p, g in zip(preds, gts):
+    print(p, "vs", g)</pre>
+    </div>
+  </div>
+
+  <!-- ─── 6. Pandas ─────────────────────────────────────────────────────── -->
+  <h2 id="pandas" class="section-anchor">6 — Pandas: Loading and Analyzing Data</h2>
+  <p>Pandas is the Python library for working with tabular data (like a CSV file or Excel sheet). A DataFrame is a table — rows are observations, columns are fields. This is what you will use for every analysis this summer.</p>
+
+  <pre>import pandas as pd
+
+# Load the results file
+df = pd.read_csv("results/final_vast_gemma3_4b.csv")
+
+print(df.shape)          # (137, 12)  — 137 rows, 12 columns
+print(df.columns.tolist())
+print(df.head(3))        # first 3 rows</pre>
+
+  <h3>The 5 patterns you will use every day</h3>
+  <pre style="background:var(--code-bg);color:var(--code-fg);">import pandas as pd, json
+
+# ── 1. Load results ──────────────────────────────────────────────
+df = pd.read_csv("results/final_vast_gemma3_4b.csv")
+
+# ── 2. Find wrong predictions ────────────────────────────────────
+wrong = df[df["match"] != "Y"]
+print(f"{len(wrong)} wrong out of {len(df)}")
+
+# ── 3. Inspect a single row ──────────────────────────────────────
+row = wrong.iloc[0]          # first wrong row
+print(row["verdict"])        # what the model said
+print(row["ground_truth"])   # what it should have said
+
+# ── 4. Compute accuracy ──────────────────────────────────────────
+accuracy = (df["match"] == "Y").mean()
+print(f"Accuracy: {accuracy:.1%}")
+
+# ── 5. Save annotated output ──────────────────────────────────────
+df["is_correct"] = df["match"] == "Y"
+df.to_csv("results/annotated.csv", index=False)</pre>
+
+  <div class="grid-2" style="margin-top:4px;">
+    <div class="card card-crimson">
+      <h3>Filtering rows</h3>
+      <p>Use a condition inside <code>[ ]</code> to keep only matching rows:</p>
+      <pre style="font-size:0.82rem;margin-bottom:0;"># Only permitted predictions
+permitted = df[df["verdict"] == "PERMITTED"]
+
+# Wrong AND model is gemma
+wrong_gemma = df[(df["match"] != "Y") &amp;
+                 (df["model"] == "gemma3:4b")]</pre>
+    </div>
+    <div class="card card-crimson">
+      <h3>Summary statistics</h3>
+      <pre style="font-size:0.82rem;margin-bottom:0;"># Count each verdict
+df["verdict"].value_counts()
+
+# Mean of a numeric column
+df["e2e_s"].mean()
+
+# Group by model, compute accuracy
+df.groupby("model")["match"].apply(
+    lambda x: (x == "Y").mean()
+)</pre>
+    </div>
+  </div>
+
+  <!-- ─── Exercises ─────────────────────────────────────────────────────── -->
+  <h2 id="exercises" class="section-anchor">Notebook Exercises — Week 1</h2>
+  <p>The downloadable notebook has 6 guided exercises. Here is what each one covers:</p>
+
+  <table>
+    <thead>
+      <tr><th>#</th><th>Exercise</th><th>Concepts practiced</th><th>Expected output</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>1</strong></td>
+        <td>Hello Python</td>
+        <td>Variables, <code>print()</code>, <code>type()</code></td>
+        <td>Print your name and today's date</td>
+      </tr>
+      <tr>
+        <td><strong>2</strong></td>
+        <td>Patient record</td>
+        <td>Dictionaries, accessing keys, adding keys</td>
+        <td>Build a dict representing one HIPAA scenario</td>
+      </tr>
+      <tr>
+        <td><strong>3</strong></td>
+        <td>Verdict check</td>
+        <td><code>if / elif / else</code>, string comparison</td>
+        <td>Classify a prediction as correct / false positive / false negative</td>
+      </tr>
+      <tr>
+        <td><strong>4</strong></td>
+        <td>Count errors</td>
+        <td><code>for</code> loops, counters, f-strings</td>
+        <td>Loop over 10 predictions and count wrong ones</td>
+      </tr>
+      <tr>
+        <td><strong>5</strong></td>
+        <td>Write accuracy()</td>
+        <td>Functions, <code>zip()</code>, <code>return</code></td>
+        <td>Function that returns accuracy given two lists</td>
+      </tr>
+      <tr>
+        <td><strong>6</strong></td>
+        <td>Load real results</td>
+        <td>Pandas <code>read_csv()</code>, filtering, <code>.mean()</code></td>
+        <td>Compute accuracy from an actual experiment CSV</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="card card-gold">
+    <h3>Stuck? Try this order</h3>
+    <ol style="margin:0;">
+      <li>Read the markdown cell above the exercise — it explains what to do</li>
+      <li>Look at the examples on this page for the same concept</li>
+      <li>Run what you have and read the error message carefully — the last line tells you what went wrong</li>
+      <li>Post in Slack <strong>#python-help</strong> with your code and the full error message</li>
+    </ol>
+  </div>
+
+  <!-- ─── Common errors ────────────────────────────────────────────────── -->
+  <h2 id="errors" class="section-anchor">Common Errors and What They Mean</h2>
+  <table>
+    <thead>
+      <tr><th>Error</th><th>Most likely cause</th><th>Fix</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>IndentationError</code></td>
+        <td>Mixed tabs and spaces, or missing indent inside <code>def</code> / <code>if</code> / <code>for</code></td>
+        <td>Use 4 spaces consistently. VS Code can fix this: Format Document (Shift+Alt+F)</td>
+      </tr>
+      <tr>
+        <td><code>NameError: name 'x' is not defined</code></td>
+        <td>You used a variable before assigning it, or spelled it differently</td>
+        <td>Check spelling. Make sure the cell that creates the variable was run.</td>
+      </tr>
+      <tr>
+        <td><code>KeyError: 'verdict'</code></td>
+        <td>That column name doesn't exist in your DataFrame or dict</td>
+        <td>Run <code>print(df.columns.tolist())</code> to see actual column names</td>
+      </tr>
+      <tr>
+        <td><code>TypeError: can only concatenate str</code></td>
+        <td>Adding a string to a number without converting</td>
+        <td>Use f-string: <code>f"Accuracy: {acc}"</code> instead of <code>"Accuracy: " + acc</code></td>
+      </tr>
+      <tr>
+        <td><code>FileNotFoundError</code></td>
+        <td>The CSV path is wrong or Jupyter is running from a different folder</td>
+        <td>Run <code>import os; print(os.getcwd())</code> to see where you are, then adjust path</td>
+      </tr>
+      <tr>
+        <td><code>ModuleNotFoundError: pandas</code></td>
+        <td>Your conda environment is not activated, or pandas not installed</td>
+        <td>In terminal: <code>conda activate compliancegpt</code> then restart Jupyter</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <footer>ComplianceGPT Lab · AI Innovation &amp; Diffusion REU 2026 · Stony Brook University</footer>
+</div>
+</main>
+</body>
+</html>
