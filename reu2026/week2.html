@@ -11,165 +11,312 @@
   <div class="logo"><div class="lab-name">ComplianceGPT Lab</div><div class="lab-sub">AI Innovation &amp; Diffusion REU 2026<br>Stony Brook University</div></div>
   <nav>
     <div class="nav-section">Program</div>
-    <a href="index.html">Welcome</a><a href="schedule.html">Weekly Schedule</a><a href="slides-week1.html">Week 1 Slides</a><a href="slides-week2.html">Week 2 Slides</a>
+    <a href="index.html">Welcome</a>
+    <a href="schedule.html">Weekly Schedule</a>
+    <a href="slides-week1.html">Week 1 Slides</a>
+    <a href="slides-week2.html">Week 2 Slides</a>
     <div class="nav-section">Foundations</div>
-    <a href="setup.html">Setup &amp; Tools</a><a href="python.html">Python Fundamentals</a><a href="foundations.html">AI Fundamentals</a><a href="foundations.html#regulations">Regulations</a>
+    <a href="setup.html">Setup &amp; Tools</a>
+    <a href="python.html">Python Fundamentals</a>
+    <a href="foundations.html">AI Fundamentals</a>
+    <a href="foundations.html#origins">Origin Story</a>
+    <a href="foundations.html#nlp">NLP Fundamentals</a>
+    <a href="foundations.html#regulations">Regulations</a>
+    <a href="cluster.html">Cluster Access</a>
     <div class="nav-section">Curriculum</div>
-    <a href="week1.html">Week 1 — Intro to AI</a><a href="week2.html" class="active">Week 2 — Language &amp; Law</a><a href="week3.html">Week 3 — Prompt Eng.</a><a href="week4.html">Week 4 — RAG</a><a href="week5.html">Week 5 — ComplianceGPT</a><a href="week6.html">Week 6 — Communication</a>
+    <a href="week1.html">Week 1 — Intro to AI</a>
+    <a href="week2.html" class="active">Week 2 — AI Fundamentals</a>
+    <a href="week3.html">Week 3 — Language &amp; Law</a>
+    <a href="week4.html">Week 4 — Prompt Eng.</a>
+    <a href="week5.html">Week 5 — RAG</a>
+    <a href="week6.html">Week 6 — Communication</a>
     <div class="nav-section">Research</div>
-    <a href="projects.html">Student Projects</a><a href="readings.html">Reading List</a><a href="assignments.html">Assignments</a>
+    <a href="projects.html">Student Projects</a>
+    <a href="readings.html">Reading List</a>
+    <a href="assignments.html">Assignments</a>
   </nav>
 </aside>
+
 <main id="main">
 <div class="page-header">
   <div class="breadcrumb">Curriculum</div>
-  <h1>Week 2 — Language and Regulations</h1>
-  <p class="subtitle">June 29 – July 3 · NLP tokens &amp; embeddings · HIPAA deep dive · First extraction task</p>
+  <h1>Week 2 — AI Fundamentals</h1>
+  <p class="subtitle">June 29 – July 3 · ML → DL → NLP → Transformers → LLMs · Cluster access · First GPU experiments</p>
 </div>
 <div class="content">
 
   <div class="week-header">
     <div class="week-num">W2</div>
     <div class="week-info">
-      <h2>Language and Regulations</h2>
-      <p>Jun 29 – Jul 3 &nbsp;·&nbsp; NLP + HIPAA/GDPR/GLBA &nbsp;·&nbsp; Deliverable: error analysis of 2 wrong predictions</p>
+      <h2>AI Fundamentals</h2>
+      <p>Jun 29 – Jul 3 &nbsp;·&nbsp; Mon/Tue/Wed on campus · Thu/Fri remote &nbsp;·&nbsp; Deliverable: notebook exercises + first cluster run</p>
     </div>
+  </div>
+
+  <div class="card card-gold" style="margin-bottom:24px;">
+    <h3>This Week's Story</h3>
+    <p>Why do LLMs like Gemma and Claude exist? Why do they work? And why do they still fail 5.8% of the time on HIPAA? This week you learn the 70-year progression from hand-coded rules → machine learning → deep learning → transformers → LLMs. On Tuesday you get access to GPUs. By Wednesday you have run a real experiment on the Stony Brook AI Cluster. Regulations are <em>next</em> week — this week is entirely AI.</p>
   </div>
 
   <h2>Learning Goals</h2>
   <ul>
-    <li>Understand what tokens, embeddings, and transformers are at an intuitive level</li>
-    <li>Know the core structure of HIPAA and why it's hard for AI</li>
-    <li>Run a batch extraction experiment and inspect the raw JSON outputs</li>
-    <li>Write your first substantive error analysis</li>
+    <li>Explain ML → DL → NLP → transformers → LLMs as a progression — you should be able to tell this story to someone who's never heard of it</li>
+    <li>Understand what tokens, embeddings, and self-attention are at an intuitive level</li>
+    <li>Log into the Stony Brook AI Cluster, set up your conda environment, and submit a SLURM job</li>
+    <li>Run a ComplianceGPT batch experiment on a GPU and download the results</li>
+    <li>Implement precision, recall, and F1 from scratch and understand why accuracy alone is misleading</li>
   </ul>
 
-  <h2>Day 1 — Monday, June 29: How LLMs Read Text</h2>
-  <div class="day-block">
-    <div class="day-title">🧠 Topics</div>
-    <div class="day-body">
-      <div class="grid-2">
-        <div>
-          <h4>Tokenization</h4>
-          <ul>
-            <li>LLMs process tokens, not words: "anti-inflammatory" = 3 tokens</li>
-            <li>Token limits: Gemma3:4b has an 8k context window</li>
-            <li>Why this matters: longer scenarios may get truncated</li>
-            <li>Interactive demo: run the tokenizer on a HIPAA scenario</li>
-          </ul>
-        </div>
-        <div>
-          <h4>Embeddings &amp; Attention</h4>
-          <ul>
-            <li>Embeddings: words as points in high-dimensional space</li>
-            <li>Similar words are geometrically close</li>
-            <li>Attention: "he signed the <u>order</u>" — court order or coffee order?</li>
-            <li>This is why transformers handle legal context well (usually)</li>
-          </ul>
-        </div>
-      </div>
-      <div class="card card-gold" style="margin-top:16px;">
-        <h3>Live Coding: Inspect LLM Outputs</h3>
-        <p>We'll open a raw JSON extraction from ComplianceGPT and examine what the LLM actually output for a HIPAA scenario. We'll look at the fields: <code>sender_role</code>, <code>receiver_role</code>, <code>purpose</code>, <code>phi_involved</code>. What did the model get right? What did it miss or make up?</p>
-      </div>
-    </div>
-  </div>
-  <div class="day-block">
-    <div class="day-title">🎯 Day 1 Task</div>
-    <div class="day-body">
-      <p>Run <code>batch_runner.py</code> on 20 rows from <code>data/goldcoin_hhs_merged.csv</code>. Save results to <code>results/[yourname]_week2_batch.csv</code>. Open it in a spreadsheet. Find 1 wrong prediction and write 2 sentences about why you think it's wrong.</p>
-    </div>
-  </div>
+  <!-- ── MONDAY ── -->
+  <h2>Monday, June 29 — The 70-Year Story</h2>
+  <p style="color:var(--muted);font-size:0.9rem;margin-bottom:12px;">On campus · NCS 242 · 10am–noon</p>
 
-  <h2>Day 2 — Wednesday, July 1: HIPAA Deep Dive</h2>
   <div class="day-block">
-    <div class="day-title">⚖️ Topics</div>
+    <div class="day-title">🧠 Lecture — How We Got to LLMs (Slides O1–O8)</div>
     <div class="day-body">
       <div class="grid-2">
         <div>
-          <h4>HIPAA Structure</h4>
+          <h4>The origin story</h4>
           <ul>
-            <li>Who must comply: covered entities (CEs) and business associates</li>
-            <li>What is PHI: 18 identifiers under the Privacy Rule</li>
-            <li>The general rule: no disclosure without authorization</li>
-            <li>The exceptions: ~15 permitted disclosure categories</li>
+            <li><strong>1956</strong> — AI is born. Hand-coded rules. Why they fail at scale.</li>
+            <li><strong>1986</strong> — Backpropagation: neural networks can finally learn</li>
+            <li><strong>2012</strong> — AlexNet / ImageNet: deep learning actually works. The three ingredients: data, GPUs, algorithms.</li>
+            <li><strong>2013</strong> — Word2Vec: words as geometric vectors. "hospital" and "clinic" are close. "hospital" and "lawsuit" are far. Meaning encoded as geometry.</li>
+            <li><strong>~2015</strong> — RNNs, LSTMs: processing sequences. The vanishing gradient problem.</li>
           </ul>
         </div>
         <div>
-          <h4>Key Permitted Disclosures</h4>
+          <h4>The modern era</h4>
           <ul>
-            <li>Treatment, payment, healthcare operations (TPO) — most common</li>
-            <li>Patient authorization — explicit written consent</li>
-            <li>Law enforcement — with specific legal instruments</li>
-            <li>Judicial proceedings — court orders, subpoenas</li>
-            <li>Research — with IRB waiver or de-identification</li>
-            <li>Public health — disease reporting, FDA, CDC</li>
+            <li><strong>2017</strong> — "Attention Is All You Need": the Transformer. Every word attends to every other word in parallel. No sequential bottleneck. Encoder vs. Decoder.</li>
+            <li><strong>2018</strong> — BERT (encoder) and GPT-1 (decoder): the two paths from the Transformer</li>
+            <li><strong>2020</strong> — GPT-3 (175B params): few-shot learning. Show 3 examples in the prompt → model gets the task. No fine-tuning.</li>
+            <li><strong>2022</strong> — RLHF + ChatGPT: 100M users in 60 days. The world changes.</li>
+            <li><strong>Now</strong> — Claude, Gemma3, Llama3: the models you're using this summer</li>
           </ul>
         </div>
       </div>
       <div class="card card-navy" style="margin-top:16px;">
-        <h3>The Minimum Necessary Rule</h3>
-        <p>Even permitted disclosures must use only the <em>minimum necessary</em> PHI for the stated purpose. A hospital can share a diagnosis for treatment, but not an entire medical history. ComplianceGPT checks this as a sub-condition on many disclosure categories.</p>
+        <h3>Bridge: Why This Matters for Your Research</h3>
+        <p>Gemma3:4B has read more text than any human could in a million lifetimes. It knows HIPAA — statistically. But it predicts the most likely next token, not the most legally correct one. These are not the same. That 5.8% error rate is the gap your research lives in.</p>
       </div>
     </div>
   </div>
+
   <div class="day-block">
-    <div class="day-title">🎯 Day 2 Task</div>
+    <div class="day-title">💻 Live Demo — Tokenization in Action</div>
     <div class="day-body">
-      <p>Read the HIPAA Summary document (link on readings page). For 3 wrong predictions from your batch, categorize the HIPAA exception that applies: TPO, law enforcement, judicial, research, or public health. Write 1 sentence per scenario explaining which exception is relevant and whether the model got the category right.</p>
+      <p>We'll run <code>tiktoken</code> on real HIPAA scenario text live. Students will see:</p>
+      <ul>
+        <li>How "anti-inflammatory" splits into 3 tokens, "§164.512(e)(1)(ii)" into 8+</li>
+        <li>How a 500-word scenario fills 12% of Gemma3's context window before the prompt even starts</li>
+        <li>Why truncation is a silent failure: the model gets a verdict, but the key fact was cut off</li>
+      </ul>
     </div>
   </div>
 
-  <h2>Day 3 — Friday, July 3: GDPR and GLBA Overview</h2>
   <div class="day-block">
-    <div class="day-title">🌍 Topics</div>
+    <div class="day-title">🎯 Monday Task</div>
+    <div class="day-body">
+      <p><strong>Tonight:</strong> Watch <strong>3Blue1Brown — Neural Networks playlist, videos 1 and 2</strong> (find it on YouTube — ~40 min total). Come Tuesday knowing: what is a neuron, what is backpropagation, what does "learning" mean mathematically. You don't need the math — you need the intuition.</p>
+      <p style="margin-top:10px;"><strong>Also tonight:</strong> Email <a href="mailto:rt@cs.stonybrook.edu">rt@cs.stonybrook.edu</a> requesting cluster access — instructions at <a href="cluster.html">cluster.html</a>. Include your NetID. Access must be requested tonight so it's ready for Tuesday.</p>
+    </div>
+  </div>
+
+  <!-- ── TUESDAY ── -->
+  <h2>Tuesday, June 30 — LLMs in Practice + Cluster Setup</h2>
+  <p style="color:var(--muted);font-size:0.9rem;margin-bottom:12px;">On campus · NCS 242 · 10am–noon</p>
+
+  <div class="day-block">
+    <div class="day-title">🧠 Lecture — Tokens, Embeddings, Attention (Slides 1–7)</div>
     <div class="day-body">
       <div class="grid-2">
         <div>
-          <h4>GDPR</h4>
+          <h4>How LLMs actually read text</h4>
           <ul>
-            <li>Covers all personal data of EU residents (not just health)</li>
-            <li>Lawful basis: consent, contract, legal obligation, vital interests, public task, legitimate interest</li>
-            <li>Data subject rights: access, erasure, portability, objection</li>
-            <li>Maximum fine: 4% global revenue or €20M</li>
+            <li>Tokens: subword units, not words. Context window limits.</li>
+            <li>Embeddings: each token → a point in high-dimensional space. Geometric meaning.</li>
+            <li>Self-attention: "He signed the <u>order</u>" — how the model resolves "order" to court order vs. medical order based on surrounding context</li>
+            <li>Where attention succeeds: long-range legal dependencies</li>
+            <li>Where attention fails: adversarial framing, role confusion, legal boilerplate that looks like enabling language</li>
           </ul>
         </div>
         <div>
-          <h4>GLBA</h4>
+          <h4>What ComplianceGPT's LLM₁ must extract</h4>
           <ul>
-            <li>US financial privacy law (1999)</li>
-            <li>Banks must protect customer NPI (non-public personal info)</li>
-            <li>Customers have opt-out rights for sharing with third parties</li>
-            <li>Analogy: HIPAA for finance — same structure, different domain</li>
+            <li>The CI 5-tuple: sender, receiver, subject, phi_type, purpose</li>
+            <li>Oracle predicates: 24 boolean flags, each True only if explicitly evidenced</li>
+            <li>Why hallucination happens: "acting pursuant to what might be a court order" embeds close to "court order" → model sets <code>has_court_order = True</code></li>
+            <li>Why this matters: a single wrong oracle predicate changes the verdict</li>
           </ul>
         </div>
-      </div>
-      <div class="card card-gold" style="margin-top:16px;">
-        <h3>Discussion: Transferability</h3>
-        <p>ComplianceGPT was built for HIPAA and extended to GDPR, GLBA, and SOX. Your project might study: does a model that's good at HIPAA also transfer well to GDPR? Or do different regulations require different prompting strategies? We'll explore this question together.</p>
       </div>
     </div>
   </div>
 
-  <h2>Week 2 Deliverable</h2>
-  <div class="card card-crimson">
-    <h3>Due: Friday, July 4 (Independence Day — submit by end of July 3)</h3>
-    <p><strong>1. Python exercise set</strong> — Complete exercises 5–8 in <code>notebooks/week2_nlp.ipynb</code>: token counting, batch accuracy computation, precision/recall calculation, results filtering.</p>
-    <p style="margin-top:10px;"><strong>2. Error analysis (1 page)</strong> — Pick 2 wrong predictions from your batch run. For each:</p>
-    <ul style="margin-top:8px;">
-      <li>What was the scenario? (1 sentence summary)</li>
-      <li>What did the model predict? What was the correct answer?</li>
-      <li>Looking at the raw JSON extraction — what field was wrong? (<code>sender_role</code>? <code>purpose</code>? <code>phi_involved</code>?)</li>
-      <li>What would you change about the prompt or the model to fix it?</li>
-    </ul>
+  <div class="day-block">
+    <div class="day-title">🖥️ Cluster Setup — Everyone Gets a GPU</div>
+    <div class="day-body">
+      <p>Full step-by-step instructions: <a href="cluster.html"><strong>cluster.html</strong></a>. We do this together in class. Do not skip any step.</p>
+      <ol style="margin-top:10px;">
+        <li><strong>Verify access email arrived.</strong> If not, we troubleshoot now.</li>
+        <li><strong>Connect via SSH</strong> — Mac: Terminal. Windows: VS Code + Remote SSH (recommended) or PuTTY.</li>
+        <li><strong>First login:</strong> <code>ssh yournetid@submit.ai.stonybrook.edu</code> — home directory setup takes 1–2 min the first time.</li>
+        <li><strong>Load modules:</strong> <code>module load slurm python3</code></li>
+        <li><strong>Install Miniconda</strong> and create the <code>compliancegpt</code> conda environment.</li>
+        <li><strong>Install packages:</strong> PyTorch, transformers, pandas, tiktoken.</li>
+        <li><strong>Submit the test job</strong> from <code>cluster.html</code> — verify you see <code>CUDA: True</code> and a GPU name in the output.</li>
+      </ol>
+      <div class="card card-gold" style="margin-top:14px;">
+        <h3>Goal by end of Tuesday</h3>
+        <p>Every student has submitted a SLURM job, seen it run on a GPU node, and read the output file. If your <code>test_out.txt</code> shows a GPU name and <code>CUDA: True</code> — you're done. If not, we fix it before you leave.</p>
+      </div>
+    </div>
   </div>
 
-  <h2>Recommended Reading This Week</h2>
-  <ul>
-    <li><strong>HIPAA Privacy Rule Summary</strong> (hhs.gov) — The 2-page summary is enough. The full regulation is 100+ pages; you don't need it all.</li>
-    <li><strong>Vaswani et al. — "Attention Is All You Need" (2017)</strong> — Section 1 (introduction) and Section 3 (architecture diagram) only. This is the foundational transformer paper.</li>
-    <li><strong>Andrej Karpathy — "Let's Build GPT from Scratch"</strong> (YouTube) — Optional but strongly recommended. You will genuinely understand transformers after this.</li>
-  </ul>
+  <div class="day-block">
+    <div class="day-title">🎯 Tuesday Task</div>
+    <div class="day-body">
+      <p><strong>Complete Exercise 5 and 6</strong> in <code>notebooks/week2_nlp.ipynb</code> before Wednesday. Exercise 5 uses tiktoken (you can run it locally). Exercise 6 implements precision/recall/F1 — work through the math yourself, don't look it up.</p>
+      <p style="margin-top:8px;"><strong>Also:</strong> Watch 3Blue1Brown videos 3 and 4 (backpropagation and training). Come Wednesday knowing: what happens when the model gets a wrong answer, and how weights are adjusted.</p>
+    </div>
+  </div>
+
+  <!-- ── WEDNESDAY ── -->
+  <h2>Wednesday, July 1 — First Real GPU Experiment</h2>
+  <p style="color:var(--muted);font-size:0.9rem;margin-bottom:12px;">On campus · NCS 242 · 10am–noon</p>
+
+  <div class="day-block">
+    <div class="day-title">🧠 Mini-Lecture — The Scaling Story + What Breaks (15 min)</div>
+    <div class="day-body">
+      <p>A fast recap of the model lineage (Slides O7–O8): BERT → GPT-3 → ChatGPT → Gemma. Then: what specifically goes wrong in legal text extraction. We look at one real FP and one real FN from the GoldCoin results and trace each back to an oracle predicate failure.</p>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-title">🔬 Hands-on — Submit Your First Real Experiment</div>
+    <div class="day-body">
+      <p>Using the job template from <a href="cluster.html#step6">cluster.html Step 6</a>, each student submits a batch run of at least 20 scenarios from <code>goldcoin_hhs_merged.csv</code>. Together we watch the queue, monitor output, and download results.</p>
+      <div class="grid-2" style="margin-top:12px;">
+        <div>
+          <h4>What you'll do</h4>
+          <ol>
+            <li>Edit <code>run_experiment.sh</code> with your NetID and output path</li>
+            <li>Run: <code>sbatch run_experiment.sh</code></li>
+            <li>Monitor: <code>squeue -u yournetid</code></li>
+            <li>Watch output: <code>tail -f logs/run_*_out.txt</code></li>
+            <li>Download the results CSV to your laptop</li>
+            <li>Open it — find at least one wrong prediction</li>
+          </ol>
+        </div>
+        <div>
+          <h4>What you should see</h4>
+          <ul>
+            <li>Job status: PD (pending) → R (running) → job disappears when done</li>
+            <li>A results CSV with <code>verdict_norm</code> and <code>ground_truth</code> columns</li>
+            <li>At least one row where they don't match</li>
+            <li>A <code>scenario_json</code> column showing what the LLM extracted</li>
+            <li>At least one oracle predicate that's wrong</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-title">💻 Live Coding — Exercises 7 &amp; 8 (together in class)</div>
+    <div class="day-body">
+      <p>We work through Exercises 7 (group errors by category) and 8 (oracle predicate analysis) from <code>notebooks/week2_nlp.ipynb</code> together using the results you just downloaded. The pattern will be clear: <code>has_court_order</code> fires in most FP rows, and it fires wrong in the judicial pathway cases.</p>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-title">🎯 Wednesday Task</div>
+    <div class="day-body">
+      <p>By end of Wednesday (or that evening): complete Exercises 7 and 8 using your own results. Write your findings in the reflection cells. This is the first time you're doing real research — you're discovering <em>which model failure mode is most common</em> in your specific batch run. Keep that finding. You'll use it for your project proposal.</p>
+    </div>
+  </div>
+
+  <!-- ── REMOTE DAYS ── -->
+  <h2>Thursday July 2 — Remote Work</h2>
+  <div class="day-block">
+    <div class="day-title">📋 Agenda</div>
+    <div class="day-body">
+      <ul>
+        <li><strong>By noon:</strong> Slack update in <code>#daily-updates</code> — what you're working on, any blockers</li>
+        <li>Finalize and clean up <code>notebooks/week2_nlp.ipynb</code> (all 4 exercises completed, reflections written)</li>
+        <li>Run a second cluster experiment with a different model (Llama3:8B instead of Gemma3). Compare accuracy.</li>
+        <li>Watch <strong>Andrej Karpathy — "The State of GPT" (2023)</strong> on YouTube — 45 min. Pretraining, instruction tuning, RLHF. This is the background for Week 3 (prompt engineering).</li>
+        <li>Read <strong>Jay Alammar — "The Illustrated Transformer"</strong> blog post. The best visual explanation of attention.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Friday July 3 — Deliverable Due</h2>
+  <div class="day-block">
+    <div class="day-title">📋 Agenda</div>
+    <div class="day-body">
+      <ul>
+        <li><strong>By noon:</strong> Slack update</li>
+        <li>Write the 1-page error analysis (see deliverable below)</li>
+        <li>Clean up and submit everything by <strong>5pm</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── DELIVERABLE ── -->
+  <h2>Week 2 Deliverable</h2>
+  <div class="card card-crimson">
+    <h3>Due: Friday, July 3 at 5pm</h3>
+
+    <p><strong>1. Completed notebook</strong> — <code>notebooks/week2_nlp.ipynb</code> with all reflection cells filled in:</p>
+    <ul style="margin-top:6px;">
+      <li><strong>Exercise 5</strong> — Token counts for 3 scenarios, reflection on truncation risk</li>
+      <li><strong>Exercise 6</strong> — Precision/recall/F1 implemented from scratch, interpretation written</li>
+      <li><strong>Exercise 7</strong> — Error grouped by purpose category; which category is worst?</li>
+      <li><strong>Exercise 8</strong> — Which oracle predicate over-fires in your FP rows?</li>
+    </ul>
+
+    <p style="margin-top:14px;"><strong>2. Cluster run evidence</strong> — Post in <code>#deliverables</code> on Slack:</p>
+    <ul style="margin-top:6px;">
+      <li>Output of <code>sacct -u yournetid</code> showing at least 1 completed job</li>
+      <li>The results CSV filename from your batch run (e.g. <code>gemma3_run_48305.csv</code>)</li>
+      <li>One sentence: "I ran X scenarios, got Y% accuracy, the most common error was [oracle predicate]."</li>
+    </ul>
+
+    <p style="margin-top:14px;"><strong>3. Error analysis (1 page)</strong> — Pick 2 wrong predictions from your cluster run. For each write:</p>
+    <ul style="margin-top:6px;">
+      <li>1-sentence summary of the scenario</li>
+      <li>What the model predicted vs. the correct answer</li>
+      <li>Which exact oracle predicate is wrong in the JSON, and what it should be</li>
+      <li>Root cause: hallucination, under-extraction, role confusion, or purpose OOV?</li>
+      <li>One proposed fix (prompt instruction, few-shot example, or schema change)</li>
+    </ul>
+    <p style="margin-top:10px;font-size:0.9em;color:#6b0000;">Submit: committed notebook + Google Doc link, both posted to Slack <code>#deliverables</code> by 5pm.</p>
+  </div>
+
+  <!-- ── RESOURCES ── -->
+  <h2>Resources This Week</h2>
+  <div class="grid-2">
+    <div>
+      <h3>Required</h3>
+      <ul>
+        <li><strong>3Blue1Brown — Neural Networks, videos 1–4</strong> (YouTube) — ~80 min total. Watch all four this week.</li>
+        <li><strong>Andrej Karpathy — "The State of GPT" (2023)</strong> (YouTube, 45 min) — pretraining, instruction tuning, RLHF explained clearly.</li>
+        <li><strong>Jay Alammar — "The Illustrated Transformer"</strong> (jalammar.github.io) — the best visual explanation of self-attention on the internet.</li>
+        <li><strong>Cluster setup guide:</strong> <a href="cluster.html">cluster.html</a> — step-by-step for Mac and Windows.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Highly Recommended</h3>
+      <ul>
+        <li><strong>Vaswani et al. — "Attention Is All You Need" (2017)</strong> (arxiv 1706.03762) — abstract, Section 1, Figure 1 only. You don't need the math.</li>
+        <li><strong>Andrej Karpathy — "Let's Build GPT from Scratch"</strong> (YouTube, 2 hrs) — if you watch one optional video this summer, make it this one. You will genuinely understand transformers afterward.</li>
+        <li><strong>GoldCoin paper</strong> (arxiv 2405.15175) — abstract + Section 2. This is the benchmark you're working with all summer.</li>
+        <li><strong>AI Cluster docs:</strong> ai.stonybrook.edu/research/computingresources — official hardware specs and usage policy.</li>
+      </ul>
+    </div>
+  </div>
 
   <footer>ComplianceGPT Lab · AI Innovation &amp; Diffusion REU 2026 · Stony Brook University</footer>
 </div>

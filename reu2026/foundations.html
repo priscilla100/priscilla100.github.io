@@ -13,7 +13,7 @@
     <div class="nav-section">Program</div>
     <a href="index.html">Welcome</a><a href="schedule.html">Weekly Schedule</a><a href="slides-week1.html">Week 1 Slides</a><a href="slides-week2.html">Week 2 Slides</a>
     <div class="nav-section">Foundations</div>
-    <a href="setup.html">Software &amp; Setup</a><a href="python.html">Python Fundamentals</a><a href="foundations.html" class="active">AI Fundamentals</a><a href="foundations.html#nlp" class="active">NLP Fundamentals</a><a href="foundations.html#regulations" class="active">Regulations</a>
+    <a href="setup.html">Software &amp; Setup</a><a href="python.html">Python Fundamentals</a><a href="foundations.html" class="active">AI Fundamentals</a><a href="foundations.html#origins" class="active">Origin Story</a><a href="foundations.html#nlp" class="active">NLP Fundamentals</a><a href="foundations.html#regulations" class="active">Regulations</a>
     <div class="nav-section">Curriculum</div>
     <a href="week1.html">Week 1 — Intro to AI</a><a href="week2.html">Week 2 — Language &amp; Law</a><a href="week3.html">Week 3 — Prompt Eng.</a><a href="week4.html">Week 4 — RAG</a><a href="week5.html">Week 5 — ComplianceGPT</a><a href="week6.html">Week 6 — Communication</a>
     <div class="nav-section">Research</div>
@@ -62,6 +62,103 @@
     <li><strong>Andrej Karpathy — "Let's Build GPT from Scratch"</strong>: 2 hours. You will understand transformers after this. Optional but highly recommended.</li>
     <li><strong>Andrew Ng — AI For Everyone</strong>: 6-hour Coursera course. Non-technical, very accessible. Great for understanding AI in context.</li>
   </ul>
+
+  <h2 id="origins" class="section-anchor">The Road to LLMs — A 70-Year Story</h2>
+  <p>Every model you use this summer is the product of 70 years of incremental ideas. Here's the progression that matters most for understanding why LLMs work and why they fail.</p>
+
+  <div style="border-left:4px solid var(--navy);padding-left:20px;margin-bottom:32px;">
+
+    <div style="margin-bottom:20px;">
+      <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:6px;">
+        <span style="font-size:1.05rem;font-weight:700;color:var(--crimson);min-width:48px;">1956</span>
+        <h3 style="margin:0;">The Dartmouth Conference — AI Is Born</h3>
+      </div>
+      <p>John McCarthy coins the term "artificial intelligence." Early vision: write enough rules, and computers will think. Programs play chess, prove theorems. The dominant approach for 30 years: <strong>hand-coded rules</strong>.</p>
+      <p><strong>The problem:</strong> rules don't scale. HIPAA alone has hundreds of exceptions, sub-conditions, and edge cases. Maintaining rules for every possible patient scenario is impossible.</p>
+    </div>
+
+    <div style="margin-bottom:20px;">
+      <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:6px;">
+        <span style="font-size:1.05rem;font-weight:700;color:var(--crimson);min-width:48px;">1986</span>
+        <h3 style="margin:0;">Backpropagation — Neural Networks Can Actually Learn</h3>
+      </div>
+      <p>Rumelhart, Hinton, and Williams publish the backpropagation algorithm. Neural networks (inspired by biological neurons) can now be trained on data by adjusting millions of numerical weights to minimize prediction error. The idea is elegant: show the network labeled examples, compute how wrong it is, propagate the error backward, adjust every weight slightly. Repeat millions of times.</p>
+      <p><strong>The bottleneck:</strong> not enough data, not enough compute. The method worked in theory but not at scale — yet.</p>
+    </div>
+
+    <div style="margin-bottom:20px;">
+      <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:6px;">
+        <span style="font-size:1.05rem;font-weight:700;color:var(--crimson);min-width:48px;">2012</span>
+        <h3 style="margin:0;">AlexNet — Deep Learning Works (Proof of Concept)</h3>
+      </div>
+      <p>The ImageNet Large Scale Visual Recognition Challenge asked models to classify 1.2 million images into 1,000 categories. The best systems had ~26% error. AlexNet — a deep convolutional neural network trained on GPUs — achieved 15.3%. The next-best competitor: 26.2%. A 10-point gap, not 1 point.</p>
+      <p>Three things converged: (1) <strong>data</strong> — the internet generated billions of labeled examples; (2) <strong>compute</strong> — GPUs built for gaming are massively parallel and perfect for training; (3) <strong>algorithms</strong> — ReLU activations and dropout made deep networks trainable. Research investment in deep learning exploded immediately.</p>
+    </div>
+
+    <div style="margin-bottom:20px;">
+      <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:6px;">
+        <span style="font-size:1.05rem;font-weight:700;color:var(--crimson);min-width:48px;">2013</span>
+        <h3 style="margin:0;">Word2Vec — Words Become Numbers (Semantic Geometry)</h3>
+      </div>
+      <p>Tomas Mikolov at Google trains a neural network on billions of words with one task: given context words, predict the missing word. The hidden layer weights — never the intended output — turn out to be extraordinarily useful: they are <strong>word embeddings</strong>.</p>
+      <p>"hospital" and "clinic" end up close in the 300-dimensional vector space. "hospital" and "lawsuit" are far apart. The famous demonstration: <code>king − man + woman ≈ queen</code>. Meaning encoded as geometry. This is how modern LLMs "know" that "judicial mandate" and "court order" are related — their embeddings end up close.</p>
+    </div>
+
+    <div style="margin-bottom:20px;">
+      <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:6px;">
+        <span style="font-size:1.05rem;font-weight:700;color:var(--crimson);min-width:48px;">~2015</span>
+        <h3 style="margin:0;">RNNs and LSTMs — Sequences, with Limits</h3>
+      </div>
+      <p>Language is ordered: "the dog bit the man" ≠ "the man bit the dog." Recurrent Neural Networks (RNNs) process tokens one at a time, passing a hidden state forward — a memory of what came before. Long Short-Term Memory networks (LSTMs, 1997, Hochreiter &amp; Schmidhuber) added gates to control what to remember and forget.</p>
+      <p><strong>The fundamental problem:</strong> sequential processing is slow (can't parallelize on GPUs), and information from early tokens fades over long sequences. A legal narrative might have the crucial fact in sentence 1 and the disclosure in sentence 20. By sentence 20, the LSTM has lost the thread. This is the failure mode that the Transformer fixed.</p>
+    </div>
+
+    <div style="margin-bottom:20px;">
+      <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:6px;">
+        <span style="font-size:1.05rem;font-weight:700;color:var(--crimson);min-width:48px;">2017</span>
+        <h3 style="margin:0;">"Attention Is All You Need" — The Transformer</h3>
+      </div>
+      <p>Vaswani et al. at Google Brain publish an 8-page paper. The core idea: <strong>self-attention</strong>. For every token, compute how much it should attend to every other token when determining its meaning. "He signed the order" — when computing the meaning of "order," the model attends to "signed" (action) and "judge" (context) with high weight, resolving the ambiguity toward "court order."</p>
+      <p>Crucially: every token attends to every other token in parallel. No sequential bottleneck. The whole sentence is processed at once. This allows training on 10,000 GPUs simultaneously — and the models can be made enormously larger.</p>
+      <p>Architecture split: <strong>Encoder</strong> (reads text → builds contextual representations → used for understanding) and <strong>Decoder</strong> (generates tokens one at a time → used for text generation). Or both: encoder-decoder for translation and summarization.</p>
+    </div>
+
+    <div style="margin-bottom:20px;">
+      <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:6px;">
+        <span style="font-size:1.05rem;font-weight:700;color:var(--crimson);min-width:48px;">2018</span>
+        <h3 style="margin:0;">BERT and GPT — Two Paths from the Transformer</h3>
+      </div>
+      <p><strong>BERT</strong> (Google, 2018) — encoder-only, 110M parameters. Pre-trained to predict masked words bidirectionally (it can see context on both sides). Fine-tuned on specific tasks: question answering, classification, named entity recognition. Dominated NLP benchmarks immediately. Still used in search engines today.</p>
+      <p><strong>GPT-1</strong> (OpenAI, 2018) — decoder-only, 117M parameters. Pre-trained to predict the next token, left-to-right. Designed for generation. The beginning of the GPT lineage.</p>
+    </div>
+
+    <div style="margin-bottom:20px;">
+      <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:6px;">
+        <span style="font-size:1.05rem;font-weight:700;color:var(--crimson);min-width:48px;">2019–20</span>
+        <h3 style="margin:0;">GPT-2 and GPT-3 — The Scale Hypothesis</h3>
+      </div>
+      <p><strong>GPT-2</strong> (1.5B parameters, 2019): OpenAI decided not to release it, worried about misuse. When they did, it could write convincing paragraphs, complete stories, fake news. The first glimpse of emergent generation capability.</p>
+      <p><strong>GPT-3</strong> (175B parameters, 2020): the model that proved the <em>scale hypothesis</em> — bigger models, trained on more data, develop qualitatively new capabilities. GPT-3 demonstrated <strong>few-shot learning</strong>: show it 3 examples in the prompt, and it generalizes to new examples — without any fine-tuning. For the first time, you could "program" a model with natural language instructions.</p>
+    </div>
+
+    <div style="margin-bottom:20px;">
+      <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:6px;">
+        <span style="font-size:1.05rem;font-weight:700;color:var(--crimson);min-width:48px;">2022</span>
+        <h3 style="margin:0;">RLHF and ChatGPT — Alignment Changes Everything</h3>
+      </div>
+      <p><strong>InstructGPT</strong> (OpenAI, 2022): GPT-3 could generate text but wasn't reliably helpful or safe. Researchers applied <strong>Reinforcement Learning from Human Feedback (RLHF)</strong>: human raters rank model outputs, a reward model is trained on those rankings, and the LLM is fine-tuned to maximize reward. The result: a model that tries to give <em>correct, helpful</em> answers rather than just <em>plausible-sounding</em> ones.</p>
+      <p><strong>ChatGPT</strong> (November 2022): 100 million users in 60 days. The fastest consumer product adoption in history. The general public discovered LLMs existed. Every company reallocated resources. Universities rewrote academic integrity policies. Regulatory bodies scrambled. The world changed in about 10 weeks.</p>
+    </div>
+
+    <div style="margin-bottom:8px;">
+      <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:6px;">
+        <span style="font-size:1.05rem;font-weight:700;color:var(--crimson);min-width:48px;">Now</span>
+        <h3 style="margin:0;">Claude, Gemini, Llama, Gemma — The Current Era</h3>
+      </div>
+      <p>The models you're working with. <strong>Gemma3:4B</strong> is a 4-billion-parameter model from Google DeepMind — "small" by 2025 standards, runs locally on a laptop, but achieves 94.2% on the HIPAA GoldCoin benchmark with the right extraction layer. <strong>Claude Sonnet</strong> is Anthropic's frontier model, trained with Constitutional AI (a variant of RLHF). <strong>Llama 3</strong> is Meta's open-weight model. All of them descend from the 2017 Transformer.</p>
+      <p>The gap between what these models <em>know</em> and what they can <em>operationalize precisely</em> is exactly what your research is about.</p>
+    </div>
+  </div>
 
   <h2 id="nlp" class="section-anchor">NLP Fundamentals</h2>
   <p>Natural Language Processing (NLP) is the field of AI that deals with human language. Your research is applied NLP.</p>

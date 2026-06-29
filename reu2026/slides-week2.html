@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Week 2 Slides — Language, Law &amp; Extraction · ComplianceGPT Lab REU 2026</title>
+<title>Week 2 Slides — AI Fundamentals · ComplianceGPT Lab REU 2026</title>
 <style>
 :root {
   --crimson: #990000;
@@ -38,10 +38,12 @@ body { font-family: Georgia, 'Times New Roman', serif; background: #1a1a2e; colo
 .slide-white   { background: #fff; color: #212529; }
 .slide-light   { background: var(--light); color: #212529; }
 .slide-green   { background: linear-gradient(135deg, #0a3d1f 0%, #1f7a3c 100%); }
+.slide-purple  { background: linear-gradient(135deg, #1a0a3d 0%, #3d1a7a 100%); }
 
 .slide-label { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
 .slide-white .slide-label, .slide-light .slide-label { color: var(--crimson); }
 .slide-green .slide-label { color: #a8f0c8; }
+.slide-purple .slide-label { color: #c8a8ff; }
 
 .slide h1 { font-size: 3rem; line-height: 1.15; font-weight: 700; margin-bottom: 18px; }
 .slide h2 { font-size: 2rem; line-height: 1.2; font-weight: 700; margin-bottom: 14px; }
@@ -83,90 +85,392 @@ body { font-family: Georgia, 'Times New Roman', serif; background: #1a1a2e; colo
 .code-block .key { color: #89dceb; }
 .code-block .val { color: #f38ba8; }
 .code-block .com { color: #6c7086; font-style: italic; }
+.code-block .flag { color: #89dceb; }
+.code-block .out  { color: #f5c2e7; font-style: italic; }
 
 .token-box {
   display: inline-flex; align-items: center; justify-content: center;
   padding: 4px 10px; border-radius: 4px; font-family: 'Courier New', monospace;
-  font-size: 0.9rem; font-weight: 600; margin: 2px;
-  border: 2px solid;
+  font-size: 0.9rem; font-weight: 600; margin: 2px; border: 2px solid;
 }
 
-.highlight { background: var(--gold); color: #000; padding: 2px 8px; border-radius: 4px; font-weight: 700; }
-.highlight-red { background: var(--crimson); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight: 700; }
-.highlight-green { background: var(--green); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight: 700; }
-.highlight-blue { background: #1e40af; color: #fff; padding: 2px 8px; border-radius: 4px; font-weight: 700; }
+.highlight       { background: var(--gold);    color: #000; padding: 2px 8px; border-radius: 4px; font-weight: 700; }
+.highlight-red   { background: var(--crimson); color: #fff; padding: 2px 8px; border-radius: 4px; font-weight: 700; }
+.highlight-green { background: var(--green);   color: #fff; padding: 2px 8px; border-radius: 4px; font-weight: 700; }
+.highlight-blue  { background: #1e40af;        color: #fff; padding: 2px 8px; border-radius: 4px; font-weight: 700; }
 
 .tag { display: inline-block; padding: 1px 8px; border-radius: 3px; font-size: 0.72rem; font-weight: 700; font-family: 'Segoe UI', system-ui, sans-serif; margin: 2px; }
-.tag-gold    { background: var(--gold); color: #000; }
+.tag-gold    { background: var(--gold);    color: #000; }
 .tag-red     { background: var(--crimson); color: #fff; }
-.tag-green   { background: var(--green); color: #fff; }
-.tag-navy    { background: var(--navy); color: #fff; }
-.tag-muted   { background: #555; color: #fff; }
+.tag-green   { background: var(--green);   color: #fff; }
+.tag-navy    { background: var(--navy);    color: #fff; }
+.tag-muted   { background: #555;           color: #fff; }
+.tag-purple  { background: #5b21b6;        color: #fff; }
 
-/* Compare table */
-.cmp-table { width: 100%; border-collapse: collapse; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 0.85rem; margin-top: 16px; }
-.cmp-table th { padding: 8px 12px; text-align: left; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.04em; }
-.cmp-table td { padding: 9px 12px; border-bottom: 1px solid rgba(255,255,255,0.08); vertical-align: top; }
-.slide-white .cmp-table td { border-bottom: 1px solid var(--border); }
-.cmp-table tr:first-child td { font-weight: 700; }
-
-/* Flow diagram */
 .flow { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin: 14px 0; font-family: 'Segoe UI', system-ui, sans-serif; }
 .flow-box { border-radius: 6px; padding: 10px 14px; text-align: center; min-width: 100px; font-size: 0.85rem; }
 .flow-arrow { font-size: 1.3rem; color: var(--gold); flex-shrink: 0; }
 
-/* Exception grid */
-.exc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
-.exc-item { border-radius: 6px; padding: 10px 14px; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 0.85rem; }
-
-/* Annotation exercise */
 .anno-text { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; padding: 18px 20px; font-style: italic; font-size: 1.05rem; line-height: 1.75; margin: 16px 0; }
-.anno-label { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 0.72rem; font-weight: 700; padding: 1px 6px; border-radius: 3px; vertical-align: super; margin-left: 2px; }
 
 .slide-num { position: absolute; top: 20px; right: 28px; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 0.75rem; color: rgba(255,255,255,0.2); }
 .slide-white .slide-num, .slide-light .slide-num { color: rgba(0,0,0,0.15); }
 
 .section-rule { border: none; border-top: 1px solid rgba(255,255,255,0.15); margin: 16px 0; }
 .slide-white .section-rule, .slide-light .section-rule { border-top-color: var(--border); }
+
+/* SLURM / cluster specific */
+.cmd-row { display:flex; align-items:baseline; gap:18px; padding:8px 14px; border-radius:5px; margin-bottom:4px; background:rgba(255,255,255,0.05); font-family:'Courier New',monospace; font-size:0.86rem; }
+.cmd-row .cmd  { color:#a6e3a1; min-width:240px; }
+.cmd-row .desc { color:rgba(255,255,255,0.6); font-family:'Segoe UI',system-ui,sans-serif; font-size:0.82rem; }
 </style>
 </head>
 <body>
 
 <div id="progress-bar"></div>
-<div id="slide-counter">1 / 18</div>
+<div id="slide-counter">1 / 27</div>
 <div class="slide-controls">
   <button onclick="prevSlide()">← Prev</button>
   <button onclick="nextSlide()">Next →</button>
 </div>
 
-<!-- ── SLIDE 1: TITLE ── -->
+<!-- ════════════════════════════════════════════════════
+     PART 0 — THE ORIGIN STORY  (Slides O1 – O8)
+     ════════════════════════════════════════════════════ -->
+
+<!-- O1: TITLE -->
 <div class="slide slide-navy active">
-  <span class="slide-num">1</span>
-  <div class="slide-label">ComplianceGPT Lab · AI Innovation &amp; Diffusion REU 2026</div>
-  <h1>Week 2 — Language, Law &amp; Extraction</h1>
-  <p class="subtitle">How LLMs read text · What they extract · Why HIPAA is hard · The regulations you need to know</p>
-  <div style="margin-top:40px;display:flex;gap:40px;font-family:'Segoe UI',system-ui,sans-serif;">
-    <div><div style="font-size:0.72rem;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px;">Session</div><div style="font-size:1rem;">Wednesday, July 1 · NCS 242</div></div>
-    <div><div style="font-size:0.72rem;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px;">Remote days</div><div style="font-size:1rem;">Thursday July 2 · Friday July 3</div></div>
-    <div><div style="font-size:0.72rem;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px;">Deliverable due</div><div style="font-size:1rem;">Friday July 3, 5pm</div></div>
+  <span class="slide-num">O1</span>
+  <div class="slide-label">Origins · How We Got to LLMs</div>
+  <h1>The 70-Year Road to ChatGPT</h1>
+  <p class="subtitle">From hand-coded rules to Claude and Gemma — the progression that made ComplianceGPT possible</p>
+
+  <div style="margin-top:36px;display:flex;align-items:center;gap:0;font-family:'Segoe UI',system-ui,sans-serif;font-size:0.82rem;">
+    <div style="text-align:center;padding:12px 18px;background:rgba(255,255,255,0.08);border-radius:6px 0 0 6px;border:1px solid rgba(255,255,255,0.15);">
+      <div style="font-size:1.5rem;font-weight:900;color:var(--gold);">1956</div>
+      <div style="color:rgba(255,255,255,0.5);margin-top:3px;">AI is born</div>
+    </div>
+    <div style="color:var(--gold);font-size:1.1rem;padding:0 4px;">──</div>
+    <div style="text-align:center;padding:12px 18px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);">
+      <div style="font-size:1.5rem;font-weight:900;color:var(--gold);">1986</div>
+      <div style="color:rgba(255,255,255,0.5);margin-top:3px;">Backprop</div>
+    </div>
+    <div style="color:var(--gold);font-size:1.1rem;padding:0 4px;">──</div>
+    <div style="text-align:center;padding:12px 18px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);">
+      <div style="font-size:1.5rem;font-weight:900;color:var(--gold);">2012</div>
+      <div style="color:rgba(255,255,255,0.5);margin-top:3px;">Deep learning</div>
+    </div>
+    <div style="color:var(--gold);font-size:1.1rem;padding:0 4px;">──</div>
+    <div style="text-align:center;padding:12px 18px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);">
+      <div style="font-size:1.5rem;font-weight:900;color:var(--gold);">2013</div>
+      <div style="color:rgba(255,255,255,0.5);margin-top:3px;">Word2Vec</div>
+    </div>
+    <div style="color:var(--gold);font-size:1.1rem;padding:0 4px;">──</div>
+    <div style="text-align:center;padding:12px 18px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);">
+      <div style="font-size:1.5rem;font-weight:900;color:var(--gold);">2017</div>
+      <div style="color:rgba(255,255,255,0.5);margin-top:3px;">Transformer</div>
+    </div>
+    <div style="color:var(--gold);font-size:1.1rem;padding:0 4px;">──</div>
+    <div style="text-align:center;padding:12px 18px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);">
+      <div style="font-size:1.5rem;font-weight:900;color:var(--gold);">2020</div>
+      <div style="color:rgba(255,255,255,0.5);margin-top:3px;">GPT-3</div>
+    </div>
+    <div style="color:var(--gold);font-size:1.1rem;padding:0 4px;">──</div>
+    <div style="text-align:center;padding:12px 18px;background:rgba(255,255,255,0.08);border-radius:0 6px 6px 0;border:1px solid rgba(255,255,255,0.15);">
+      <div style="font-size:1.5rem;font-weight:900;color:var(--gold);">2022</div>
+      <div style="color:rgba(255,255,255,0.5);margin-top:3px;">ChatGPT</div>
+    </div>
   </div>
-  <div style="margin-top:32px;" class="card card-glass">
-    <p style="font-size:0.95rem;">This week we go from <em>running the pipeline</em> to <em>understanding what happens inside it</em>. By Friday you should be able to look at a wrong prediction and explain — at the token, extraction, and legal level — exactly why it failed.</p>
+
+  <div style="margin-top:28px;" class="card card-glass">
+    <p style="font-size:0.95rem;">Every model you're working with this summer — Gemma3, Llama3, Claude Sonnet — is the product of 70 years of incremental ideas. Understanding the story helps you understand <em>why</em> these models succeed and fail the way they do.</p>
   </div>
 </div>
 
-<!-- ── SLIDE 2: WEEK 1 RECAP ── -->
+<!-- O2: TWO WAYS TO TEACH A COMPUTER -->
+<div class="slide slide-light">
+  <span class="slide-num">O2</span>
+  <div class="slide-label">Origins · Machine Learning</div>
+  <h2>Two Ways to Teach a Computer</h2>
+  <p class="subtitle-dark">This distinction — rules vs. learning — is the single most important idea in modern AI.</p>
+  <div class="grid-2" style="margin-top:20px;">
+    <div>
+      <div class="card card-crimson" style="margin-bottom:14px;">
+        <h3>Approach 1: Write the Rules</h3>
+        <div class="code-block" style="font-size:0.82rem;margin:10px 0;">
+<span class="com"># HIPAA compliance, 1990s style</span>
+<span class="kw">if</span> <span class="str">"court order"</span> <span class="kw">in</span> text:
+    has_court_order = <span class="kw">True</span>
+<span class="kw">elif</span> <span class="str">"judicial mandate"</span> <span class="kw">in</span> text:
+    has_court_order = <span class="kw">True</span>
+<span class="com"># ... 200 more synonyms ...</span>
+        </div>
+        <p style="font-size:0.88rem;color:#6b0000;"><strong>Problem:</strong> misses "the bench ordered disclosure." Catches "the officer mentioned a possible order." Never finishes. Breaks on every edge case.</p>
+      </div>
+    </div>
+    <div>
+      <div class="card card-green">
+        <h3>Approach 2: Machine Learning</h3>
+        <p style="font-size:0.9rem;margin:8px 0;">Show the system thousands of labeled examples:</p>
+        <div style="font-family:'Courier New',monospace;font-size:0.82rem;background:#f0fff4;border-radius:4px;padding:10px 14px;margin:8px 0;border:1px solid #c3e6cb;">
+          <div>"The judge signed a court order" → <strong style="color:#1f7a3c;">True</strong></div>
+          <div>"The bench ordered production" → <strong style="color:#1f7a3c;">True</strong></div>
+          <div>"He mentioned it was ordered" → <strong style="color:#c0392b;">False</strong></div>
+          <div>"Acting per a judicial mandate" → <strong style="color:#1f7a3c;">True</strong></div>
+        </div>
+        <p style="font-size:0.88rem;margin-top:8px;">The model <em>learns the pattern</em> — including edge cases it's never seen. <strong>DATA replaces LOGIC.</strong></p>
+      </div>
+    </div>
+  </div>
+  <div class="card card-gold" style="margin-top:16px;">
+    <h3>The insight that took 40 years to prove</h3>
+    <p>Writing rules was the wrong direction. The right direction: collect enough labeled examples, let a learning algorithm figure out the rules itself. Simple in hindsight. Required decades of compute, data, and algorithms to make work.</p>
+  </div>
+</div>
+
+<!-- O3: NEURAL NETWORKS -->
+<div class="slide slide-dark">
+  <span class="slide-num">O3</span>
+  <div class="slide-label">Origins · Deep Learning</div>
+  <h2>Neural Networks — The Engine</h2>
+  <p style="color:rgba(255,255,255,0.7);">Inspired by the brain, backpropagation-trained networks finally proved themselves in 2012. Three ingredients came together: data, GPUs, and better algorithms.</p>
+  <div class="grid-2" style="margin-top:20px;">
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">What a neural network does</h3>
+      <ul style="font-size:0.88rem;">
+        <li><strong>Input layer</strong> — receives raw numbers (pixels, token IDs, embeddings)</li>
+        <li><strong>Hidden layers</strong> — each layer transforms the representation. Deeper = more abstract features. Layer 1 might detect edges; Layer 10 might detect "court order context."</li>
+        <li><strong>Output layer</strong> — class probabilities, next-token scores, or a regression value</li>
+        <li><strong>Weights</strong> — the numbers connecting every node to every node in the next layer. Training adjusts these.</li>
+        <li><strong>Backpropagation (1986)</strong> — compute how wrong the output is, propagate error backward, nudge each weight slightly in the right direction. Repeat millions of times.</li>
+      </ul>
+    </div>
+    <div>
+      <div class="card card-glass" style="margin-bottom:14px;">
+        <h3 style="color:var(--gold);">The 2012 ImageNet moment</h3>
+        <p style="font-size:0.88rem;margin:8px 0;">The ImageNet challenge: classify 1.2 million images into 1,000 categories. Best 2011 system: 26% error. AlexNet (deep convolutional net, trained on GPUs, 2012): <span class="highlight">15.3% error</span>. Next best competitor: 26.2%.</p>
+        <p style="font-size:0.88rem;">A 10-point gap, not 1. Research capital flooded into deep learning overnight. Everything changed.</p>
+      </div>
+      <div class="grid-2" style="gap:10px;">
+        <div class="card card-glass" style="padding:12px;">
+          <h3 style="font-size:0.9rem;color:var(--gold);">Data</h3>
+          <p style="font-size:0.82rem;">The internet created billions of labeled examples that didn't exist before</p>
+        </div>
+        <div class="card card-glass" style="padding:12px;">
+          <h3 style="font-size:0.9rem;color:var(--gold);">GPUs</h3>
+          <p style="font-size:0.82rem;">Built for gaming — massively parallel — perfect for training neural nets</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- O4: WORD2VEC -->
+<div class="slide slide-dark">
+  <span class="slide-num">O4</span>
+  <div class="slide-label">Origins · NLP</div>
+  <h2>The Language Problem — Words as Geometry</h2>
+  <p style="color:rgba(255,255,255,0.7);">Images have pixels — easy to feed to a neural net. Text has words. The breakthrough was encoding <em>meaning</em> as geometry.</p>
+  <div class="grid-2" style="margin-top:20px;">
+    <div>
+      <div class="card card-glass" style="margin-bottom:14px;border-left:3px solid var(--crimson);">
+        <h3 style="color:#f08080;">Bag of Words (1990s)</h3>
+        <div class="code-block" style="font-size:0.8rem;margin:8px 0;">
+"hospital" → [0, 0, 1, 0, ..., 0] <span class="com"># 10k dims</span>
+"clinic"   → [0, 0, 0, 1, ..., 0] <span class="com"># totally different</span>
+"not guilty" ≈ "guilty"  <span class="com"># order ignored!</span>
+        </div>
+        <p style="font-size:0.82rem;color:#f08080;">Semantically identical words are geometrically unrelated. No context.</p>
+      </div>
+    </div>
+    <div>
+      <div class="card card-glass" style="border-left:3px solid #a8f0c8;">
+        <h3 style="color:#a8f0c8;">Word2Vec — Mikolov et al. (2013)</h3>
+        <p style="font-size:0.85rem;margin:8px 0;">Train a neural net to predict: "The [blank] is a medical facility." The <em>hidden layer weights</em> become the word embeddings. Similar words end up geometrically close.</p>
+        <div class="code-block" style="font-size:0.82rem;margin:8px 0;">
+sim("hospital", "clinic")  → <span class="str">0.87</span>  <span class="com">✓ close</span>
+sim("hospital", "lawsuit") → <span class="str">0.12</span>  <span class="com">✓ far</span>
+
+king − man + woman ≈ queen          <span class="com">✓ compositionality</span>
+        </div>
+        <p style="font-size:0.82rem;color:#a8f0c8;">Semantic meaning encoded as geometry. A revolution.</p>
+      </div>
+    </div>
+  </div>
+  <div class="card card-glass" style="margin-top:14px;">
+    <h3 style="color:var(--gold);">Why this matters for your research</h3>
+    <p style="font-size:0.88rem;">Modern LLMs use embeddings 10,000× richer than Word2Vec. When your model "knows" that "court order" and "judicial mandate" are related, it's because they're close in embedding space. This is also why adversarial prompts work: "acting pursuant to what might be a court order" embeds dangerously close to "court order."</p>
+  </div>
+</div>
+
+<!-- O5: RNNS -->
+<div class="slide slide-teal">
+  <span class="slide-num">O5</span>
+  <div class="slide-label">Origins · Sequence Models</div>
+  <h2>The Sequential Problem — RNNs and LSTMs</h2>
+  <p style="color:rgba(255,255,255,0.75);">Word2Vec gave words meaning. But language is ordered — word N depends on words 1 through N-1. We needed models that process sequences.</p>
+  <div class="grid-2" style="margin-top:20px;">
+    <div>
+      <div class="card card-teal" style="margin-bottom:14px;">
+        <h3>Recurrent Neural Networks (RNNs, mid-2010s)</h3>
+        <p style="font-size:0.85rem;margin:8px 0;">Process one token at a time, passing a "hidden state" forward — a running memory of what came before. Sequential: token 1 → hidden state → token 2 → hidden state → …</p>
+        <p style="font-size:0.85rem;margin-top:8px;"><strong>The vanishing gradient problem:</strong> information from early tokens fades. By token 100, the model has effectively forgotten token 1.</p>
+      </div>
+      <div class="card card-teal">
+        <h3>LSTMs — Long Short-Term Memory (1997)</h3>
+        <p style="font-size:0.85rem;margin:8px 0;">Added explicit memory gates to control what to remember and forget. Better at long sequences. But still sequential — can't parallelize on GPUs.</p>
+      </div>
+    </div>
+    <div>
+      <div class="card card-teal">
+        <h3>The legal text problem</h3>
+        <p style="font-size:0.88rem;font-style:italic;margin:8px 0;">"The patient, who was admitted last year following a workplace injury treated by a physician who had previously disclosed records in an unrelated matter, filed for damages claiming the hospital had improperly shared information without court authorization."</p>
+        <p style="font-size:0.85rem;margin-top:10px;">The critical fact — "without court authorization" — is at the end. The setup that makes it matter is at the beginning. By the time an LSTM reaches the end of that sentence, the beginning is attenuated. This is exactly why RNNs fail on long legal narratives.</p>
+        <p style="font-size:0.85rem;margin-top:8px;color:#a8f0c8;"><strong>The Transformer (2017) solved this by eliminating the sequential bottleneck entirely.</strong></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- O6: TRANSFORMER -->
+<div class="slide slide-crimson">
+  <span class="slide-num">O6</span>
+  <div class="slide-label">Origins · The Transformer (2017)</div>
+  <h2>Attention Is All You Need</h2>
+  <p style="color:rgba(255,255,255,0.85);">Vaswani et al., Google Brain, 2017. Eight pages. Every word attends to every other word simultaneously — no sequential bottleneck, fully parallelizable on GPUs.</p>
+  <div class="grid-2" style="margin-top:22px;">
+    <div>
+      <div class="card card-glass" style="margin-bottom:14px;">
+        <h3 style="color:var(--gold);">Self-Attention in one example</h3>
+        <p style="font-size:0.85rem;margin:8px 0;">For each token, compute: <em>how much should I attend to every other token?</em></p>
+        <div style="background:rgba(0,0,0,0.25);border-radius:6px;padding:12px;font-family:'Segoe UI',system-ui,sans-serif;font-size:0.82rem;margin:8px 0;">
+          <div>"He signed the <strong style="color:var(--gold);">order</strong> to produce records"</div>
+          <div style="margin-top:8px;">Attention weights for "order":</div>
+          <div style="padding-left:12px;margin-top:4px;">
+            <div>"signed" → <span style="color:#a8f0c8;">0.72</span> &nbsp; (legal action confirms court weight)</div>
+            <div>"records" → <span style="color:#a8f0c8;">0.61</span> (object confirms production context)</div>
+            <div>"He" → <span style="color:#f08080;">0.03</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (pronoun, low relevance)</div>
+          </div>
+          <div style="margin-top:8px;color:#a8f0c8;font-weight:700;">→ "order" = court order, not medical order ✓</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card card-glass" style="margin-bottom:14px;">
+        <h3 style="color:var(--gold);">Encoder vs. Decoder</h3>
+        <ul style="font-size:0.88rem;">
+          <li><strong style="color:#a8f0c8;">Encoder</strong> — reads full input bidirectionally, builds contextual representations. Used for understanding / extraction. Model: <strong>BERT (2018)</strong>.</li>
+          <li style="margin-top:8px;"><strong style="color:#f0a8a8;">Decoder</strong> — generates tokens left-to-right, attends to what's been generated. Used for text generation. Model: <strong>GPT (2018→)</strong>.</li>
+          <li style="margin-top:8px;"><strong style="color:#a8c8f0;">Enc-Dec</strong> — reads input, generates output. Used for translation / summarization.</li>
+        </ul>
+      </div>
+      <div class="card card-glass">
+        <h3 style="color:var(--gold);">Why transformers dominate</h3>
+        <ul style="font-size:0.85rem;">
+          <li>Fully parallelizable — train on thousands of GPUs simultaneously</li>
+          <li>No vanishing gradient — all tokens equidistant in attention</li>
+          <li>Scales predictably with data and compute</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- O7: SCALING -->
+<div class="slide slide-dark">
+  <span class="slide-num">O7</span>
+  <div class="slide-label">Origins · The LLM Era</div>
+  <h2>The Scaling Hypothesis — Bigger Models Learn More</h2>
+  <p style="color:rgba(255,255,255,0.7);">Once transformers worked, researchers discovered: just make them bigger. More parameters + more data + more compute → qualitatively new capabilities emerge.</p>
+  <div style="margin-top:20px;font-family:'Segoe UI',system-ui,sans-serif;">
+    <div style="display:flex;align-items:stretch;gap:0;margin-bottom:2px;"><div style="width:80px;font-size:0.75rem;color:rgba(255,255,255,0.4);padding:8px 0;text-align:right;padding-right:12px;flex-shrink:0;">2018</div><div style="display:flex;align-items:center;gap:10px;flex:1;background:rgba(255,255,255,0.05);border-radius:6px;padding:8px 14px;border-left:3px solid #3a7bd5;"><div><strong>BERT</strong> — 110M params · Encoder-only · Fine-tune for tasks · Dominated NLP benchmarks immediately</div></div></div>
+    <div style="display:flex;align-items:stretch;gap:0;margin-bottom:2px;"><div style="width:80px;font-size:0.75rem;color:rgba(255,255,255,0.4);padding:8px 0;text-align:right;padding-right:12px;flex-shrink:0;">2018</div><div style="display:flex;align-items:center;gap:10px;flex:1;background:rgba(255,255,255,0.05);border-radius:6px;padding:8px 14px;border-left:3px solid #7c5cbf;"><div><strong>GPT-1</strong> — 117M params · Decoder-only · Predicts next token · Language generation begins</div></div></div>
+    <div style="display:flex;align-items:stretch;gap:0;margin-bottom:2px;"><div style="width:80px;font-size:0.75rem;color:rgba(255,255,255,0.4);padding:8px 0;text-align:right;padding-right:12px;flex-shrink:0;">2019</div><div style="display:flex;align-items:center;gap:10px;flex:1;background:rgba(255,255,255,0.05);border-radius:6px;padding:8px 14px;border-left:3px solid #bf5c5c;"><div><strong>GPT-2</strong> — 1.5B params · "Too dangerous to release" → then released · Coherent paragraph generation · First emergence</div></div></div>
+    <div style="display:flex;align-items:stretch;gap:0;margin-bottom:2px;"><div style="width:80px;font-size:0.75rem;color:rgba(255,255,255,0.4);padding:8px 0;text-align:right;padding-right:12px;flex-shrink:0;">2020</div><div style="display:flex;align-items:center;gap:10px;flex:1;background:rgba(255,255,255,0.06);border-radius:6px;padding:8px 14px;border-left:3px solid var(--gold);"><div><strong>GPT-3</strong> — 175B params · <span class="highlight">Few-shot learning</span>: show 3 examples in the prompt, no fine-tuning needed. First model that could "read instructions."</div></div></div>
+    <div style="display:flex;align-items:stretch;gap:0;margin-bottom:2px;"><div style="width:80px;font-size:0.75rem;color:rgba(255,255,255,0.4);padding:8px 0;text-align:right;padding-right:12px;flex-shrink:0;">2022</div><div style="display:flex;align-items:center;gap:10px;flex:1;background:rgba(255,255,255,0.05);border-radius:6px;padding:8px 14px;border-left:3px solid #1f7a3c;"><div><strong>InstructGPT + RLHF</strong> — Human feedback trains the model to be <em>helpful</em>, not just fluent. The key step from "impressive demo" to "useful product."</div></div></div>
+    <div style="display:flex;align-items:stretch;gap:0;margin-bottom:2px;"><div style="width:80px;font-size:0.75rem;color:rgba(255,255,255,0.4);padding:8px 0;text-align:right;padding-right:12px;flex-shrink:0;">Nov 2022</div><div style="display:flex;align-items:center;gap:10px;flex:1;background:rgba(255,165,0,0.1);border-radius:6px;padding:8px 14px;border-left:3px solid orange;"><div><strong>ChatGPT</strong> — 100 million users in 60 days. Fastest consumer product adoption in history. The world changed in 10 weeks.</div></div></div>
+    <div style="display:flex;align-items:stretch;gap:0;"><div style="width:80px;font-size:0.75rem;color:rgba(255,255,255,0.4);padding:8px 0;text-align:right;padding-right:12px;flex-shrink:0;">2023–25</div><div style="display:flex;align-items:center;gap:10px;flex:1;background:rgba(255,255,255,0.05);border-radius:6px;padding:8px 14px;border-left:3px solid #60a5fa;"><div><strong>Claude, Gemini, Llama, Gemma</strong> — the models you're using this summer. 4B params today matches 175B from 2020.</div></div></div>
+  </div>
+</div>
+
+<!-- O8: BRIDGE TO RESEARCH -->
+<div class="slide slide-green">
+  <span class="slide-num">O8</span>
+  <div class="slide-label">Origins → Your Research</div>
+  <h2>Why This History Is Your Research</h2>
+  <div class="grid-2" style="margin-top:20px;">
+    <div>
+      <div class="card card-glass" style="margin-bottom:14px;">
+        <h3 style="color:#a8f0c8;">LLMs know HIPAA — sort of</h3>
+        <p style="font-size:0.88rem;margin:8px 0;">Gemma3 was trained on trillions of tokens including legal text, HIPAA summaries, law review articles. It has a statistical representation of compliance law. It can explain HIPAA in plain English better than most non-lawyers.</p>
+        <p style="font-size:0.88rem;">But: it predicts the <strong>most likely next token</strong>, not the <strong>most legally correct one</strong>. These are not the same.</p>
+      </div>
+      <div class="card card-glass">
+        <h3 style="color:#a8f0c8;">Your model in numbers</h3>
+        <ul style="font-size:0.88rem;">
+          <li><strong>Gemma3:4B</strong> — 4 billion parameters</li>
+          <li>~10 trillion tokens of training data</li>
+          <li>8,192 token context window</li>
+          <li>Runs on a single GPU</li>
+          <li>Achieves <strong>94.2%</strong> on GoldCoin with the right extraction layer</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card card-glass">
+        <h3 style="color:#a8f0c8;">The gap your research closes</h3>
+        <div style="font-family:'Segoe UI',system-ui,sans-serif;margin-top:10px;">
+          <div style="background:rgba(255,255,255,0.08);border-radius:4px;padding:10px;margin-bottom:8px;">
+            <div style="color:rgba(255,255,255,0.5);font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;">What LLMs do naturally</div>
+            <p style="font-size:0.88rem;margin-top:4px;">Summarize a medical case. Identify parties. Explain what HIPAA says about law enforcement disclosures.</p>
+          </div>
+          <div style="background:rgba(255,255,255,0.08);border-radius:4px;padding:10px;margin-bottom:8px;">
+            <div style="color:#f08080;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;">What they fail at without engineering</div>
+            <p style="font-size:0.88rem;margin-top:4px;">Reliably extract <code style="font-size:0.82rem;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">has_court_order = False</code> when the text says "the officer implied there might be a warrant." The word "warrant" activates; "implied" and "might" don't cancel it.</p>
+          </div>
+          <div style="background:rgba(255,255,255,0.08);border-radius:4px;padding:10px;">
+            <div style="color:#a8f0c8;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;">Your research question</div>
+            <p style="font-size:0.88rem;margin-top:4px;"><em>Can we engineer LLMs precisely enough to support formal legal compliance reasoning?</em></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     MAIN DECK — AI WEEK  (Slides 1 – 19)
+     ════════════════════════════════════════════════════ -->
+
+<!-- SLIDE 1: TITLE -->
+<div class="slide slide-navy">
+  <span class="slide-num">1</span>
+  <div class="slide-label">ComplianceGPT Lab · AI Innovation &amp; Diffusion REU 2026</div>
+  <h1>Week 2 — AI Fundamentals</h1>
+  <p class="subtitle">ML · DL · NLP · Transformers · LLMs · GPU Cluster · First Real Experiments</p>
+  <div style="margin-top:36px;display:flex;gap:36px;font-family:'Segoe UI',system-ui,sans-serif;">
+    <div><div style="font-size:0.72rem;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px;">Monday Jun 29</div><div>Origin story · tokenizer demo · cluster email</div></div>
+    <div><div style="font-size:0.72rem;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px;">Tuesday Jun 30</div><div>LLMs in practice · cluster setup · test job</div></div>
+    <div><div style="font-size:0.72rem;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px;">Wednesday Jul 1</div><div>First GPU experiment · error analysis</div></div>
+  </div>
+  <div style="margin-top:28px;" class="card card-glass">
+    <p style="font-size:0.95rem;">This week is <strong>entirely AI</strong>. No regulations. Just the models, the math, and the machines. By Wednesday you will have run a real experiment on a GPU cluster and explained why a model got a prediction wrong at the level of individual embedding geometry.</p>
+  </div>
+</div>
+
+<!-- SLIDE 2: WEEK 1 RECAP -->
 <div class="slide slide-dark">
   <span class="slide-num">2</span>
   <div class="slide-label">Recap</div>
   <h2>What You Did Last Week</h2>
   <div class="grid-2" style="margin-top:20px;">
     <div>
-      <h3 style="color:var(--gold);margin-bottom:12px;">You ran the pipeline</h3>
+      <h3 style="color:var(--gold);margin-bottom:12px;">You ran the pipeline end-to-end</h3>
       <ul>
-        <li>Loaded a HIPAA court case scenario from the GoldCoin dataset</li>
-        <li>Passed it to an LLM (Gemma3 or Llama3)</li>
-        <li>Saw a structured JSON output with fields like <code style="font-size:0.82rem;background:rgba(255,255,255,0.1);padding:1px 5px;border-radius:3px;">sender_role</code>, <code style="font-size:0.82rem;background:rgba(255,255,255,0.1);padding:1px 5px;border-radius:3px;">purpose</code>, <code style="font-size:0.82rem;background:rgba(255,255,255,0.1);padding:1px 5px;border-radius:3px;">has_court_order</code></li>
+        <li>Loaded a real HIPAA court case scenario</li>
+        <li>Passed it to Gemma3 or Llama3 via the API</li>
+        <li>Got back a structured JSON extraction</li>
+        <li>Fed that JSON to the formal reasoning engine</li>
         <li>Got a verdict: PERMITTED or DENIED</li>
         <li>Found at least one wrong prediction</li>
       </ul>
@@ -174,35 +478,25 @@ body { font-family: Georgia, 'Times New Roman', serif; background: #1a1a2e; colo
     <div>
       <h3 style="color:var(--gold);margin-bottom:12px;">The question you should have</h3>
       <div class="card card-glass">
-        <p style="font-size:1.05rem;font-style:italic;line-height:1.7;">"The pipeline returned the wrong verdict. But <em>which step</em> went wrong — and why? Did the LLM misread the text? Did it extract the wrong field? Did the reasoning engine get wrong inputs?"</p>
+        <p style="font-size:1.05rem;font-style:italic;line-height:1.7;">"The pipeline got the wrong answer. Which step failed? The LLM? The JSON? The reasoning engine? And <em>why</em> — at the level of how the model works?"</p>
       </div>
-      <p style="margin-top:14px;font-size:0.92rem;color:rgba(255,255,255,0.7);">That question is the entire curriculum for Weeks 2–5. This week: learn how the LLM reads text and what it's supposed to extract.</p>
+      <p style="margin-top:14px;font-size:0.92rem;color:rgba(255,255,255,0.7);">This week answers that question. By understanding <em>how</em> the model reads text, you can predict <em>where</em> it will fail — and design fixes before you even run the experiment.</p>
     </div>
   </div>
-  <hr class="section-rule">
+  <hr class="section-rule" style="margin-top:20px;">
   <div class="grid-3" style="margin-top:8px;">
-    <div class="card card-glass" style="text-align:center;padding:14px;">
-      <div style="font-size:1.8rem;font-weight:900;color:var(--gold);">137</div>
-      <div style="font-size:0.78rem;color:rgba(255,255,255,0.5);font-family:'Segoe UI',system-ui,sans-serif;">GoldCoin court cases</div>
-    </div>
-    <div class="card card-glass" style="text-align:center;padding:14px;">
-      <div style="font-size:1.8rem;font-weight:900;color:var(--gold);">94.2%</div>
-      <div style="font-size:0.78rem;color:rgba(255,255,255,0.5);font-family:'Segoe UI',system-ui,sans-serif;">Best model accuracy</div>
-    </div>
-    <div class="card card-glass" style="text-align:center;padding:14px;">
-      <div style="font-size:1.8rem;font-weight:900;color:var(--crimson);">5.8pp</div>
-      <div style="font-size:0.78rem;color:rgba(255,255,255,0.5);font-family:'Segoe UI',system-ui,sans-serif;">Gap to perfect — all extraction failures</div>
-    </div>
+    <div class="card card-glass" style="text-align:center;padding:14px;"><div style="font-size:1.8rem;font-weight:900;color:var(--gold);">137</div><div style="font-size:0.78rem;color:rgba(255,255,255,0.5);font-family:'Segoe UI',system-ui,sans-serif;">GoldCoin court cases</div></div>
+    <div class="card card-glass" style="text-align:center;padding:14px;"><div style="font-size:1.8rem;font-weight:900;color:var(--gold);">94.2%</div><div style="font-size:0.78rem;color:rgba(255,255,255,0.5);font-family:'Segoe UI',system-ui,sans-serif;">Best accuracy (Gemma3)</div></div>
+    <div class="card card-glass" style="text-align:center;padding:14px;"><div style="font-size:1.8rem;font-weight:900;color:var(--crimson);">5.8pp</div><div style="font-size:0.78rem;color:rgba(255,255,255,0.5);font-family:'Segoe UI',system-ui,sans-serif;">Gap to perfect — all extraction failures</div></div>
   </div>
 </div>
 
-<!-- ── SLIDE 3: TOKENIZATION ── -->
+<!-- SLIDE 3: TOKENIZATION -->
 <div class="slide slide-dark">
   <span class="slide-num">3</span>
   <div class="slide-label">How LLMs Read Text · Part 1</div>
   <h2>Tokenization — LLMs Don't Read Words</h2>
   <p style="color:rgba(255,255,255,0.7);">LLMs process <strong>tokens</strong> — subword units, not words. This matters for compliance because legal language tokenizes differently than casual text.</p>
-
   <div style="margin-top:20px;" class="card card-glass">
     <h3 style="color:var(--gold);">Real example: a HIPAA scenario sentence</h3>
     <p style="font-size:1rem;font-style:italic;margin:10px 0 14px;">"The hospital disclosed the patient's anti-inflammatory prescription to a law enforcement officer."</p>
@@ -219,52 +513,40 @@ body { font-family: Georgia, 'Times New Roman', serif; background: #1a1a2e; colo
       <span class="token-box" style="background:#3a1f1f;border-color:#bf5c5c;color:#ffa8a8;">inflammatory</span>
       <span class="token-box" style="background:#1e3a5f;border-color:#3a7bd5;color:#90c4ff;">&nbsp;prescription</span>
       <span class="token-box" style="background:#1f3a1f;border-color:#5cbf5c;color:#a8ffa8;">&nbsp;to</span>
-      <span class="token-box" style="background:#1f3a1f;border-color:#5cbf5c;color:#a8ffa8;">&nbsp;a</span>
       <span class="token-box" style="background:#3a3a1f;border-color:#bfbf5c;color:#ffffa8;">&nbsp;law</span>
       <span class="token-box" style="background:#3a3a1f;border-color:#bfbf5c;color:#ffffa8;">&nbsp;enforcement</span>
       <span class="token-box" style="background:#3a3a1f;border-color:#bfbf5c;color:#ffffa8;">&nbsp;officer</span>
     </div>
-    <p style="margin-top:12px;font-size:0.82rem;color:rgba(255,255,255,0.5);font-family:'Segoe UI',system-ui,sans-serif;">"anti-inflammatory" → 3 tokens · "law enforcement officer" → 3 tokens (each recognized as a phrase unit)</p>
+    <p style="margin-top:12px;font-size:0.82rem;color:rgba(255,255,255,0.5);font-family:'Segoe UI',system-ui,sans-serif;">"anti-inflammatory" → 3 tokens &nbsp;·&nbsp; "law enforcement officer" → 3 tokens &nbsp;·&nbsp; "§164.512(e)(1)(ii)" → 8+ tokens</p>
   </div>
-
-  <div class="grid-3" style="margin-top:16px;">
+  <div class="grid-2" style="margin-top:16px;">
     <div class="card card-glass">
-      <h3>Why it matters for your project</h3>
+      <h3>Why this matters for your project</h3>
       <ul style="font-size:0.85rem;">
-        <li>A 4B model has an ~8,000 token context window</li>
-        <li>Long HIPAA case narratives can be ~500–1,500 tokens</li>
-        <li>The prompt template (instructions + examples) takes ~300–600 tokens</li>
-        <li>Truncation can silently drop the key legal fact</li>
+        <li>Gemma3:4B context window = 8,192 tokens</li>
+        <li>A long court case narrative can be 500–1,500 tokens</li>
+        <li>The prompt template takes ~400 tokens</li>
+        <li>Truncation silently drops the key legal fact</li>
       </ul>
     </div>
     <div class="card card-glass">
-      <h3>Rare legal terms = unusual tokens</h3>
-      <ul style="font-size:0.85rem;">
-        <li>"subpoena" → usually 2–3 tokens</li>
-        <li>"HIPAA" → 1 token (seen frequently in training)</li>
-        <li>"§164.512(e)(1)(ii)" → 8+ tokens</li>
-        <li>Models see statutory citations rarely — may confuse them</li>
-      </ul>
-    </div>
-    <div class="card card-glass">
-      <h3>Quick experiment you can run</h3>
-      <div class="code-block" style="font-size:0.76rem;padding:10px 14px;margin:8px 0 0;">
+      <h3>Try it yourself — Exercise 5</h3>
+      <div class="code-block" style="font-size:0.78rem;padding:10px 14px;margin:8px 0 0;">
 <span class="kw">import</span> tiktoken
 enc = tiktoken.get_encoding(<span class="str">"cl100k_base"</span>)
 tokens = enc.encode(your_scenario)
-<span class="kw">print</span>(<span class="kw">len</span>(tokens))
+<span class="kw">print</span>(<span class="kw">len</span>(tokens), <span class="str">"tokens"</span>)
       </div>
     </div>
   </div>
 </div>
 
-<!-- ── SLIDE 4: EMBEDDINGS ── -->
+<!-- SLIDE 4: EMBEDDINGS -->
 <div class="slide slide-dark">
   <span class="slide-num">4</span>
   <div class="slide-label">How LLMs Read Text · Part 2</div>
   <h2>Embeddings — Words as Points in Space</h2>
   <p style="color:rgba(255,255,255,0.7);">Every token is mapped to a high-dimensional vector. Semantically similar tokens are geometrically close. This is how the model "knows" that "hospital" and "clinic" are related even if the exact word doesn't appear.</p>
-
   <div class="grid-2" style="margin-top:20px;">
     <div>
       <div class="card card-glass" style="margin-bottom:14px;">
@@ -279,140 +561,251 @@ tokens = enc.encode(your_scenario)
           <div style="position:absolute;top:15px;left:20px;width:130px;height:70px;border:1px dashed rgba(144,196,255,0.3);border-radius:50%;"></div>
           <div style="position:absolute;bottom:10px;left:30px;width:130px;height:55px;border:1px dashed rgba(255,168,168,0.3);border-radius:50%;"></div>
         </div>
-        <p style="font-size:0.82rem;color:rgba(255,255,255,0.5);margin-top:8px;">Healthcare cluster (blue) vs. legal-process cluster (red) — even without explicit rules, the model knows these groups are different concepts.</p>
+        <p style="font-size:0.82rem;color:rgba(255,255,255,0.5);margin-top:8px;">Healthcare cluster (blue) vs. legal-process cluster (red). The model knows these are different concept groups without being told explicitly.</p>
       </div>
     </div>
     <div>
       <div class="card card-glass" style="margin-bottom:14px;">
-        <h3 style="color:var(--gold);">What this means for compliance extraction</h3>
+        <h3 style="color:var(--gold);">What this means for extraction</h3>
         <ul>
-          <li>"The doctor shared the records" and "The physician disclosed the PHI" should embed similarly — the model recognizes the equivalence</li>
-          <li>"Court order" and "judicial mandate" embed closely → model tends to set <code style="font-size:0.8rem;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">has_court_order=true</code> for both</li>
-          <li><strong>Problem:</strong> "the attorney implied a court order might exist" also embeds close to "court order" — causing hallucination</li>
+          <li>"Doctor shared records" and "Physician disclosed PHI" embed similarly → model correctly recognizes both as disclosure events</li>
+          <li>"Court order" and "judicial mandate" embed closely → model correctly sets <code style="font-size:0.8rem;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">has_court_order=true</code> for both</li>
         </ul>
       </div>
       <div class="card card-crimson">
-        <h3>The hallucination mechanism</h3>
-        <p>When a scenario uses legally-suggestive language (<em>"the officer said the records were needed"</em>), the embedding is close to "court order" — and the model sets the oracle predicate True. But no court order exists. This is the oracle corruption attack vector.</p>
+        <h3>The hallucination surface</h3>
+        <p>"The officer said the records were needed" embeds too close to "court order" — model sets oracle True. But no court order exists. This is the mechanism behind false positives. Understanding embeddings is understanding <em>why</em> your FPs happen.</p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ── SLIDE 5: ATTENTION ── -->
+<!-- SLIDE 5: ATTENTION -->
 <div class="slide slide-dark">
   <span class="slide-num">5</span>
   <div class="slide-label">How LLMs Read Text · Part 3</div>
   <h2>Attention — Context Determines Meaning</h2>
-  <p style="color:rgba(255,255,255,0.7);">Attention is the mechanism that lets each token "look at" all other tokens when computing its meaning. This is why transformers handle legal text better than older models: the word "order" means something completely different in different contexts.</p>
-
+  <p style="color:rgba(255,255,255,0.7);">Self-attention lets each token "look at" all other tokens when computing its meaning. This is why transformers handle legal text better than RNNs: the word "order" means something completely different depending on context.</p>
   <div style="margin-top:20px;">
     <div class="card card-glass" style="margin-bottom:16px;">
-      <h3 style="color:var(--gold);">The "order" disambiguation problem</h3>
+      <h3 style="color:var(--gold);">The "order" disambiguation — live example</h3>
       <div class="grid-2" style="gap:14px;">
         <div>
           <p style="font-size:0.88rem;font-style:italic;background:rgba(255,255,255,0.06);padding:12px;border-radius:4px;margin-bottom:8px;">"The judge signed an <span class="highlight">order</span> requiring the hospital to produce records."</p>
-          <p style="font-size:0.85rem;">→ Attention to "judge", "signed", "requiring" → <span class="highlight-green">court order</span> → <code style="font-size:0.8rem;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">has_court_order = true</code></p>
+          <p style="font-size:0.85rem;">→ Attends to "judge", "signed", "requiring" → <span class="highlight-green">court order</span> → <code style="font-size:0.8rem;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">has_court_order = true</code></p>
         </div>
         <div>
-          <p style="font-size:0.88rem;font-style:italic;background:rgba(255,255,255,0.06);padding:12px;border-radius:4px;margin-bottom:8px;">"The doctor placed an <span class="highlight">order</span> for a CT scan and sent the results to the insurer."</p>
-          <p style="font-size:0.85rem;">→ Attention to "doctor", "CT scan", "results" → <span class="highlight-blue">medical order</span> → <code style="font-size:0.8rem;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">has_court_order = false</code></p>
+          <p style="font-size:0.88rem;font-style:italic;background:rgba(255,255,255,0.06);padding:12px;border-radius:4px;margin-bottom:8px;">"The doctor placed an <span class="highlight">order</span> for a CT scan and sent results to the insurer."</p>
+          <p style="font-size:0.85rem;">→ Attends to "doctor", "CT scan", "results" → <span class="highlight-blue">medical order</span> → <code style="font-size:0.8rem;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">has_court_order = false</code></p>
         </div>
       </div>
     </div>
   </div>
-
   <div class="grid-2">
     <div class="card card-glass">
       <h3>Where attention succeeds</h3>
       <ul style="font-size:0.88rem;">
-        <li>Resolving ambiguous legal terms from context</li>
-        <li>Identifying the <em>direction</em> of disclosure (sender → receiver)</li>
-        <li>Linking pronouns to their referents across a long narrative</li>
-        <li>Recognizing when a conditional clause negates a permission</li>
+        <li>Disambiguating legal terms from context</li>
+        <li>Identifying direction of disclosure (sender → receiver)</li>
+        <li>Linking pronouns across a long narrative</li>
+        <li>Recognizing when a conditional clause negates permission</li>
       </ul>
     </div>
     <div class="card card-glass">
-      <h3>Where attention fails (your research!)</h3>
+      <h3>Where attention fails — your research</h3>
       <ul style="font-size:0.88rem;">
         <li>Adversarial framing: "acting pursuant to what might be a court order" — attended tokens suggest legal mandate</li>
         <li>Role confusion: "the attorney's client" — who is the sender?</li>
-        <li>Long-range dependencies: key negation at sentence 1, permission at sentence 8</li>
-        <li>Legal boilerplate that looks like enabling language</li>
+        <li>Long-range dependencies: key negation at sentence 1, permission granted at sentence 8</li>
+        <li>Legal boilerplate that resembles enabling language</li>
       </ul>
     </div>
   </div>
 </div>
 
-<!-- ── SLIDE 6: INFORMATION EXTRACTION ── -->
-<div class="slide slide-teal">
+<!-- SLIDE 6: HOW LLMs ARE TRAINED -->
+<div class="slide slide-purple">
   <span class="slide-num">6</span>
-  <div class="slide-label">From Text to Structure</div>
-  <h2>Information Extraction — What the LLM Must Do</h2>
-  <p style="color:rgba(255,255,255,0.75);">ComplianceGPT's LLM₁ performs <strong>structured information extraction</strong>: convert an unstructured narrative into a JSON object with specific fields. This is one of the hardest NLP tasks because legal language is precise, context-dependent, and adversarially ambiguous.</p>
+  <div class="slide-label">LLMs in Practice · Training</div>
+  <h2>How LLMs Are Built — The 3-Stage Recipe</h2>
+  <p style="color:rgba(255,255,255,0.75);">Every modern LLM you use — Gemma3, Llama3, Claude — was built through the same three stages. Understanding them explains why models behave the way they do.</p>
+  <div class="grid-3" style="margin-top:24px;">
+    <div class="card card-glass">
+      <div style="font-size:0.7rem;font-weight:700;letter-spacing:.1em;color:#c8a8ff;text-transform:uppercase;margin-bottom:8px;">Stage 1</div>
+      <h3 style="color:var(--gold);">Pretraining</h3>
+      <p style="font-size:0.88rem;margin:8px 0;">Train on 10+ trillion tokens from the internet: web pages, books, code, legal documents, Wikipedia. Task: predict the next token.</p>
+      <p style="font-size:0.88rem;">Result: a model that knows <em>about</em> the world — factual knowledge, language patterns, writing styles. It can complete sentences in any register.</p>
+      <p style="font-size:0.82rem;color:rgba(255,255,255,0.5);margin-top:10px;">⚠ At this stage the model will happily complete "How do I make a bomb..." — no safety filters yet.</p>
+    </div>
+    <div class="card card-glass">
+      <div style="font-size:0.7rem;font-weight:700;letter-spacing:.1em;color:#c8a8ff;text-transform:uppercase;margin-bottom:8px;">Stage 2</div>
+      <h3 style="color:var(--gold);">Instruction Fine-Tuning (SFT)</h3>
+      <p style="font-size:0.88rem;margin:8px 0;">Train on thousands of (instruction, good response) pairs. Task: given a user request, generate a helpful, relevant response.</p>
+      <p style="font-size:0.88rem;">Result: a model that understands what it's <em>supposed</em> to do when given a task. It follows instructions, uses the right format, stays on topic.</p>
+      <p style="font-size:0.82rem;color:rgba(255,255,255,0.5);margin-top:10px;">This is what makes GPT-3 → InstructGPT. Same weights, radically different behavior.</p>
+    </div>
+    <div class="card card-glass">
+      <div style="font-size:0.7rem;font-weight:700;letter-spacing:.1em;color:#c8a8ff;text-transform:uppercase;margin-bottom:8px;">Stage 3</div>
+      <h3 style="color:var(--gold);">RLHF</h3>
+      <p style="font-size:0.88rem;margin:8px 0;">Human raters rank model outputs for quality. A reward model is trained on these rankings. The LLM is fine-tuned to maximize reward.</p>
+      <p style="font-size:0.88rem;">Result: a model optimized for what humans actually prefer — accurate, helpful, harmless, honest. This is what makes ChatGPT feel so different from raw GPT-3.</p>
+      <p style="font-size:0.82rem;color:rgba(255,255,255,0.5);margin-top:10px;">RLHF also introduces subtle biases: the model may prefer confident-sounding wrong answers over uncertain-sounding correct ones.</p>
+    </div>
+  </div>
+  <div class="card card-glass" style="margin-top:16px;">
+    <h3 style="color:var(--gold);">Why this matters for extraction</h3>
+    <p style="font-size:0.88rem;">RLHF trains models to sound confident. Confident-sounding wrong extractions (e.g., asserting <code style="font-size:0.82rem;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">has_court_order: true</code>) score well on fluency but are wrong. The model is optimized for human approval, not for legal precision.</p>
+  </div>
+</div>
 
+<!-- SLIDE 7: INFERENCE -->
+<div class="slide slide-light">
+  <span class="slide-num">7</span>
+  <div class="slide-label">LLMs in Practice · Inference</div>
+  <h2>What Happens at Inference</h2>
+  <p class="subtitle-dark">Every time you call an LLM, it's doing the same thing: predicting the next token, one at a time, until it decides to stop. Understanding this explains most of the failure modes you'll see.</p>
+  <div class="grid-2" style="margin-top:20px;">
+    <div>
+      <div class="card card-white" style="border:1px solid var(--border);margin-bottom:14px;">
+        <h3>The generation loop</h3>
+        <ol style="font-size:0.88rem;padding-left:18px;">
+          <li>Input tokens are processed by all transformer layers in parallel</li>
+          <li>The final layer produces a score for every token in the vocabulary (50,000+ scores)</li>
+          <li>Softmax converts scores to probabilities</li>
+          <li>One token is sampled according to those probabilities</li>
+          <li>That token is appended to the input, and the loop repeats</li>
+          <li>Continues until a special end-of-sequence token is generated</li>
+        </ol>
+      </div>
+      <div class="card card-gold">
+        <h3>Context window = your budget</h3>
+        <p>Input tokens + output tokens must fit in 8,192 tokens for Gemma3:4B. A 400-token prompt + 300-token scenario + 200-token extraction = 900 tokens. Fine. But add few-shot examples and you shrink the budget fast.</p>
+      </div>
+    </div>
+    <div>
+      <div class="card card-white" style="border:1px solid var(--border);margin-bottom:14px;">
+        <h3>Temperature — controlling randomness</h3>
+        <table style="width:100%;border-collapse:collapse;font-size:0.85rem;margin-top:8px;">
+          <tr style="background:#f0f4ff;"><td style="padding:7px 10px;font-weight:700;">temp = 0</td><td style="padding:7px 10px;">Always picks the highest-probability token. Deterministic. Good for structured extraction — you want the same JSON every time.</td></tr>
+          <tr><td style="padding:7px 10px;font-weight:700;">temp = 0.7</td><td style="padding:7px 10px;">Default for most APIs. Some randomness — good for creative tasks, bad for boolean oracles.</td></tr>
+          <tr style="background:#f0f4ff;"><td style="padding:7px 10px;font-weight:700;">temp = 1.5</td><td style="padding:7px 10px;">High randomness. Produces varied, sometimes incoherent outputs. Useful for brainstorming, terrible for compliance extraction.</td></tr>
+        </table>
+      </div>
+      <div class="card card-crimson">
+        <h3>Implication for your experiments</h3>
+        <p>Always set <code style="font-size:0.82rem;">temperature=0</code> for extraction experiments. A non-zero temperature means the same scenario can give different oracle values on repeated runs — your results become non-reproducible.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 8: HALLUCINATION -->
+<div class="slide slide-crimson">
+  <span class="slide-num">8</span>
+  <div class="slide-label">LLMs in Practice · Failure Modes</div>
+  <h2>Hallucination — Why It Happens</h2>
+  <p style="color:rgba(255,255,255,0.85);">Hallucination is not a bug or a random glitch. It's a predictable consequence of how LLMs work. Understanding the mechanism helps you design prompts that prevent it.</p>
+  <div class="grid-2" style="margin-top:22px;">
+    <div>
+      <div class="card card-glass" style="margin-bottom:14px;">
+        <h3 style="color:var(--gold);">Mechanism 1: Embedding proximity</h3>
+        <p style="font-size:0.88rem;margin:8px 0;">Adversarial language activates nearby oracle predicates in embedding space:</p>
+        <div style="background:rgba(0,0,0,0.3);border-radius:4px;padding:10px;font-family:'Segoe UI',system-ui,sans-serif;font-size:0.82rem;margin:8px 0;">
+          <div>"acting pursuant to what might be a court order"</div>
+          <div style="margin-top:4px;color:rgba(255,255,255,0.5);">↓ embeds close to ↓</div>
+          <div style="color:var(--gold);">"court order"</div>
+          <div style="margin-top:6px;color:#f08080;">Model sets has_court_order = True ← WRONG</div>
+        </div>
+        <p style="font-size:0.82rem;">The model is pattern-completing, not fact-verifying. No court order exists. But the text <em>sounds like</em> court-order text.</p>
+      </div>
+    </div>
+    <div>
+      <div class="card card-glass" style="margin-bottom:14px;">
+        <h3 style="color:var(--gold);">Mechanism 2: No internal verification</h3>
+        <p style="font-size:0.88rem;margin:8px 0;">LLMs have no access to ground truth. They cannot check whether "has_court_order = true" is actually evidenced in the text. They predict the token that, statistically, tends to appear after prompts like this one.</p>
+        <p style="font-size:0.88rem;">If training data contains many examples where judicial-purpose scenarios end with True oracles, the model will predict True for any judicial-purpose scenario — even when no instrument exists.</p>
+      </div>
+    </div>
+  </div>
+  <div class="grid-2" style="margin-top:4px;">
+    <div class="card card-glass" style="border-left:3px solid #f08080;">
+      <h3>FP — Oracle hallucination</h3>
+      <p style="font-size:0.85rem;">Oracle predicate set True when no evidence → formal engine fires exception → PERMITTED when correct answer is DENIED → <strong>PHI leak</strong></p>
+    </div>
+    <div class="card card-glass" style="border-left:3px solid #fab387;">
+      <h3>FN — Oracle under-extraction</h3>
+      <p style="font-size:0.85rem;">Oracle predicate left False even though evidence is present → formal engine cannot fire → DENIED when correct answer is PERMITTED → over-blocking</p>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 9: INFORMATION EXTRACTION -->
+<div class="slide slide-teal">
+  <span class="slide-num">9</span>
+  <div class="slide-label">From Text to Structure</div>
+  <h2>Information Extraction — What LLM₁ Must Do</h2>
+  <p style="color:rgba(255,255,255,0.75);">ComplianceGPT's LLM₁ performs <strong>structured information extraction</strong>: convert an unstructured narrative into a precise JSON object. One wrong boolean and the verdict flips.</p>
   <div style="margin-top:20px;">
     <div class="grid-2">
       <div>
         <div class="card card-teal" style="margin-bottom:12px;">
           <h3>Input: natural language narrative</h3>
-          <p style="font-size:0.92rem;font-style:italic;line-height:1.75;margin-top:8px;">"A hospital emergency department physician requested blood alcohol test results from a state police officer who had drawn the blood at the scene of an accident. The physician said the results were needed to treat the patient."</p>
+          <p style="font-size:0.92rem;font-style:italic;line-height:1.75;margin-top:8px;">"A hospital received a civil subpoena from an attorney representing the plaintiff in a malpractice case. The attorney provided a written certification that the patient had been served with notice and the time to object had passed without objection."</p>
         </div>
         <div class="card card-teal">
           <h3>The extraction task</h3>
           <ul style="font-size:0.88rem;">
-            <li>Who is disclosing? (<em>sender</em>)</li>
-            <li>Who is receiving? (<em>receiver</em>)</li>
-            <li>What type of data? (<em>phi_type</em>)</li>
-            <li>What is the stated purpose? (<em>purpose</em>)</li>
-            <li>Is there a court order? A patient authorization? A legal mandate? (<em>oracle predicates</em>)</li>
+            <li>Who is disclosing? (sender)</li>
+            <li>Who receives? (receiver)</li>
+            <li>What data type? (phi_type)</li>
+            <li>What purpose? (purpose)</li>
+            <li>Does a court order exist?</li>
+            <li>Were satisfactory assurances provided?</li>
+            <li>Was notification made?</li>
           </ul>
         </div>
       </div>
-      <div>
-        <div class="card card-teal">
-          <h3>Output: structured JSON</h3>
-          <div class="code-block" style="font-size:0.8rem;">
+      <div class="card card-teal">
+        <h3>Output: structured JSON</h3>
+        <div class="code-block" style="font-size:0.8rem;">
 {
-  <span class="key">"sender_role"</span>: <span class="str">"police_officer"</span>,
-  <span class="key">"receiver_role"</span>: <span class="str">"physician"</span>,
-  <span class="key">"phi_type"</span>: <span class="str">"lab_results"</span>,
-  <span class="key">"purpose"</span>: <span class="str">"treatment"</span>,
+  <span class="key">"sender_role"</span>: <span class="str">"hospital"</span>,
+  <span class="key">"receiver_role"</span>: <span class="str">"attorney"</span>,
+  <span class="key">"phi_type"</span>: <span class="str">"medical_records"</span>,
+  <span class="key">"purpose"</span>: <span class="str">"judicial"</span>,
   <span class="key">"has_court_order"</span>: <span class="val">false</span>,
-  <span class="key">"is_required_by_law"</span>: <span class="val">false</span>,
-  <span class="key">"obtained_authorization"</span>: <span class="val">false</span>,
-  <span class="key">"has_treatment_relationship"</span>: <span class="val">true</span>
-  <span class="com">// → PERMITTED under §164.506 (TPO)</span>
+  <span class="key">"has_lawful_process_with_assurance"</span>: <span class="val">true</span>,
+  <span class="com">// ^ THIS enables §164.512(e)(1)(ii)</span>
+  <span class="key">"made_reasonable_effort_to_notify"</span>: <span class="val">true</span>,
+  <span class="key">"obtained_authorization_164_508"</span>: <span class="val">false</span>
 }
-          </div>
-          <p style="font-size:0.8rem;color:rgba(255,255,255,0.5);margin-top:8px;">But wait — did the police officer legally have the right to draw blood? Is this really a treatment disclosure? This is where models make errors.</p>
         </div>
+        <p style="font-size:0.8rem;color:rgba(255,255,255,0.5);margin-top:8px;">A model that sets <code style="font-size:0.78rem;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">has_court_order=true</code> here gets the right verdict PERMITTED — but for the wrong reason. That's an oracle hallucination that happens to cancel out. The next scenario it may not.</p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ── SLIDE 7: THE CI SCHEMA ── -->
+<!-- SLIDE 10: CI SCHEMA -->
 <div class="slide slide-white">
-  <span class="slide-num">7</span>
+  <span class="slide-num">10</span>
   <div class="slide-label">ComplianceGPT's Extraction Schema</div>
-  <h2>The Contextual Integrity 5-Tuple + Oracle Predicates</h2>
-  <p class="subtitle-dark">ComplianceGPT uses the Contextual Integrity (CI) framework to model disclosures. Every scenario is mapped to a 5-tuple plus boolean oracle predicates.</p>
-
+  <h2>The CI 5-Tuple + Oracle Predicates</h2>
+  <p class="subtitle-dark">Every scenario maps to a 5-tuple of structural facts plus 24 boolean oracle predicates. The formal engine cannot grant PERMITTED without the right oracles set to True.</p>
   <div class="grid-2" style="margin-top:16px;">
     <div>
       <h3 style="color:var(--navy);margin-bottom:10px;">The CI 5-Tuple (structural facts)</h3>
       <table style="width:100%;border-collapse:collapse;font-family:'Segoe UI',system-ui,sans-serif;font-size:0.88rem;">
-        <tr style="background:#f0f4ff;"><td style="padding:8px 12px;font-weight:700;color:var(--navy);">sender</td><td style="padding:8px 12px;">Who is disclosing PHI <em>(e.g., hospital, physician, health plan)</em></td></tr>
-        <tr><td style="padding:8px 12px;font-weight:700;color:var(--navy);">receiver</td><td style="padding:8px 12px;">Who receives PHI <em>(e.g., law enforcement, court, researcher)</em></td></tr>
+        <tr style="background:#f0f4ff;"><td style="padding:8px 12px;font-weight:700;color:var(--navy);">sender</td><td style="padding:8px 12px;">Who is disclosing PHI (hospital, physician, health plan…)</td></tr>
+        <tr><td style="padding:8px 12px;font-weight:700;color:var(--navy);">receiver</td><td style="padding:8px 12px;">Who receives PHI (law enforcement, court, researcher…)</td></tr>
         <tr style="background:#f0f4ff;"><td style="padding:8px 12px;font-weight:700;color:var(--navy);">subject</td><td style="padding:8px 12px;">The patient whose PHI is being disclosed</td></tr>
-        <tr><td style="padding:8px 12px;font-weight:700;color:var(--navy);">phi_type</td><td style="padding:8px 12px;">Type of health information <em>(diagnosis, lab results, billing, etc.)</em></td></tr>
-        <tr style="background:#f0f4ff;"><td style="padding:8px 12px;font-weight:700;color:var(--navy);">purpose</td><td style="padding:8px 12px;">Why the disclosure is happening <em>(treatment, law enforcement, research…)</em></td></tr>
+        <tr><td style="padding:8px 12px;font-weight:700;color:var(--navy);">phi_type</td><td style="padding:8px 12px;">Type of health information (diagnosis, billing, lab…)</td></tr>
+        <tr style="background:#f0f4ff;"><td style="padding:8px 12px;font-weight:700;color:var(--navy);">purpose</td><td style="padding:8px 12px;">Why the disclosure happens (treatment, law enforcement, research…)</td></tr>
       </table>
     </div>
     <div>
       <h3 style="color:var(--navy);margin-bottom:10px;">Oracle Predicates (enabling conditions)</h3>
-      <p style="font-size:0.88rem;color:var(--muted);margin-bottom:10px;">Boolean flags for statutory exceptions. The formal engine cannot grant PERMITTED without these.</p>
+      <p style="font-size:0.88rem;color:var(--muted);margin-bottom:10px;">Boolean flags. The formal engine cannot grant PERMITTED unless the right ones are True.</p>
       <div style="display:flex;flex-wrap:wrap;gap:6px;">
         <span class="tag tag-navy">has_court_order</span>
         <span class="tag tag-navy">obtained_authorization_164_508</span>
@@ -420,286 +813,127 @@ tokens = enc.encode(your_scenario)
         <span class="tag tag-navy">has_lawful_process_with_assurance</span>
         <span class="tag tag-navy">has_treatment_relationship</span>
         <span class="tag tag-navy">satisfactory_assurances</span>
-        <span class="tag tag-navy">obtained_consent_506b</span>
         <span class="tag tag-navy">made_reasonable_effort_to_notify</span>
-        <span class="tag tag-navy">permitted_by_other_law</span>
-        <span class="tag tag-muted">+ 15 more…</span>
+        <span class="tag tag-muted">+ 17 more…</span>
       </div>
       <div class="card card-gold" style="margin-top:14px;">
-        <h3>Why boolean?</h3>
-        <p>Each predicate is either present or absent — no partial credit. If <code>has_court_order</code> is False, the judicial exception cannot fire, regardless of how the narrative is phrased. This is the "closed-world" assumption.</p>
+        <h3>The closed-world assumption</h3>
+        <p>If an oracle predicate is False, the exception cannot fire — regardless of how the narrative is phrased. There is no "probably has a court order." It's binary. This is what makes the system verifiable.</p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ── SLIDE 8: HIPAA FRAMEWORK ── -->
-<div class="slide slide-light">
-  <span class="slide-num">8</span>
-  <div class="slide-label">HIPAA Deep Dive · Part 1</div>
-  <h2>HIPAA's General Prohibition and Exception Structure</h2>
-  <p class="subtitle-dark">HIPAA has one simple rule and ~15 exceptions. Most compliance errors happen in the exceptions, not the rule.</p>
-
-  <div class="flow" style="margin:20px 0 8px;">
-    <div class="flow-box" style="background:var(--crimson);color:#fff;flex:1;">
-      <div style="font-size:0.7rem;font-weight:700;letter-spacing:.05em;opacity:0.8;margin-bottom:3px;">§164.502(a)</div>
-      <div style="font-weight:700;">General Rule</div>
-      <div style="font-size:0.8rem;opacity:0.85;margin-top:3px;">A covered entity may not use or disclose PHI — <strong>except as permitted.</strong></div>
-    </div>
-    <div class="flow-arrow">→</div>
-    <div class="flow-box" style="background:var(--navy);color:#fff;flex:1;">
-      <div style="font-size:0.7rem;font-weight:700;letter-spacing:.05em;opacity:0.8;margin-bottom:3px;">§164.502(a)(1)</div>
-      <div style="font-weight:700;">To the Individual</div>
-      <div style="font-size:0.8rem;opacity:0.85;margin-top:3px;">Patient can always access their own PHI.</div>
-    </div>
-    <div class="flow-arrow">→</div>
-    <div class="flow-box" style="background:#1f7a3c;color:#fff;flex:1;">
-      <div style="font-size:0.7rem;font-weight:700;letter-spacing:.05em;opacity:0.8;margin-bottom:3px;">§164.506</div>
-      <div style="font-weight:700;">TPO</div>
-      <div style="font-size:0.8rem;opacity:0.85;margin-top:3px;">Treatment, Payment, Healthcare Operations — no authorization needed.</div>
-    </div>
-    <div class="flow-arrow">→</div>
-    <div class="flow-box" style="background:#5a3a00;color:#fff;flex:1;">
-      <div style="font-size:0.7rem;font-weight:700;letter-spacing:.05em;opacity:0.8;margin-bottom:3px;">§164.508</div>
-      <div style="font-weight:700;">Authorization</div>
-      <div style="font-size:0.8rem;opacity:0.85;margin-top:3px;">Written signed authorization from the patient.</div>
-    </div>
-    <div class="flow-arrow">→</div>
-    <div class="flow-box" style="background:#2d2d2d;color:#fff;flex:1;">
-      <div style="font-size:0.7rem;font-weight:700;letter-spacing:.05em;opacity:0.8;margin-bottom:3px;">§164.512</div>
-      <div style="font-weight:700;">Without Authorization</div>
-      <div style="font-size:0.8rem;opacity:0.85;margin-top:3px;">12 specific public interest exceptions with strict conditions.</div>
-    </div>
-  </div>
-
-  <div class="grid-2" style="margin-top:12px;">
-    <div class="card card-white" style="border:1px solid var(--border);">
-      <h3>Who must comply (Covered Entities)</h3>
-      <ul style="font-size:0.88rem;">
-        <li><strong>Healthcare providers</strong> — hospitals, clinics, physicians, pharmacies, nursing homes</li>
-        <li><strong>Health plans</strong> — insurers, HMOs, Medicare/Medicaid</li>
-        <li><strong>Healthcare clearinghouses</strong> — billing processors</li>
-        <li><strong>Business associates</strong> — contractors handling PHI on a CE's behalf</li>
-      </ul>
-    </div>
-    <div class="card card-white" style="border:1px solid var(--border);">
-      <h3>What is PHI (18 Identifiers)</h3>
-      <p style="font-size:0.85rem;color:var(--muted);margin-bottom:8px;">Any health information that can identify a patient. The 18 identifiers include:</p>
-      <ul style="font-size:0.88rem;">
-        <li>Name, address, dates (birth, admission, discharge)</li>
-        <li>Phone/fax/email, SSN, medical record numbers</li>
-        <li>Account numbers, certificate numbers, device identifiers</li>
-        <li>Photos, biometric identifiers, any unique number or code</li>
-      </ul>
-    </div>
-  </div>
-</div>
-
-<!-- ── SLIDE 9: §164.512 EXCEPTIONS ── -->
-<div class="slide slide-white">
-  <span class="slide-num">9</span>
-  <div class="slide-label">HIPAA Deep Dive · Part 2</div>
-  <h2>§164.512 — The 12 Public Interest Exceptions</h2>
-  <p class="subtitle-dark">These are the hard cases. Most ComplianceGPT errors live here. Each exception has specific statutory conditions — missing any one condition → DENIED.</p>
-
-  <div class="exc-grid">
-    <div class="exc-item" style="background:#f0f8ff;border-left:3px solid #3a7bd5;">
-      <div style="font-size:0.72rem;font-weight:700;color:#1e3a6e;margin-bottom:4px;">§164.512(a)</div>
-      <strong>Required by Law</strong>
-      <p style="font-size:0.82rem;color:#555;margin-top:3px;">Disclosure mandated by statute, regulation, or court order. Condition: must be the minimum necessary PHI for the stated legal purpose.</p>
-    </div>
-    <div class="exc-item" style="background:#f0f8ff;border-left:3px solid #3a7bd5;">
-      <div style="font-size:0.72rem;font-weight:700;color:#1e3a6e;margin-bottom:4px;">§164.512(b)</div>
-      <strong>Public Health Activities</strong>
-      <p style="font-size:0.82rem;color:#555;margin-top:3px;">Reporting to public health authorities (CDC, FDA, state health departments). Disease surveillance, product recalls, birth/death reporting.</p>
-    </div>
-    <div class="exc-item" style="background:#fff5f5;border-left:3px solid var(--crimson);">
-      <div style="font-size:0.72rem;font-weight:700;color:#6b0000;margin-bottom:4px;">§164.512(e) ⚠ HIGH ERROR RATE</div>
-      <strong>Judicial &amp; Administrative Proceedings</strong>
-      <p style="font-size:0.82rem;color:#555;margin-top:3px;">Requires <em>one of</em>: (i) a court order, OR (ii) a subpoena/discovery request with satisfactory assurances that the patient was notified. Three separate enabling predicates.</p>
-    </div>
-    <div class="exc-item" style="background:#fff5f5;border-left:3px solid var(--crimson);">
-      <div style="font-size:0.72rem;font-weight:700;color:#6b0000;margin-bottom:4px;">§164.512(f) ⚠ HIGH ERROR RATE</div>
-      <strong>Law Enforcement</strong>
-      <p style="font-size:0.82rem;color:#555;margin-top:3px;">Six distinct sub-conditions: court order/warrant, grand jury subpoena, administrative subpoena, crime on premises, locating suspect/witness, emergency situations. Each has different requirements.</p>
-    </div>
-    <div class="exc-item" style="background:#f0fff4;border-left:3px solid #1f7a3c;">
-      <div style="font-size:0.72rem;font-weight:700;color:#0a3d1f;margin-bottom:4px;">§164.512(c)</div>
-      <strong>Abuse / Neglect / Domestic Violence</strong>
-      <p style="font-size:0.82rem;color:#555;margin-top:3px;">Reports of abuse or neglect to authorities. CE must believe disclosure is necessary to prevent harm.</p>
-    </div>
-    <div class="exc-item" style="background:#f0fff4;border-left:3px solid #1f7a3c;">
-      <div style="font-size:0.72rem;font-weight:700;color:#0a3d1f;margin-bottom:4px;">§164.512(i)</div>
-      <strong>Research</strong>
-      <p style="font-size:0.82rem;color:#555;margin-top:3px;">IRB waiver OR de-identified data OR limited data set with data use agreement. Research without these conditions → DENIED.</p>
-    </div>
-    <div class="exc-item" style="background:#fffdf0;border-left:3px solid #c8a000;">
-      <div style="font-size:0.72rem;font-weight:700;color:#5a4500;margin-bottom:4px;">§164.512(j)</div>
-      <strong>Threat to Health or Safety</strong>
-      <p style="font-size:0.82rem;color:#555;margin-top:3px;">CE must believe disclosure is necessary to prevent or lessen a serious and imminent threat to health or safety. Good faith belief required.</p>
-    </div>
-    <div class="exc-item" style="background:#fffdf0;border-left:3px solid #c8a000;">
-      <div style="font-size:0.72rem;font-weight:700;color:#5a4500;margin-bottom:4px;">§164.524</div>
-      <strong>Individual Access Rights</strong>
-      <p style="font-size:0.82rem;color:#555;margin-top:3px;">Patients have the right to access their own medical records. CEs must respond within 30 days. Limited denial grounds.</p>
-    </div>
-  </div>
-</div>
-
-<!-- ── SLIDE 10: JUDICIAL & LE DEEP DIVE ── -->
-<div class="slide slide-crimson">
-  <span class="slide-num">10</span>
-  <div class="slide-label">The Two Hardest Sections</div>
-  <h2>§164.512(e) Judicial and §164.512(f) Law Enforcement</h2>
-  <p style="color:rgba(255,255,255,0.8);">These two sections generate the <strong>majority of ComplianceGPT errors</strong>. They are the dominant adversarial attack surface. Understanding exactly what each requires is essential for error analysis.</p>
-
-  <div class="grid-2" style="margin-top:22px;">
-    <div class="card card-glass">
-      <h3 style="color:var(--gold);">§164.512(e) — Judicial Proceedings</h3>
-      <p style="font-size:0.85rem;margin:8px 0;">PERMITTED if and only if <em>one</em> of these three enabling instruments exists:</p>
-      <ul style="font-size:0.88rem;">
-        <li><strong style="color:var(--gold);">(i)</strong> Court order — signed by a judge, expressly ordering the disclosure</li>
-        <li><strong style="color:var(--gold);">(ii)</strong> Subpoena/discovery request <em>plus</em> satisfactory assurances — written certification that the patient was notified AND the time to object has passed</li>
-        <li><strong style="color:var(--gold);">(iii)</strong> Qualified protective order — protecting the PHI from further use outside the proceeding</li>
-      </ul>
-      <div style="margin-top:12px;padding:10px;background:rgba(255,255,255,0.08);border-radius:4px;font-size:0.82rem;">
-        <strong>Common LLM error:</strong> malpractice litigation scenarios where a lawyer <em>requests</em> records during discovery — but the hospital discloses without confirming whether satisfactory assurances were provided. Model sets <code style="font-size:0.78rem;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">has_court_order=true</code> even though no court order exists.
-      </div>
-    </div>
-    <div class="card card-glass">
-      <h3 style="color:var(--gold);">§164.512(f) — Law Enforcement</h3>
-      <p style="font-size:0.85rem;margin:8px 0;">Six separate sub-conditions — each has different enabling requirements:</p>
-      <ul style="font-size:0.88rem;">
-        <li><strong>(1)(i)</strong> Court order, court-ordered warrant, grand jury subpoena</li>
-        <li><strong>(1)(ii)</strong> Administrative subpoena with specific law enforcement purpose</li>
-        <li><strong>(2)</strong> Identifying/locating a suspect, fugitive, witness, or missing person</li>
-        <li><strong>(3)</strong> Victim of crime (with consent or emergency exception)</li>
-        <li><strong>(4)</strong> Death is suspected to have resulted from criminal conduct</li>
-        <li><strong>(5)</strong> Crime on CE's premises</li>
-        <li><strong>(6)</strong> Medical emergency — offender committed a crime</li>
-      </ul>
-      <div style="margin-top:12px;padding:10px;background:rgba(255,255,255,0.08);border-radius:4px;font-size:0.82rem;">
-        <strong>Common LLM error:</strong> police officer "requests" records without a warrant — model extracts purpose as "law_enforcement" and sets <code style="font-size:0.78rem;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">is_required_by_law=true</code>, but purpose alone is not sufficient without a specific legal instrument.
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ── SLIDE 11: GDPR vs HIPAA ── -->
-<div class="slide slide-white">
+<!-- SLIDE 11: THE AI CLUSTER -->
+<div class="slide slide-dark">
   <span class="slide-num">11</span>
-  <div class="slide-label">Cross-Regulation</div>
-  <h2>HIPAA vs. GDPR — Parallel Structure, Different Scope</h2>
-  <p class="subtitle-dark">These two regulations share a common structure: general prohibition → lawful basis exceptions → rights. But the scope, terminology, and enforcement differ significantly.</p>
+  <div class="slide-label">Stony Brook AI Cluster</div>
+  <h2>Your Research Infrastructure</h2>
+  <p style="color:rgba(255,255,255,0.7);">The NSF-funded Stony Brook AI Cluster gives you access to H100s, V100s, and Quadro RTX 8000s. Running 137 scenarios on Gemma3 takes ~1 hour on your laptop CPU. On one V100, it takes under 5 minutes.</p>
 
-  <table class="cmp-table" style="margin-top:20px;">
-    <tr style="background:var(--navy);color:#fff;">
-      <th style="padding:10px 14px;width:200px;">Dimension</th>
-      <th style="padding:10px 14px;background:#004080;">HIPAA (US, 1996)</th>
-      <th style="padding:10px 14px;background:#6b0000;">GDPR (EU, 2018)</th>
-    </tr>
-    <tr>
-      <td style="padding:9px 14px;font-weight:700;background:#f8f9fa;">Data covered</td>
-      <td style="padding:9px 14px;">Protected Health Information (PHI) only — identifiable health data held by CEs</td>
-      <td style="padding:9px 14px;background:#fff5f5;">All personal data of EU residents — any information that identifies or can identify a person</td>
-    </tr>
-    <tr>
-      <td style="padding:9px 14px;font-weight:700;background:#f8f9fa;">Who must comply</td>
-      <td style="padding:9px 14px;">Covered Entities and Business Associates (US healthcare sector)</td>
-      <td style="padding:9px 14px;background:#fff5f5;">Any organization processing EU residents' data — regardless of where the org is located</td>
-    </tr>
-    <tr>
-      <td style="padding:9px 14px;font-weight:700;background:#f8f9fa;">Lawful basis</td>
-      <td style="padding:9px 14px;">~15 specific exceptions (TPO, authorization, law enforcement, etc.)</td>
-      <td style="padding:9px 14px;background:#fff5f5;">6 lawful bases: consent, contract, legal obligation, vital interests, public task, legitimate interest</td>
-    </tr>
-    <tr>
-      <td style="padding:9px 14px;font-weight:700;background:#f8f9fa;">Patient rights</td>
-      <td style="padding:9px 14px;">Right to access (§164.524), right to amend (§164.526), accounting of disclosures (§164.528)</td>
-      <td style="padding:9px 14px;background:#fff5f5;">Right to access, erasure (right to be forgotten), portability, objection, restriction of processing</td>
-    </tr>
-    <tr>
-      <td style="padding:9px 14px;font-weight:700;background:#f8f9fa;">Deletion right</td>
-      <td style="padding:9px 14px;color:#6c757d;"><em>Very limited</em> — no general right to delete; only in specific circumstances (e.g., psychotherapy notes)</td>
-      <td style="padding:9px 14px;background:#fff5f5;color:var(--green);font-weight:600;">Strong right to erasure — unless legal obligation requires retention</td>
-    </tr>
-    <tr>
-      <td style="padding:9px 14px;font-weight:700;background:#f8f9fa;">Max penalty</td>
-      <td style="padding:9px 14px;">$1.9M/year per violation category (HHS OCR)</td>
-      <td style="padding:9px 14px;background:#fff5f5;color:var(--crimson);font-weight:600;">4% of global annual revenue OR €20M — whichever is higher</td>
-    </tr>
-    <tr style="background:#f0f8ff;">
-      <td style="padding:9px 14px;font-weight:700;">Overlap question</td>
-      <td colspan="2" style="padding:9px 14px;font-style:italic;">An EU patient at a US hospital: <em>both</em> HIPAA and GDPR apply. The stricter rule governs. This is Project 5's core problem.</td>
-    </tr>
-  </table>
+  <div class="grid-3" style="margin-top:22px;">
+    <div class="card card-glass" style="border-top:3px solid var(--gold);">
+      <h3 style="color:var(--gold);">AI Cluster — Your target</h3>
+      <ul style="font-size:0.85rem;">
+        <li>Login: <code style="font-size:0.8rem;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">submit.ai.stonybrook.edu</code></li>
+        <li>6 nodes: 2× V100 (32GB), 2× RTX 8000 (48GB), 1× H100 (80GB)</li>
+        <li>Jobs submitted via <strong>SLURM</strong></li>
+        <li>Home dir shared across all nodes — code lives in one place</li>
+      </ul>
+    </div>
+    <div class="card card-glass">
+      <h3 style="color:rgba(255,255,255,0.6);">DGX A100 — If needed</h3>
+      <ul style="font-size:0.85rem;">
+        <li>8× A100 (40GB each)</li>
+        <li>Login: <code style="font-size:0.8rem;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">130.245.162.235:130</code></li>
+        <li>Docker containers only</li>
+        <li>Use only if training from scratch</li>
+        <li><em>Most of you won't need this.</em></li>
+      </ul>
+    </div>
+    <div class="card card-glass">
+      <h3 style="color:rgba(255,255,255,0.6);">HGX H100 — Restricted</h3>
+      <ul style="font-size:0.85rem;">
+        <li>8× H100 (80GB each)</li>
+        <li>Requires separate form request</li>
+        <li>High demand, limited access</li>
+        <li>For very large models only</li>
+        <li><em>You won't need this.</em></li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="margin-top:18px;font-family:'Segoe UI',system-ui,sans-serif;font-size:0.88rem;">
+    <div class="flow">
+      <div class="flow-box" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);">Your laptop<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">write job script</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="background:rgba(0,51,102,0.6);border:2px solid var(--gold);">Submit node<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.7);">sbatch myjob.sh</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);">SLURM queue<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">waits for GPU</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="background:rgba(31,122,60,0.5);border:1px solid #a8f0c8;">GPU node<br><span style="font-size:0.75rem;color:#a8f0c8;">runs your code</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);">Output file<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">results CSV</span></div>
+    </div>
+    <p style="font-size:0.82rem;color:rgba(255,255,255,0.4);">You never SSH into the GPU node directly. You submit jobs and read output files. The submit node is the only node you log into.</p>
+  </div>
 </div>
 
-<!-- ── SLIDE 12: CCPA / COPPA / SOX / GLBA ── -->
+<!-- SLIDE 12: SLURM -->
 <div class="slide slide-dark">
   <span class="slide-num">12</span>
-  <div class="slide-label">The Other Regulations</div>
-  <h2>CCPA · COPPA · SOX · GLBA — Quick Reference</h2>
-  <p style="color:rgba(255,255,255,0.7);">These come into play when a user question crosses domains — patient is a minor, data touches financial records, or the organization is a financial institution.</p>
+  <div class="slide-label">Cluster · SLURM</div>
+  <h2>SLURM — 4 Steps to Run a GPU Job</h2>
+  <p style="color:rgba(255,255,255,0.7);">SLURM is the job scheduler. You describe what you need. It queues your job and runs it when a GPU is free. Complete guide at <strong>cluster.html</strong>.</p>
 
   <div class="grid-2" style="margin-top:20px;">
-    <div class="card card-glass">
-      <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;">
-        <span style="font-size:1.1rem;font-weight:700;color:var(--gold);">CCPA</span>
-        <span style="font-size:0.75rem;color:rgba(255,255,255,0.45);">California Consumer Privacy Act · 2020</span>
+    <div>
+      <h3 style="color:var(--gold);margin-bottom:12px;">The job script (myjob.sh)</h3>
+      <div class="code-block" style="font-size:0.8rem;">
+#!/bin/bash
+<span class="flag">#SBATCH --job-name=</span><span class="str">cg_gemma</span>
+<span class="flag">#SBATCH --output=</span><span class="str">/home/netid/logs/run_%j_out.txt</span>
+<span class="flag">#SBATCH --error=</span><span class="str">/home/netid/logs/run_%j_err.txt</span>
+<span class="flag">#SBATCH --time=</span><span class="num">0-04:00</span>   <span class="com"># 4-hour max</span>
+<span class="flag">#SBATCH --mem=</span><span class="num">32000</span>     <span class="com"># 32 GB RAM</span>
+<span class="flag">#SBATCH --gres=gpu:</span><span class="num">1</span>    <span class="com"># 1 GPU</span>
+
+source ~/miniconda3/etc/profile.d/conda.sh
+conda activate compliancegpt
+
+python ~/compliancegpt/batch_runner.py \
+  <span class="flag">--model</span> <span class="str">"google/gemma-3-4b-it"</span> \
+  <span class="flag">--output</span> <span class="str">"results/run_$SLURM_JOB_ID.csv"</span>
       </div>
-      <ul style="font-size:0.88rem;">
-        <li><strong>Right to know:</strong> what data is collected and who it's shared with</li>
-        <li><strong>Right to delete:</strong> request deletion of personal information</li>
-        <li><strong>Right to opt-out:</strong> stop sale of data to third parties</li>
-        <li><strong>Overlap:</strong> "Can I delete my medical records?" → CCPA says yes (for CA residents), HIPAA says it depends on many factors</li>
-        <li>HIPAA-covered entities are partially exempt but non-PHI data at a healthcare org still falls under CCPA</li>
-      </ul>
     </div>
-    <div class="card card-glass">
-      <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;">
-        <span style="font-size:1.1rem;font-weight:700;color:var(--gold);">COPPA</span>
-        <span style="font-size:0.75rem;color:rgba(255,255,255,0.45);">Children's Online Privacy Protection Act · 1998</span>
+    <div>
+      <h3 style="color:var(--gold);margin-bottom:12px;">The commands</h3>
+      <div class="cmd-row"><span class="cmd">sbatch myjob.sh</span><span class="desc">Submit — get a job ID back</span></div>
+      <div class="cmd-row"><span class="cmd">squeue -u yournetid</span><span class="desc">See your jobs (PD=pending, R=running)</span></div>
+      <div class="cmd-row"><span class="cmd">tail -f logs/run_*_out.txt</span><span class="desc">Watch output update live</span></div>
+      <div class="cmd-row"><span class="cmd">scancel JOBID</span><span class="desc">Cancel a job</span></div>
+      <div class="cmd-row"><span class="cmd">sacct -u yournetid</span><span class="desc">Job history</span></div>
+      <div class="cmd-row"><span class="cmd">sinfo</span><span class="desc">See all nodes and their status</span></div>
+
+      <div class="card card-glass" style="margin-top:14px;">
+        <h3 style="color:var(--gold);">Request guidelines for ComplianceGPT inference</h3>
+        <ul style="font-size:0.85rem;">
+          <li><code style="font-size:0.8rem;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">--gres=gpu:1</code> — one GPU is enough</li>
+          <li><code style="font-size:0.8rem;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">--mem=32000</code> — 32GB RAM for 4B model</li>
+          <li><code style="font-size:0.8rem;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">--time=0-04:00</code> — 4 hrs covers 137 scenarios with buffer</li>
+          <li>Do not request 8 GPUs for inference. Other users need them.</li>
+        </ul>
       </div>
-      <ul style="font-size:0.88rem;">
-        <li>Applies to any online service collecting data from children under 13</li>
-        <li>Requires verifiable parental consent before collection</li>
-        <li><strong>Overlap with HIPAA:</strong> a pediatric patient's medical records at an online patient portal → both HIPAA and COPPA apply</li>
-        <li>"Can a hospital share a 10-year-old's records with a school?" → HIPAA §164.512 + COPPA consent requirements + FERPA</li>
-      </ul>
-    </div>
-    <div class="card card-glass">
-      <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;">
-        <span style="font-size:1.1rem;font-weight:700;color:var(--gold);">SOX §802</span>
-        <span style="font-size:0.75rem;color:rgba(255,255,255,0.45);">Sarbanes-Oxley · Records Retention</span>
-      </div>
-      <ul style="font-size:0.88rem;">
-        <li>Public companies must retain business records for at least 7 years</li>
-        <li>Cannot alter, destroy, or conceal records subject to investigation</li>
-        <li><strong>Overlap:</strong> "Can I delete my billing records from a public hospital?" → HIPAA says limited deletion rights; SOX §802 says financial records cannot be destroyed if under audit investigation</li>
-        <li>Relevant when a patient asks to delete health data that overlaps with financial audit trails</li>
-      </ul>
-    </div>
-    <div class="card card-glass">
-      <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:10px;">
-        <span style="font-size:1.1rem;font-weight:700;color:var(--gold);">GLBA</span>
-        <span style="font-size:0.75rem;color:rgba(255,255,255,0.45);">Gramm-Leach-Bliley Act · 1999</span>
-      </div>
-      <ul style="font-size:0.88rem;">
-        <li>Financial institutions must protect customer non-public personal information (NPI)</li>
-        <li><strong>Overlap:</strong> a health insurance company is both a CE under HIPAA and a financial institution under GLBA — medical billing data may be regulated by both</li>
-        <li>"Can my health insurer share my data with a bank affiliate?" → HIPAA says no for PHI; GLBA controls how affiliated sharing works for NPI</li>
-      </ul>
     </div>
   </div>
 </div>
 
-<!-- ── SLIDE 13: ANNOTATION EXERCISE ── -->
+<!-- SLIDE 13: EXTRACTION EXERCISE -->
 <div class="slide slide-navy">
   <span class="slide-num">13</span>
   <div class="slide-label">Live Exercise</div>
-  <h2>Annotate a Real Court Case</h2>
-  <p style="color:rgba(255,255,255,0.75);">Let's extract the CI fields and oracle predicates from this real GoldCoin scenario together. What would the JSON look like? What is the correct verdict?</p>
+  <h2>Extract the CI Fields — Do It Before Looking</h2>
+  <p style="color:rgba(255,255,255,0.75);">Read the scenario. Before the answer appears: write down sender, receiver, purpose, and which oracle predicates you think are True. Then we'll compare.</p>
 
   <div class="anno-text">
     "A hospital received a civil subpoena for a patient's medical records. The requesting attorney provided the hospital with a written certification stating that the patient had been served with notice of the subpoena, that the time permitted for the patient to raise objections had passed without objection, and that the information requested was needed for the malpractice litigation. The hospital released the records."
@@ -707,118 +941,101 @@ tokens = enc.encode(your_scenario)
 
   <div class="grid-3" style="margin-top:16px;">
     <div class="card card-glass">
-      <h3 style="color:var(--gold);">Step 1 — Extract the 5-tuple</h3>
+      <h3 style="color:var(--gold);">Step 1 — The 5-tuple</h3>
       <ul style="font-size:0.88rem;">
-        <li><strong>Sender:</strong> ?</li>
-        <li><strong>Receiver:</strong> ?</li>
-        <li><strong>Subject:</strong> ?</li>
-        <li><strong>PHI type:</strong> ?</li>
-        <li><strong>Purpose:</strong> ?</li>
-      </ul>
-      <p style="margin-top:10px;font-size:0.82rem;color:rgba(255,255,255,0.5);">Answer: hospital → attorney; patient; medical records; judicial/malpractice</p>
-    </div>
-    <div class="card card-glass">
-      <h3 style="color:var(--gold);">Step 2 — Which exception applies?</h3>
-      <p style="font-size:0.88rem;">Purpose is "judicial proceedings" → §164.512(e)</p>
-      <p style="font-size:0.88rem;margin-top:8px;">Which sub-condition?</p>
-      <ul style="font-size:0.88rem;margin-top:6px;">
-        <li>(i) Court order? — <span class="highlight-red">NO</span></li>
-        <li>(ii) Subpoena + satisfactory assurances? — check the text…</li>
-        <li>Written cert that patient was notified ✓</li>
-        <li>Time to object passed without objection ✓</li>
-        <li>→ <span class="highlight-green">PERMITTED</span> under §164.512(e)(1)(ii)</li>
+        <li><strong>Sender:</strong> hospital</li>
+        <li><strong>Receiver:</strong> attorney</li>
+        <li><strong>Subject:</strong> patient</li>
+        <li><strong>PHI type:</strong> medical records</li>
+        <li><strong>Purpose:</strong> judicial / malpractice</li>
       </ul>
     </div>
     <div class="card card-glass">
-      <h3 style="color:var(--gold);">Step 3 — Oracle predicates</h3>
+      <h3 style="color:var(--gold);">Step 2 — Oracle predicates</h3>
       <div class="code-block" style="font-size:0.76rem;padding:10px 12px;">
 {
   <span class="key">"has_court_order"</span>: <span class="val">false</span>,
   <span class="key">"has_lawful_process_</span>
-  <span class="key"> with_assurance"</span>: <span class="val">true</span>,
-  <span class="com">// ^ THIS is what enables it</span>
-  <span class="key">"made_reasonable_effort_</span>
-  <span class="key"> to_notify"</span>: <span class="val">true</span>
+  <span class="key">&nbsp;with_assurance"</span>: <span class="val">true</span>,
+  <span class="com">// ^ written certification</span>
+  <span class="key">"made_reasonable_</span>
+  <span class="key">&nbsp;effort_to_notify"</span>: <span class="val">true</span>
+  <span class="com">// ^ patient served + no obj</span>
 }
       </div>
-      <p style="font-size:0.82rem;color:rgba(255,255,255,0.5);margin-top:6px;">A model that sets has_court_order=true gets the right verdict for the wrong reason — a dangerous hallucination.</p>
+    </div>
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">Step 3 — The trap</h3>
+      <p style="font-size:0.85rem;margin:8px 0;">A model that extracts <code style="font-size:0.8rem;background:rgba(255,255,255,0.1);padding:1px 4px;border-radius:3px;">has_court_order=true</code> will still return PERMITTED — but for the wrong reason.</p>
+      <p style="font-size:0.85rem;">That's an oracle hallucination that cancels out here. In a DENIED case with similar language, it would cause a false positive. <strong>Getting the right answer for the wrong reason is dangerous.</strong></p>
     </div>
   </div>
 </div>
 
-<!-- ── SLIDE 14: ERROR ANALYSIS METHOD ── -->
+<!-- SLIDE 14: ERROR ANALYSIS METHOD -->
 <div class="slide slide-light">
   <span class="slide-num">14</span>
   <div class="slide-label">Research Skill</div>
   <h2>How to Read a Wrong Prediction</h2>
-  <p class="subtitle-dark">This is the core research skill for this summer. When ComplianceGPT returns the wrong verdict, your job is to determine <em>exactly</em> which layer failed and why.</p>
-
+  <p class="subtitle-dark">When the pipeline returns the wrong verdict, your job is to determine <em>exactly</em> which layer failed and why. Four steps — always in this order.</p>
   <div style="margin-top:16px;">
     <div style="display:flex;gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;font-family:'Segoe UI',system-ui,sans-serif;">
       <div style="flex:1;padding:18px;border-right:1px solid var(--border);">
         <div style="font-size:0.72rem;font-weight:700;color:var(--crimson);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">Step 1</div>
         <h3 style="color:var(--navy);margin-bottom:8px;">Check the ground truth</h3>
-        <p style="font-size:0.88rem;">What was the correct verdict? What HIPAA section governs? What enabling condition makes it PERMITTED or DENIED?</p>
-        <div class="card card-gold" style="margin-top:12px;padding:12px;">
-          <p style="font-size:0.82rem;"><strong>Look at:</strong> <code>ground_truth</code> column, the scenario text, and — if available — the HIPAA section citation in the GoldCoin metadata.</p>
-        </div>
+        <p style="font-size:0.88rem;">What was the correct verdict? What enabling condition makes it PERMITTED or DENIED? What would need to be True for the correct answer to be reached?</p>
       </div>
       <div style="flex:1;padding:18px;border-right:1px solid var(--border);">
         <div style="font-size:0.72rem;font-weight:700;color:var(--crimson);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">Step 2</div>
         <h3 style="color:var(--navy);margin-bottom:8px;">Inspect the JSON extraction</h3>
-        <p style="font-size:0.88rem;">What did the model extract? Look at the <code>scenario_json</code> column. Which field is wrong?</p>
-        <ul style="font-size:0.85rem;margin-top:10px;">
+        <ul style="font-size:0.85rem;margin-top:6px;">
           <li>Wrong <code>sender_role</code> or <code>receiver_role</code>?</li>
           <li>Wrong <code>purpose</code> string?</li>
-          <li>Oracle predicate set True when it shouldn't be (hallucination)?</li>
-          <li>Oracle predicate False when it should be True (under-extraction)?</li>
+          <li>Oracle predicate True when it shouldn't be?</li>
+          <li>Oracle predicate False when text clearly states it?</li>
         </ul>
       </div>
       <div style="flex:1;padding:18px;border-right:1px solid var(--border);">
         <div style="font-size:0.72rem;font-weight:700;color:var(--crimson);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">Step 3</div>
         <h3 style="color:var(--navy);margin-bottom:8px;">Trace to root cause</h3>
-        <p style="font-size:0.88rem;">Why did the model extract the wrong value? Pick one:</p>
-        <ul style="font-size:0.85rem;margin-top:10px;">
-          <li><span class="tag tag-red">Oracle hallucination</span> model invented an enabling fact</li>
-          <li><span class="tag tag-red">Oracle under-extraction</span> fact was there, model missed it</li>
+        <ul style="font-size:0.85rem;margin-top:6px;">
+          <li><span class="tag tag-red">Oracle hallucination</span> invented enabling fact</li>
+          <li><span class="tag tag-red">Under-extraction</span> fact present, model missed it</li>
           <li><span class="tag tag-navy">Role confusion</span> sender/receiver swapped</li>
-          <li><span class="tag tag-navy">Purpose OOV</span> purpose not in schema vocabulary</li>
-          <li><span class="tag tag-muted">Format failure</span> invalid JSON output</li>
+          <li><span class="tag tag-navy">Purpose OOV</span> purpose not in schema vocab</li>
+          <li><span class="tag tag-muted">Format failure</span> invalid JSON</li>
         </ul>
       </div>
       <div style="flex:1;padding:18px;">
         <div style="font-size:0.72rem;font-weight:700;color:var(--crimson);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">Step 4</div>
         <h3 style="color:var(--navy);margin-bottom:8px;">Propose the fix</h3>
-        <p style="font-size:0.88rem;">What would you change?</p>
-        <ul style="font-size:0.85rem;margin-top:10px;">
-          <li>A prompt instruction that guards against this error type?</li>
-          <li>A few-shot example demonstrating the correct extraction?</li>
-          <li>A schema change to add a missing oracle predicate?</li>
+        <ul style="font-size:0.85rem;margin-top:6px;">
+          <li>A prompt instruction guarding against this error type?</li>
+          <li>A few-shot example showing the correct extraction?</li>
+          <li>A schema change to add a missing predicate?</li>
           <li>A post-processing rule?</li>
         </ul>
-        <div class="card card-green" style="margin-top:12px;padding:10px;">
-          <p style="font-size:0.82rem;"><strong>This is your project.</strong> For 6 weeks, you'll do this systematically and measure whether your fix reduces the error rate.</p>
+        <div class="card card-green" style="margin-top:10px;padding:10px;">
+          <p style="font-size:0.82rem;"><strong>This is your project</strong> — do this systematically, measure whether your fix works.</p>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ── SLIDE 15: LIVE CODING ── -->
+<!-- SLIDE 15: LIVE CODING — INSPECT OUTPUTS -->
 <div class="slide slide-dark">
   <span class="slide-num">15</span>
   <div class="slide-label">Live Coding</div>
   <h2>Inspecting Extraction Outputs in Python</h2>
-  <p style="color:rgba(255,255,255,0.7);">Open your results CSV. Follow along. We'll find a wrong prediction and dissect the extraction together.</p>
-
+  <p style="color:rgba(255,255,255,0.7);">Open your results CSV. We find a wrong prediction and trace it together.</p>
   <div class="grid-2" style="margin-top:20px;">
     <div>
       <div class="code-block">
-<span class="com"># Load results from your Week 1 batch run</span>
-<span class="kw">import</span> pandas <span class="kw">as</span> pd
-<span class="kw">import</span> json
+<span class="com"># Load your batch results</span>
+<span class="kw">import</span> pandas <span class="kw">as</span> pd, json
 
-df = pd.read_csv(<span class="str">"results/yourname_week1.csv"</span>)
+df = pd.read_csv(<span class="str">"results/yourname_batch.csv"</span>)
 
 <span class="com"># Find wrong predictions</span>
 wrong = df[df[<span class="str">"match"</span>] == <span class="str">"N"</span>]
@@ -835,17 +1052,16 @@ row = wrong.iloc[<span class="num">0</span>]
 sj = json.loads(row[<span class="str">"scenario_json"</span>])
 
 <span class="com"># Print CI fields</span>
-<span class="kw">for</span> field <span class="kw">in</span> [<span class="str">"sender_role"</span>, <span class="str">"receiver_role"</span>,
-              <span class="str">"purpose"</span>, <span class="str">"phi_type"</span>]:
-    <span class="kw">print</span>(f<span class="str">"{field}: {sj.get(field)}"</span>)
+<span class="kw">for</span> f <span class="kw">in</span> [<span class="str">"sender_role"</span>,<span class="str">"receiver_role"</span>,<span class="str">"purpose"</span>]:
+    <span class="kw">print</span>(f<span class="str">"{f}: {sj.get(f)}"</span>)
 
-<span class="com"># Print oracle predicates</span>
-oracles = [k <span class="kw">for</span> k <span class="kw">in</span> sj <span class="kw">if</span> sj[k] <span class="kw">is</span> <span class="kw">True</span>
-           <span class="kw">and</span> k.startswith(<span class="str">"has_"</span>)]
-<span class="kw">print</span>(<span class="str">"True oracles:"</span>, oracles)
+<span class="com"># Which oracles are True?</span>
+true_oracles = [k <span class="kw">for</span> k,v <span class="kw">in</span> sj.items()
+                <span class="kw">if</span> v <span class="kw">is</span> <span class="kw">True</span>]
+<span class="kw">print</span>(<span class="str">"True oracles:"</span>, true_oracles)
 
-<span class="com"># Print the scenario text</span>
-<span class="kw">print</span>(row[<span class="str">"question"</span>][:500])
+<span class="com"># Print the scenario</span>
+<span class="kw">print</span>(row[<span class="str">"question"</span>][:<span class="num">500</span>])
       </div>
     </div>
   </div>
@@ -854,199 +1070,204 @@ oracles = [k <span class="kw">for</span> k <span class="kw">in</span> sj <span c
     <ul style="font-size:0.9rem;">
       <li>Does the scenario text mention a court order? If yes — is <code>has_court_order</code> True? If no — is it correctly False?</li>
       <li>Does the sender/receiver match who's actually disclosing in the narrative?</li>
-      <li>Is the purpose string in the schema vocabulary, or did the model invent something like <code>"general_healthcare"</code>?</li>
-      <li>Are there oracle predicates that are True but shouldn't be — or False when the text clearly states the condition?</li>
+      <li>Is the purpose string a valid schema vocabulary term, or something invented?</li>
+      <li>Are there True oracle predicates that the text does not actually support?</li>
     </ul>
   </div>
 </div>
 
-<!-- ── SLIDE 16: PYTHON CONCEPTS ── -->
+<!-- SLIDE 16: PYTHON — PRECISION RECALL F1 -->
 <div class="slide slide-dark">
   <span class="slide-num">16</span>
-  <div class="slide-label">Python Skills This Week</div>
-  <h2>What You Need to Know by Friday</h2>
-  <p style="color:rgba(255,255,255,0.7);">This week's Python exercises build the analysis tools you'll use all summer for error analysis and benchmarking.</p>
-
+  <div class="slide-label">Python Skills · Exercise 6</div>
+  <h2>Precision, Recall, F1 — Why Accuracy Isn't Enough</h2>
+  <p style="color:rgba(255,255,255,0.7);">A model that always outputs DENIED gets 90% accuracy on a dataset that's 90% DENIED — but it's useless. It catches nothing. Build these metrics from scratch.</p>
   <div class="grid-2" style="margin-top:20px;">
     <div>
       <div class="code-block">
-<span class="com"># 1. Compute precision and recall manually</span>
-tp = ((pred == <span class="str">"PERMITTED"</span>) & (gt == <span class="str">"PERMITTED"</span>)).sum()
-fp = ((pred == <span class="str">"PERMITTED"</span>) & (gt == <span class="str">"DENIED"</span>)).sum()
-fn = ((pred == <span class="str">"DENIED"</span>)    & (gt == <span class="str">"PERMITTED"</span>)).sum()
+<span class="com"># Implement from scratch — no sklearn</span>
+<span class="kw">def</span> precision_recall_f1(pred, gt):
+    tp = sum(p==<span class="str">"PERMITTED"</span> <span class="kw">and</span> g==<span class="str">"PERMITTED"</span>
+             <span class="kw">for</span> p,g <span class="kw">in</span> zip(pred,gt))
+    fp = sum(p==<span class="str">"PERMITTED"</span> <span class="kw">and</span> g==<span class="str">"DENIED"</span>
+             <span class="kw">for</span> p,g <span class="kw">in</span> zip(pred,gt))
+    fn = sum(p==<span class="str">"DENIED"</span>    <span class="kw">and</span> g==<span class="str">"PERMITTED"</span>
+             <span class="kw">for</span> p,g <span class="kw">in</span> zip(pred,gt))
 
-precision = tp / (tp + fp)
-recall    = tp / (tp + fn)
-f1        = <span class="num">2</span> * precision * recall / (precision + recall)
-<span class="kw">print</span>(f<span class="str">"P={precision:.3f} R={recall:.3f} F1={f1:.3f}"</span>)
-      </div>
-
-      <div class="code-block" style="margin-top:12px;">
-<span class="com"># 2. Group errors by type</span>
-df[<span class="str">"error_type"</span>] = <span class="str">""</span>
-df.loc[
-  (df[<span class="str">"verdict_norm"</span>] == <span class="str">"PERMITTED"</span>) &
-  (df[<span class="str">"ground_truth"</span>] == <span class="str">"DENIED"</span>),
-  <span class="str">"error_type"</span>
-] = <span class="str">"FP"</span>
-df.loc[
-  (df[<span class="str">"verdict_norm"</span>] == <span class="str">"DENIED"</span>) &
-  (df[<span class="str">"ground_truth"</span>] == <span class="str">"PERMITTED"</span>),
-  <span class="str">"error_type"</span>
-] = <span class="str">"FN"</span>
+    precision = tp / (tp + fp) <span class="kw">if</span> (tp+fp) <span class="kw">else</span> <span class="num">0</span>
+    recall    = tp / (tp + fn) <span class="kw">if</span> (tp+fn) <span class="kw">else</span> <span class="num">0</span>
+    f1 = <span class="num">2</span>*precision*recall/(precision+recall) \
+         <span class="kw">if</span> (precision+recall) <span class="kw">else</span> <span class="num">0</span>
+    <span class="kw">return</span> precision, recall, f1
       </div>
     </div>
     <div>
-      <div class="code-block">
-<span class="com"># 3. Parse oracle predicates from JSON</span>
-<span class="kw">def</span> get_oracles(row):
-    <span class="kw">try</span>:
-        sj = json.loads(row[<span class="str">"scenario_json"</span>])
-        <span class="kw">return</span> {k: v <span class="kw">for</span> k, v <span class="kw">in</span> sj.items()
-                <span class="kw">if</span> <span class="kw">isinstance</span>(v, bool)}
-    <span class="kw">except</span>:
-        <span class="kw">return</span> {}
-
-df[<span class="str">"oracles"</span>] = df.apply(get_oracles, axis=<span class="num">1</span>)
+      <div class="card card-glass" style="margin-bottom:14px;">
+        <h3 style="color:var(--gold);">What each metric means</h3>
+        <table style="width:100%;border-collapse:collapse;font-family:'Segoe UI',system-ui,sans-serif;font-size:0.85rem;margin-top:8px;">
+          <tr style="background:rgba(255,255,255,0.06);"><td style="padding:7px 10px;font-weight:700;">Precision</td><td style="padding:7px 10px;">Of cases we said PERMITTED, what fraction was correct? Low precision = <strong>PHI leaks</strong>.</td></tr>
+          <tr><td style="padding:7px 10px;font-weight:700;">Recall</td><td style="padding:7px 10px;">Of truly PERMITTED cases, what fraction did we catch? Low recall = <strong>over-blocking</strong>.</td></tr>
+          <tr style="background:rgba(255,255,255,0.06);"><td style="padding:7px 10px;font-weight:700;">F1</td><td style="padding:7px 10px;">Harmonic mean. Punishes models that sacrifice one metric for the other.</td></tr>
+        </table>
       </div>
-
-      <div class="code-block" style="margin-top:12px;">
-<span class="com"># 4. Check how often each oracle fires</span>
-oracle_cols = [<span class="str">"has_court_order"</span>,
-               <span class="str">"is_required_by_law"</span>,
-               <span class="str">"obtained_authorization"</span>]
-
-<span class="kw">for</span> col <span class="kw">in</span> oracle_cols:
-    rate = df[<span class="str">"oracles"</span>].apply(
-        <span class="kw">lambda</span> d: d.get(col, <span class="kw">False</span>)
-    ).mean()
-    <span class="kw">print</span>(f<span class="str">"{col}: {rate:.1%}"</span>)
+      <div class="card card-crimson">
+        <h3>The always-DENIED model trap</h3>
+        <p>If 90% of cases are DENIED, a model that always outputs DENIED gets 90% accuracy. Precision: undefined (0 PERMITTED predictions). Recall: 0%. F1: 0%. <strong>This is why you must report all three metrics.</strong></p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ── SLIDE 17: THIS WEEK'S TASKS ── -->
-<div class="slide slide-navy">
+<!-- SLIDE 17: LIVE CODING — CLUSTER -->
+<div class="slide slide-green">
   <span class="slide-num">17</span>
-  <div class="slide-label">Week 2 Tasks</div>
-  <h2>What You're Doing This Week</h2>
+  <div class="slide-label">Live Coding · Wednesday</div>
+  <h2>Your First Real GPU Experiment — Together</h2>
+  <p style="color:rgba(255,255,255,0.85);">Everyone submits a job. We watch the queue together. We read the output together. You download results and open them in Python. This is research.</p>
+
   <div class="grid-2" style="margin-top:22px;">
     <div>
-      <div class="card card-glass" style="margin-bottom:14px;border:2px solid var(--gold);">
-        <div style="font-size:0.72rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">Wednesday July 1 — On Campus</div>
-        <ul style="font-size:0.9rem;">
-          <li>Live coding: inspect a wrong prediction end-to-end</li>
-          <li>Run batch experiment: 20 rows, inspect raw JSON</li>
-          <li>For each wrong prediction: categorize the HIPAA exception and identify the failing field</li>
-        </ul>
-      </div>
-      <div class="card card-glass" style="margin-bottom:14px;">
-        <div style="font-size:0.72rem;font-weight:700;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">Thursday July 2 — Remote</div>
-        <ul style="font-size:0.9rem;">
-          <li>Complete Python exercises 5–8 in <code>notebooks/week2_nlp.ipynb</code></li>
-          <li>Read: Vaswani et al. "Attention Is All You Need" (abstract + intro + Figure 1)</li>
-          <li>Slack update by noon</li>
-        </ul>
-      </div>
-      <div class="card card-glass">
-        <div style="font-size:0.72rem;font-weight:700;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">Friday July 3 — Remote · Deliverable Due</div>
-        <ul style="font-size:0.9rem;">
-          <li>Complete and submit <strong>error analysis (1 page)</strong> — 2 wrong predictions, full dissection</li>
-          <li>Read: HIPAA Permitted Uses summary (hhs.gov)</li>
-          <li>Slack update by noon · Deliverable submitted by 5pm</li>
-        </ul>
-      </div>
+      <h3 style="color:#a8f0c8;margin-bottom:12px;">The sequence of commands</h3>
+      <div class="cmd-row"><span class="cmd">ssh netid@submit.ai.stonybrook.edu</span><span class="desc">Connect to cluster</span></div>
+      <div class="cmd-row"><span class="cmd">mkdir -p ~/compliancegpt/logs results</span><span class="desc">Create output dirs</span></div>
+      <div class="cmd-row"><span class="cmd">nano run_experiment.sh</span><span class="desc">Edit the job script</span></div>
+      <div class="cmd-row"><span class="cmd">sbatch run_experiment.sh</span><span class="desc">Submit — note the job ID</span></div>
+      <div class="cmd-row"><span class="cmd">squeue -u yournetid</span><span class="desc">Watch status (PD → R → done)</span></div>
+      <div class="cmd-row"><span class="cmd">tail -f logs/run_*_out.txt</span><span class="desc">Watch output as it runs</span></div>
+      <div class="cmd-row"><span class="cmd">cat logs/run_*_err.txt</span><span class="desc">Check for errors if job fails</span></div>
     </div>
     <div>
-      <div class="card card-gold">
-        <h3>Week 2 Deliverable — Error Analysis</h3>
-        <p style="margin-top:8px;">Pick <strong>2 wrong predictions</strong> from your batch run. For each one, write:</p>
-        <ol style="font-size:0.9rem;padding-left:18px;margin-top:10px;">
-          <li style="margin-bottom:8px;"><strong>What was the scenario?</strong> 1 sentence summary of what happened in the court case.</li>
-          <li style="margin-bottom:8px;"><strong>What did the model predict vs. the correct answer?</strong></li>
-          <li style="margin-bottom:8px;"><strong>Looking at the raw JSON</strong> — which exact field was wrong? Show the extracted value vs. what it should have been.</li>
-          <li style="margin-bottom:8px;"><strong>Root cause:</strong> oracle hallucination? Oracle under-extraction? Role confusion? Purpose OOV?</li>
-          <li><strong>Proposed fix:</strong> what prompt change, example, or schema change would address this?</li>
-        </ol>
-        <p style="margin-top:12px;font-size:0.85rem;color:var(--muted);">Format: Google Doc. Target length ~1 page per case. Submit link in Slack by Friday 5pm.</p>
+      <h3 style="color:#a8f0c8;margin-bottom:12px;">When the job finishes</h3>
+      <div class="code-block" style="font-size:0.8rem;">
+<span class="com"># Download results (on your laptop)</span>
+<span class="com"># Mac/Linux:</span>
+scp netid@submit.ai.stonybrook.edu:\
+  ~/compliancegpt/results/run_48305.csv \
+  ~/Downloads/
+
+<span class="com"># Windows: use VS Code Explorer</span>
+<span class="com"># → navigate → right-click → Download</span>
+      </div>
+      <div class="card card-glass" style="margin-top:12px;">
+        <h3 style="color:#a8f0c8;">Success criteria for Wednesday</h3>
+        <ul style="font-size:0.85rem;">
+          <li>Job appears in <code>squeue</code> with status R</li>
+          <li>Output file shows GPU name + <code>CUDA: True</code></li>
+          <li>Results CSV exists with at least 20 rows</li>
+          <li>You can open it in pandas and compute accuracy</li>
+          <li>You can find one wrong prediction and name the oracle that's wrong</li>
+        </ul>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ── SLIDE 18: RESOURCES ── -->
-<div class="slide slide-dark">
+<!-- SLIDE 18: TASKS -->
+<div class="slide slide-navy">
   <span class="slide-num">18</span>
-  <div class="slide-label">Week 2 Resources</div>
-  <h2>What to Read and Watch</h2>
+  <div class="slide-label">Week 2 Tasks</div>
+  <h2>What You're Doing This Week</h2>
+  <div class="grid-3" style="margin-top:22px;">
+    <div class="card card-glass" style="border:2px solid var(--gold);">
+      <div style="font-size:0.72rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;">Monday Jun 29 — On Campus</div>
+      <ul style="font-size:0.9rem;">
+        <li>Origin story lecture (Slides O1–O8)</li>
+        <li>Live tokenizer demo</li>
+        <li>Tonight: 3Blue1Brown videos 1–2</li>
+        <li>Tonight: email rt@cs.stonybrook.edu for cluster access</li>
+      </ul>
+    </div>
+    <div class="card card-glass" style="border:2px solid var(--gold);">
+      <div style="font-size:0.72rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;">Tuesday Jun 30 — On Campus</div>
+      <ul style="font-size:0.9rem;">
+        <li>LLMs in practice (Slides 3–10)</li>
+        <li>Cluster setup — everyone connects and submits test job before leaving</li>
+        <li>Tonight: Exercises 5–6 in notebook</li>
+        <li>Tonight: 3Blue1Brown videos 3–4</li>
+      </ul>
+    </div>
+    <div class="card card-glass" style="border:2px solid var(--gold);">
+      <div style="font-size:0.72rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;">Wednesday Jul 1 — On Campus</div>
+      <ul style="font-size:0.9rem;">
+        <li>First real GPU experiment (together)</li>
+        <li>Exercises 7–8 with your own results</li>
+        <li>Error analysis method walkthrough</li>
+        <li>Find your first interesting research finding</li>
+      </ul>
+    </div>
+  </div>
+  <div class="grid-2" style="margin-top:16px;">
+    <div class="card card-glass">
+      <div style="font-size:0.72rem;font-weight:700;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">Thursday Jul 2 — Remote</div>
+      <ul style="font-size:0.9rem;">
+        <li>Finish notebook (all 4 exercises + reflections)</li>
+        <li>Second cluster run: different model (Llama3 vs Gemma3)</li>
+        <li>Watch Karpathy "State of GPT" (45 min)</li>
+        <li>Slack update by noon</li>
+      </ul>
+    </div>
+    <div class="card card-gold">
+      <h3>Deliverable — Friday Jul 3, 5pm</h3>
+      <ol style="font-size:0.9rem;padding-left:16px;margin-top:8px;">
+        <li style="margin-bottom:6px;">Completed <code>week2_nlp.ipynb</code> (all 4 exercises + reflections)</li>
+        <li style="margin-bottom:6px;"><code>sacct</code> screenshot showing ≥1 completed SLURM job</li>
+        <li>1-page error analysis: 2 wrong predictions, oracle traced, fix proposed</li>
+      </ol>
+      <p style="margin-top:10px;font-size:0.85rem;color:var(--muted);">Post in Slack <code>#deliverables</code>. Both notebook and error analysis.</p>
+    </div>
+  </div>
+</div>
 
+<!-- SLIDE 19: RESOURCES -->
+<div class="slide slide-dark">
+  <span class="slide-num">19</span>
+  <div class="slide-label">Week 2 Resources</div>
+  <h2>What to Watch, Read, and Run</h2>
   <div class="grid-2" style="margin-top:20px;">
     <div>
-      <h3 style="color:var(--gold);margin-bottom:14px;">Papers</h3>
-      <ul class="resource-list" style="list-style:none;padding:0;">
+      <h3 style="color:var(--gold);margin-bottom:14px;">Videos — Required</h3>
+      <ul style="list-style:none;padding:0;">
         <li style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.1);">
-          <span style="background:var(--crimson);color:#fff;font-size:0.68rem;font-weight:700;padding:1px 7px;border-radius:3px;">REQUIRED</span>
-          <div style="margin-top:5px;font-family:'Segoe UI',system-ui,sans-serif;font-size:0.9rem;"><strong>Vaswani et al. — "Attention Is All You Need"</strong></div>
-          <a href="https://arxiv.org/abs/1706.03762" target="_blank" style="color:#60a5fa;font-size:0.8rem;">arxiv.org/abs/1706.03762</a>
-          <div style="font-size:0.82rem;color:rgba(255,255,255,0.5);margin-top:3px;">Read: abstract, Section 1 (intro), Figure 1. You do not need the math.</div>
+          <span class="tag tag-red">REQUIRED</span>
+          <div style="margin-top:5px;font-family:'Segoe UI',system-ui,sans-serif;font-size:0.9rem;"><strong>3Blue1Brown — Neural Networks, videos 1–4</strong></div>
+          <div style="font-size:0.82rem;color:rgba(255,255,255,0.5);margin-top:3px;">~80 min total. The best visual explanation of how neural networks learn. All four before Wednesday.</div>
         </li>
         <li style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.1);">
-          <span style="background:var(--navy);color:#fff;font-size:0.68rem;font-weight:700;padding:1px 7px;border-radius:3px;">REQUIRED</span>
-          <div style="margin-top:5px;font-family:'Segoe UI',system-ui,sans-serif;font-size:0.9rem;"><strong>GoldCoin — the benchmark dataset paper</strong></div>
-          <a href="https://arxiv.org/abs/2405.15175" target="_blank" style="color:#60a5fa;font-size:0.8rem;">arxiv.org/abs/2405.15175</a>
-          <div style="font-size:0.82rem;color:rgba(255,255,255,0.5);margin-top:3px;">Read: abstract, Section 2 (dataset construction). This is the data you're working with.</div>
+          <span class="tag tag-red">REQUIRED</span>
+          <div style="margin-top:5px;font-family:'Segoe UI',system-ui,sans-serif;font-size:0.9rem;"><strong>Andrej Karpathy — "The State of GPT" (2023)</strong></div>
+          <div style="font-size:0.82rem;color:rgba(255,255,255,0.5);margin-top:3px;">45 min. Pretraining → instruction tuning → RLHF. Highly accessible. Watch before Thursday.</div>
         </li>
         <li style="padding:10px 0;">
-          <span style="background:#1f7a3c;color:#fff;font-size:0.68rem;font-weight:700;padding:1px 7px;border-radius:3px;">OPTIONAL</span>
-          <div style="margin-top:5px;font-family:'Segoe UI',system-ui,sans-serif;font-size:0.9rem;"><strong>Devlin et al. — BERT</strong></div>
-          <a href="https://arxiv.org/abs/1810.04805" target="_blank" style="color:#60a5fa;font-size:0.8rem;">arxiv.org/abs/1810.04805</a>
-        </li>
-      </ul>
-
-      <h3 style="color:var(--gold);margin-top:20px;margin-bottom:14px;">Regulations</h3>
-      <ul style="list-style:none;padding:0;">
-        <li style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.1);font-family:'Segoe UI',system-ui,sans-serif;">
-          <span style="background:var(--crimson);color:#fff;font-size:0.68rem;font-weight:700;padding:1px 7px;border-radius:3px;">REQUIRED</span>
-          <a href="https://www.hhs.gov/hipaa/for-professionals/privacy/laws-regulations/index.html" target="_blank" style="color:#60a5fa;font-size:0.85rem;margin-left:8px;">HHS — HIPAA Privacy Rule Summary (hhs.gov)</a>
-        </li>
-        <li style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.1);font-family:'Segoe UI',system-ui,sans-serif;">
-          <span style="background:var(--crimson);color:#fff;font-size:0.68rem;font-weight:700;padding:1px 7px;border-radius:3px;">REQUIRED</span>
-          <a href="https://www.hhs.gov/hipaa/for-professionals/privacy/guidance/permitteduses/index.html" target="_blank" style="color:#60a5fa;font-size:0.85rem;margin-left:8px;">HHS — Permitted Uses &amp; Disclosures (all 15 categories)</a>
-        </li>
-        <li style="padding:8px 0;font-family:'Segoe UI',system-ui,sans-serif;">
-          <span style="background:#1f7a3c;color:#fff;font-size:0.68rem;font-weight:700;padding:1px 7px;border-radius:3px;">OPTIONAL</span>
-          <a href="https://gdpr-info.eu/art-6-gdpr/" target="_blank" style="color:#60a5fa;font-size:0.85rem;margin-left:8px;">GDPR Article 6 — Lawful Bases for Processing</a>
+          <span class="tag tag-navy">RECOMMENDED</span>
+          <div style="margin-top:5px;font-family:'Segoe UI',system-ui,sans-serif;font-size:0.9rem;"><strong>Andrej Karpathy — "Let's Build GPT from Scratch"</strong></div>
+          <div style="font-size:0.82rem;color:rgba(255,255,255,0.5);margin-top:3px;">2 hours. If you watch one optional video this summer, make it this one. You will genuinely understand transformers.</div>
         </li>
       </ul>
     </div>
     <div>
-      <h3 style="color:var(--gold);margin-bottom:14px;">Videos</h3>
+      <h3 style="color:var(--gold);margin-bottom:14px;">Reading + Cluster</h3>
       <ul style="list-style:none;padding:0;">
         <li style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.1);">
-          <span style="background:var(--crimson);color:#fff;font-size:0.68rem;font-weight:700;padding:1px 7px;border-radius:3px;">REQUIRED</span>
-          <div style="margin-top:5px;font-family:'Segoe UI',system-ui,sans-serif;font-size:0.9rem;"><strong>3Blue1Brown — Neural Networks, videos 3 &amp; 4</strong></div>
-          <a href="https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi" target="_blank" style="color:#60a5fa;font-size:0.8rem;">youtube.com playlist</a>
-          <div style="font-size:0.82rem;color:rgba(255,255,255,0.5);margin-top:3px;">Videos 3 (backpropagation) and 4 (training). Complete the series started in Week 1.</div>
+          <span class="tag tag-red">REQUIRED</span>
+          <div style="margin-top:5px;font-family:'Segoe UI',system-ui,sans-serif;font-size:0.9rem;"><strong>cluster.html</strong> — Step-by-step Mac + Windows setup</div>
+          <div style="font-size:0.82rem;color:rgba(255,255,255,0.5);margin-top:3px;">Read before Tuesday. Come knowing what tool you'll use to connect.</div>
         </li>
         <li style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.1);">
-          <span style="background:var(--navy);color:#fff;font-size:0.68rem;font-weight:700;padding:1px 7px;border-radius:3px;">RECOMMENDED</span>
-          <div style="margin-top:5px;font-family:'Segoe UI',system-ui,sans-serif;font-size:0.9rem;"><strong>Corey Schafer — Pandas Tutorials</strong></div>
-          <a href="https://www.youtube.com/playlist?list=PL-osiE80TeTsWmV9i9c58mdDCSskIFdDS" target="_blank" style="color:#60a5fa;font-size:0.8rem;">youtube.com playlist</a>
-          <div style="font-size:0.82rem;color:rgba(255,255,255,0.5);margin-top:3px;">Videos 1–5 if you want more pandas practice. groupby and filtering are essential.</div>
+          <span class="tag tag-navy">RECOMMENDED</span>
+          <div style="margin-top:5px;font-family:'Segoe UI',system-ui,sans-serif;font-size:0.9rem;"><strong>Jay Alammar — "The Illustrated Transformer"</strong></div>
+          <div style="font-size:0.82rem;color:rgba(255,255,255,0.5);margin-top:3px;">Best visual explanation of self-attention on the internet. Blog post, ~20 min read. jalammar.github.io</div>
+        </li>
+        <li style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.1);">
+          <span class="tag tag-navy">RECOMMENDED</span>
+          <div style="margin-top:5px;font-family:'Segoe UI',system-ui,sans-serif;font-size:0.9rem;"><strong>Vaswani et al. — "Attention Is All You Need" (2017)</strong></div>
+          <div style="font-size:0.82rem;color:rgba(255,255,255,0.5);margin-top:3px;">Read: abstract + Section 1 + Figure 1. You don't need the math. arxiv 1706.03762</div>
         </li>
         <li style="padding:10px 0;">
-          <span style="background:var(--navy);color:#fff;font-size:0.68rem;font-weight:700;padding:1px 7px;border-radius:3px;">RECOMMENDED</span>
-          <div style="margin-top:5px;font-family:'Segoe UI',system-ui,sans-serif;font-size:0.9rem;"><strong>Andrej Karpathy — "The State of GPT" (2023)</strong></div>
-          <a href="https://www.youtube.com/watch?v=zjkBMFhNj_g" target="_blank" style="color:#60a5fa;font-size:0.8rem;">youtube.com/watch?v=zjkBMFhNj_g</a>
-          <div style="font-size:0.82rem;color:rgba(255,255,255,0.5);margin-top:3px;">45 min. How GPT models are trained: pretraining, RLHF, instruction fine-tuning. Very accessible.</div>
+          <span class="tag tag-navy">RECOMMENDED</span>
+          <div style="margin-top:5px;font-family:'Segoe UI',system-ui,sans-serif;font-size:0.9rem;"><strong>GoldCoin paper</strong> — arxiv 2405.15175</div>
+          <div style="font-size:0.82rem;color:rgba(255,255,255,0.5);margin-top:3px;">Abstract + Section 2. This is the dataset you're running experiments on all summer.</div>
         </li>
       </ul>
-
-      <div class="card card-glass" style="margin-top:20px;">
-        <h3 style="color:var(--gold);">Monday — Office Hours Available</h3>
-        <p style="font-size:0.9rem;">If you get stuck on the error analysis or Python exercises during the week, message on Slack to schedule a Monday check-in. No formal session — just roadblock removal.</p>
-      </div>
     </div>
   </div>
 </div>
@@ -1055,7 +1276,7 @@ oracle_cols = [<span class="str">"has_court_order"</span>,
 let current = 0;
 const slides = document.querySelectorAll('.slide');
 const counter = document.getElementById('slide-counter');
-const bar = document.getElementById('progress-bar');
+const bar     = document.getElementById('progress-bar');
 const controls = document.querySelector('.slide-controls');
 
 function showSlide(n) {
