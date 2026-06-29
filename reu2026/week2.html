@@ -55,7 +55,29 @@
 
   <div class="card card-gold" style="margin-bottom:24px;">
     <h3>This Week's Story</h3>
-    <p>Why do LLMs like Gemma and Claude exist? Why do they work? And why do they still fail 5.8% of the time on HIPAA? This week you learn the 70-year progression from hand-coded rules → machine learning → deep learning → transformers → LLMs. On Tuesday you get access to GPUs. By Wednesday you have run a real experiment on the Stony Brook AI Cluster. Regulations are <em>next</em> week — this week is entirely AI.</p>
+    <p>Why do LLMs like Gemma and Claude exist? Why do they work? And why do they still fail 5.8% of the time on HIPAA? This week you learn the 70-year progression from hand-coded rules → machine learning → deep learning → transformers → LLMs. On Tuesday you get access to GPUs. By Wednesday you have run a real LLM extraction experiment on the Stony Brook AI Cluster. Regulations are <em>next</em> week — this week is entirely AI.</p>
+  </div>
+
+  <div class="card card-navy" style="margin-bottom:24px;">
+    <h3>The Two-Machine Workflow — Critical Architecture</h3>
+    <p>The Soufflé formal reasoning engine <strong>cannot run on the AI Cluster</strong> — it is a locally compiled binary that requires system permissions the submit nodes do not grant. Your research workflow is therefore always split:</p>
+    <div style="display:flex;align-items:center;gap:0;margin:14px 0;font-family:'Segoe UI',system-ui,sans-serif;font-size:0.9rem;flex-wrap:wrap;gap:6px;">
+      <div style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.25);border-radius:6px;padding:10px 16px;text-align:center;">
+        <div style="font-weight:700;color:#90c4ff;">AI Cluster (GPU)</div>
+        <div style="font-size:0.8rem;color:rgba(255,255,255,0.6);margin-top:4px;">LLM extraction only<br><code style="font-size:0.78rem;">llm1_extractor.py</code></div>
+      </div>
+      <div style="font-size:1.2rem;padding:0 4px;">→</div>
+      <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);border-radius:6px;padding:10px 16px;text-align:center;">
+        <div style="font-size:0.8rem;color:rgba(255,255,255,0.5);">scp / VS Code download</div>
+        <div style="font-size:0.75rem;color:rgba(255,255,255,0.35);margin-top:2px;">extractions_JOBID.csv</div>
+      </div>
+      <div style="font-size:1.2rem;padding:0 4px;">→</div>
+      <div style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.25);border-radius:6px;padding:10px 16px;text-align:center;">
+        <div style="font-weight:700;color:#a8f0c8;">Your Laptop (local)</div>
+        <div style="font-size:0.8rem;color:rgba(255,255,255,0.6);margin-top:4px;">Soufflé engine + analysis<br><code style="font-size:0.78rem;">hipaa_connector.py</code></div>
+      </div>
+    </div>
+    <p style="font-size:0.9rem;color:rgba(255,255,255,0.7);">This is standard HPC practice: run the expensive part (GPU inference) on the cluster, run everything else locally. Soufflé takes milliseconds — it doesn't need a GPU.</p>
   </div>
 
   <h2>Learning Goals</h2>
@@ -63,7 +85,7 @@
     <li>Explain ML → DL → NLP → transformers → LLMs as a progression — you should be able to tell this story to someone who's never heard of it</li>
     <li>Understand what tokens, embeddings, and self-attention are at an intuitive level</li>
     <li>Log into the Stony Brook AI Cluster, set up your conda environment, and submit a SLURM job</li>
-    <li>Run a ComplianceGPT batch experiment on a GPU and download the results</li>
+    <li>Run LLM extraction on a GPU, download the results CSV, and run Soufflé locally to get verdicts</li>
     <li>Implement precision, recall, and F1 from scratch and understand why accuracy alone is misleading</li>
   </ul>
 
@@ -194,30 +216,32 @@
   </div>
 
   <div class="day-block">
-    <div class="day-title">🔬 Hands-on — Submit Your First Real Experiment</div>
+    <div class="day-title">🔬 Hands-on — Submit Your First Real Experiment (Exercise 9)</div>
     <div class="day-body">
-      <p>Using the job template from <a href="cluster.html#step6">cluster.html Step 6</a>, each student submits a batch run of at least 20 scenarios from <code>goldcoin_hhs_merged.csv</code>. Together we watch the queue, monitor output, and download results.</p>
+      <p>Using the job template from Exercise 9 in <code>notebooks/week2_nlp.ipynb</code>, each student submits an LLM extraction job on the cluster. Together we watch the queue, monitor output, download results, and run Soufflé locally.</p>
       <div class="grid-2" style="margin-top:12px;">
         <div>
-          <h4>What you'll do</h4>
+          <h4>On the cluster</h4>
           <ol>
-            <li>Edit <code>run_experiment.sh</code> with your NetID and output path</li>
-            <li>Run: <code>sbatch run_experiment.sh</code></li>
-            <li>Monitor: <code>squeue -u yournetid</code></li>
-            <li>Watch output: <code>tail -f logs/run_*_out.txt</code></li>
-            <li>Download the results CSV to your laptop</li>
-            <li>Open it — find at least one wrong prediction</li>
+            <li>Edit <code>run_extraction.sh</code> with your NetID</li>
+            <li><code>sbatch run_extraction.sh</code> — get a job ID</li>
+            <li><code>squeue -u yournetid</code> — watch PD → R → done</li>
+            <li><code>tail -f logs/extract_*_out.txt</code> — live output</li>
+            <li>Download <code>extractions_JOBID.csv</code> to your laptop</li>
           </ol>
         </div>
         <div>
-          <h4>What you should see</h4>
-          <ul>
-            <li>Job status: PD (pending) → R (running) → job disappears when done</li>
-            <li>A results CSV with <code>verdict_norm</code> and <code>ground_truth</code> columns</li>
-            <li>At least one row where they don't match</li>
-            <li>A <code>scenario_json</code> column showing what the LLM extracted</li>
-            <li>At least one oracle predicate that's wrong</li>
-          </ul>
+          <h4>On your laptop (after download)</h4>
+          <ol>
+            <li>Open Exercise 9 in <code>week2_nlp.ipynb</code></li>
+            <li>Update <code>EXTRACTION_CSV</code> path</li>
+            <li>Run Step 3: Soufflé connector adds <code>verdict_norm</code></li>
+            <li>Run Step 4: compute accuracy, find first wrong prediction</li>
+            <li>The <code>scenario_json</code> column shows what the LLM extracted — find the oracle that's wrong</li>
+          </ol>
+          <div class="card card-gold" style="margin-top:10px;">
+            <p style="font-size:0.88rem;"><strong>Remember:</strong> Soufflé runs on your laptop, not the cluster. The cluster output is <em>extractions only</em> — no verdicts yet.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -245,7 +269,7 @@
       <ul>
         <li><strong>By noon:</strong> Slack update in <code>#daily-updates</code> — what you're working on, any blockers</li>
         <li>Finalize and clean up <code>notebooks/week2_nlp.ipynb</code> (all 4 exercises completed, reflections written)</li>
-        <li>Run a second cluster experiment with a different model (Llama3:8B instead of Gemma3). Compare accuracy.</li>
+        <li>Run a second cluster extraction with a different model (Llama3:8B instead of Gemma3). Download it, run Soufflé locally, compare accuracy.</li>
         <li>Watch <strong>Andrej Karpathy — "The State of GPT" (2023)</strong> on YouTube — 45 min. Pretraining, instruction tuning, RLHF. This is the background for Week 3 (prompt engineering).</li>
         <li>Read <strong>Jay Alammar — "The Illustrated Transformer"</strong> blog post. The best visual explanation of attention.</li>
       </ul>
@@ -275,6 +299,7 @@
       <li><strong>Exercise 6</strong> — Precision/recall/F1 implemented from scratch, interpretation written</li>
       <li><strong>Exercise 7</strong> — Error grouped by purpose category; which category is worst?</li>
       <li><strong>Exercise 8</strong> — Which oracle predicate over-fires in your FP rows?</li>
+      <li><strong>Exercise 9</strong> — Cluster extraction run complete: job script, downloaded CSV, Soufflé run locally, accuracy computed, reflection answered</li>
     </ul>
 
     <p style="margin-top:14px;"><strong>2. Cluster run evidence</strong> — Post in <code>#deliverables</code> on Slack:</p>

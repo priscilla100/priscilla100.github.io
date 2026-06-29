@@ -829,9 +829,19 @@ tokens = enc.encode(your_scenario)
   <span class="slide-num">11</span>
   <div class="slide-label">Stony Brook AI Cluster</div>
   <h2>Your Research Infrastructure</h2>
-  <p style="color:rgba(255,255,255,0.7);">The NSF-funded Stony Brook AI Cluster gives you access to H100s, V100s, and Quadro RTX 8000s. Running 137 scenarios on Gemma3 takes ~1 hour on your laptop CPU. On one V100, it takes under 5 minutes.</p>
+  <p style="color:rgba(255,255,255,0.7);">The NSF-funded Stony Brook AI Cluster gives you access to H100s, V100s, and Quadro RTX 8000s. Running 137 scenarios on Gemma3 takes ~1 hour on your laptop CPU. On one V100, it takes under 5 minutes. <strong>Cluster = LLM extraction only. Soufflé stays on your laptop.</strong></p>
 
-  <div class="grid-3" style="margin-top:22px;">
+  <div class="card card-glass" style="margin-top:12px;margin-bottom:12px;border-left:3px solid var(--gold);">
+    <h3 style="color:var(--gold);margin-bottom:8px;font-size:0.95rem;">The two-machine workflow — always split this way</h3>
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-family:'Segoe UI',system-ui,sans-serif;font-size:0.85rem;">
+      <div style="background:rgba(144,196,255,0.15);border:1px solid rgba(144,196,255,0.4);border-radius:5px;padding:8px 14px;text-align:center;"><strong style="color:#90c4ff;">Cluster (GPU)</strong><div style="font-size:0.76rem;color:rgba(255,255,255,0.55);margin-top:3px;">llm1_extractor.py<br>→ extractions_JOBID.csv</div></div>
+      <div style="color:var(--gold);">─── scp / VS Code download ───</div>
+      <div style="background:rgba(168,240,200,0.15);border:1px solid rgba(168,240,200,0.4);border-radius:5px;padding:8px 14px;text-align:center;"><strong style="color:#a8f0c8;">Your Laptop</strong><div style="font-size:0.76rem;color:rgba(255,255,255,0.55);margin-top:3px;">hipaa_connector.py → Soufflé<br>→ verdicts + error analysis</div></div>
+    </div>
+    <p style="font-size:0.78rem;color:rgba(255,255,255,0.4);margin-top:8px;">Soufflé is a compiled binary requiring system permissions the submit nodes don't grant. It runs in milliseconds anyway — no GPU needed.</p>
+  </div>
+
+  <div class="grid-3" style="margin-top:12px;">
     <div class="card card-glass" style="border-top:3px solid var(--gold);">
       <h3 style="color:var(--gold);">AI Cluster — Your target</h3>
       <ul style="font-size:0.85rem;">
@@ -888,12 +898,13 @@ tokens = enc.encode(your_scenario)
 
   <div class="grid-2" style="margin-top:20px;">
     <div>
-      <h3 style="color:var(--gold);margin-bottom:12px;">The job script (myjob.sh)</h3>
-      <div class="code-block" style="font-size:0.8rem;">
+      <h3 style="color:var(--gold);margin-bottom:8px;">The job script (run_extraction.sh)</h3>
+      <p style="font-size:0.78rem;color:rgba(255,255,255,0.5);margin-bottom:8px;">Extraction only — no Soufflé here</p>
+      <div class="code-block" style="font-size:0.78rem;">
 #!/bin/bash
-<span class="flag">#SBATCH --job-name=</span><span class="str">cg_gemma</span>
-<span class="flag">#SBATCH --output=</span><span class="str">/home/netid/logs/run_%j_out.txt</span>
-<span class="flag">#SBATCH --error=</span><span class="str">/home/netid/logs/run_%j_err.txt</span>
+<span class="flag">#SBATCH --job-name=</span><span class="str">cg_extract</span>
+<span class="flag">#SBATCH --output=</span><span class="str">/home/netid/logs/extract_%j_out.txt</span>
+<span class="flag">#SBATCH --error=</span><span class="str">/home/netid/logs/extract_%j_err.txt</span>
 <span class="flag">#SBATCH --time=</span><span class="num">0-04:00</span>   <span class="com"># 4-hour max</span>
 <span class="flag">#SBATCH --mem=</span><span class="num">32000</span>     <span class="com"># 32 GB RAM</span>
 <span class="flag">#SBATCH --gres=gpu:</span><span class="num">1</span>    <span class="com"># 1 GPU</span>
@@ -901,9 +912,11 @@ tokens = enc.encode(your_scenario)
 source ~/miniconda3/etc/profile.d/conda.sh
 conda activate compliancegpt
 
-python ~/compliancegpt/batch_runner.py \
+<span class="com"># LLM extraction → CSV with scenario_json</span>
+<span class="com"># Soufflé runs locally AFTER you download this</span>
+python ~/compliancegpt/connector/llm1_extractor.py \
   <span class="flag">--model</span> <span class="str">"google/gemma-3-4b-it"</span> \
-  <span class="flag">--output</span> <span class="str">"results/run_$SLURM_JOB_ID.csv"</span>
+  <span class="flag">--output</span> <span class="str">"results/extractions_$SLURM_JOB_ID.csv"</span>
       </div>
     </div>
     <div>
@@ -1121,41 +1134,46 @@ true_oracles = [k <span class="kw">for</span> k,v <span class="kw">in</span> sj.
 <!-- SLIDE 17: LIVE CODING — CLUSTER -->
 <div class="slide slide-green">
   <span class="slide-num">17</span>
-  <div class="slide-label">Live Coding · Wednesday</div>
-  <h2>Your First Real GPU Experiment — Together</h2>
-  <p style="color:rgba(255,255,255,0.85);">Everyone submits a job. We watch the queue together. We read the output together. You download results and open them in Python. This is research.</p>
+  <div class="slide-label">Exercise 9 · Wednesday</div>
+  <h2>Cluster Extraction → Local Soufflé — Together</h2>
+  <p style="color:rgba(255,255,255,0.85);">Two phases. Phase 1: cluster runs LLM extraction, outputs a CSV of JSON extractions. Phase 2: you download the CSV and run Soufflé locally to get verdicts.</p>
 
-  <div class="grid-2" style="margin-top:22px;">
+  <div class="grid-2" style="margin-top:18px;">
     <div>
-      <h3 style="color:#a8f0c8;margin-bottom:12px;">The sequence of commands</h3>
-      <div class="cmd-row"><span class="cmd">ssh netid@submit.ai.stonybrook.edu</span><span class="desc">Connect to cluster</span></div>
-      <div class="cmd-row"><span class="cmd">mkdir -p ~/compliancegpt/logs results</span><span class="desc">Create output dirs</span></div>
-      <div class="cmd-row"><span class="cmd">nano run_experiment.sh</span><span class="desc">Edit the job script</span></div>
-      <div class="cmd-row"><span class="cmd">sbatch run_experiment.sh</span><span class="desc">Submit — note the job ID</span></div>
-      <div class="cmd-row"><span class="cmd">squeue -u yournetid</span><span class="desc">Watch status (PD → R → done)</span></div>
-      <div class="cmd-row"><span class="cmd">tail -f logs/run_*_out.txt</span><span class="desc">Watch output as it runs</span></div>
-      <div class="cmd-row"><span class="cmd">cat logs/run_*_err.txt</span><span class="desc">Check for errors if job fails</span></div>
+      <h3 style="color:#a8f0c8;margin-bottom:10px;">Phase 1 — On the cluster</h3>
+      <div class="cmd-row"><span class="cmd">ssh netid@submit.ai.stonybrook.edu</span><span class="desc">Connect</span></div>
+      <div class="cmd-row"><span class="cmd">mkdir -p ~/compliancegpt/logs results</span><span class="desc">Create dirs</span></div>
+      <div class="cmd-row"><span class="cmd">nano run_extraction.sh</span><span class="desc">Paste the job script from Ex 9</span></div>
+      <div class="cmd-row"><span class="cmd">sbatch run_extraction.sh</span><span class="desc">Submit — note the job ID</span></div>
+      <div class="cmd-row"><span class="cmd">squeue -u yournetid</span><span class="desc">Watch PD → R → done</span></div>
+      <div class="cmd-row"><span class="cmd">tail -f logs/extract_*_out.txt</span><span class="desc">Live output</span></div>
+      <p style="font-size:0.8rem;color:rgba(255,255,255,0.45);margin-top:8px;">Output CSV has <code>scenario_json</code> for each row — no verdicts yet. That's expected. Soufflé is not on this machine.</p>
     </div>
     <div>
-      <h3 style="color:#a8f0c8;margin-bottom:12px;">When the job finishes</h3>
-      <div class="code-block" style="font-size:0.8rem;">
-<span class="com"># Download results (on your laptop)</span>
+      <h3 style="color:#a8f0c8;margin-bottom:10px;">Phase 2 — On your laptop</h3>
+      <div class="code-block" style="font-size:0.78rem;">
+<span class="com"># Step 1: Download the extraction CSV</span>
 <span class="com"># Mac/Linux:</span>
 scp netid@submit.ai.stonybrook.edu:\
-  ~/compliancegpt/results/run_48305.csv \
+  ~/compliancegpt/results/extractions_JOBID.csv \
   ~/Downloads/
 
-<span class="com"># Windows: use VS Code Explorer</span>
-<span class="com"># → navigate → right-click → Download</span>
+<span class="com"># Windows: VS Code → right-click → Download</span>
       </div>
-      <div class="card card-glass" style="margin-top:12px;">
-        <h3 style="color:#a8f0c8;">Success criteria for Wednesday</h3>
-        <ul style="font-size:0.85rem;">
-          <li>Job appears in <code>squeue</code> with status R</li>
-          <li>Output file shows GPU name + <code>CUDA: True</code></li>
-          <li>Results CSV exists with at least 20 rows</li>
-          <li>You can open it in pandas and compute accuracy</li>
-          <li>You can find one wrong prediction and name the oracle that's wrong</li>
+      <div class="code-block" style="font-size:0.78rem;margin-top:8px;">
+<span class="com"># Step 2: Run Soufflé locally → get verdicts</span>
+<span class="com"># Open week2_nlp.ipynb → Exercise 9 → Step 3</span>
+<span class="com"># hipaa_connector.py feeds each scenario_json</span>
+<span class="com"># to local Soufflé → adds verdict_norm column</span>
+      </div>
+      <div class="card card-glass" style="margin-top:10px;">
+        <h3 style="color:#a8f0c8;font-size:0.9rem;">Wednesday success criteria</h3>
+        <ul style="font-size:0.82rem;">
+          <li><code>squeue</code> shows job R then completes</li>
+          <li>Extraction CSV downloaded, has <code>scenario_json</code></li>
+          <li>Soufflé run locally → <code>verdict_norm</code> column added</li>
+          <li>Accuracy computed in Exercise 9 Step 4</li>
+          <li>One wrong prediction found, oracle named</li>
         </ul>
       </div>
     </div>
