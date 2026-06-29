@@ -138,10 +138,17 @@
   </div>
 
   <div class="day-block">
-    <div class="day-title">🎯 Monday Task</div>
+    <div class="day-title">📓 Monday Assignment — Day 1: Scikit-learn ML</div>
     <div class="day-body">
-      <p><strong>Tonight:</strong> Watch <strong>3Blue1Brown — Neural Networks playlist, videos 1 and 2</strong> (find it on YouTube — ~40 min total). Come Tuesday knowing: what is a neuron, what is backpropagation, what does "learning" mean mathematically. You don't need the math — you need the intuition.</p>
-      <p style="margin-top:10px;"><strong>Also tonight:</strong> Email <a href="mailto:rt@cs.stonybrook.edu">rt@cs.stonybrook.edu</a> requesting cluster access — instructions at <a href="cluster.html">cluster.html</a>. Include your NetID. Access must be requested tonight so it's ready for Tuesday.</p>
+      <p>Download <a href="notebooks/day1_sklearn.ipynb" download><strong>day1_sklearn.ipynb</strong></a> and work through it tonight or during independent time. You will:</p>
+      <ul>
+        <li>Load a simulated HIPAA feature matrix (hand-crafted boolean features)</li>
+        <li>Train logistic regression, decision tree, and random forest classifiers</li>
+        <li>Read what the model actually learned (feature weights and tree rules)</li>
+        <li>Hit the wall: why does clean extracted data get 90% but raw text is the hard part?</li>
+      </ul>
+      <p style="margin-top:10px;"><strong>Also tonight:</strong> Watch <strong>3Blue1Brown — Neural Networks, videos 1–2</strong> (~40 min). Email <a href="mailto:rt@cs.stonybrook.edu">rt@cs.stonybrook.edu</a> for cluster access — include your NetID. Must go out tonight so it's ready for Tuesday's setup session.</p>
+      <p style="margin-top:8px;font-size:0.88rem;color:var(--muted);">No hard deadline — submit <code>day1_sklearn.ipynb</code> in Slack <code>#deliverables</code> when complete.</p>
     </div>
   </div>
 
@@ -197,10 +204,17 @@
   </div>
 
   <div class="day-block">
-    <div class="day-title">🎯 Tuesday Task</div>
+    <div class="day-title">📓 Tuesday Assignment — Day 2: NLP Representations</div>
     <div class="day-body">
-      <p><strong>Complete Exercise 5 and 6</strong> in <code>notebooks/week2_nlp.ipynb</code> before Wednesday. Exercise 5 uses tiktoken (you can run it locally). Exercise 6 implements precision/recall/F1 — work through the math yourself, don't look it up.</p>
-      <p style="margin-top:8px;"><strong>Also:</strong> Watch 3Blue1Brown videos 3 and 4 (backpropagation and training). Come Wednesday knowing: what happens when the model gets a wrong answer, and how weights are adjusted.</p>
+      <p>Download <a href="notebooks/day2_nlp.ipynb" download><strong>day2_nlp.ipynb</strong></a>. This is the bridge between Day 1 (hand-crafted features) and Day 3 (embeddings). You will:</p>
+      <ul>
+        <li>Represent the same scenarios as a Bag-of-Words matrix using <code>CountVectorizer</code></li>
+        <li>Switch to TF-IDF — watch accuracy improve as rare legal terms get upweighted</li>
+        <li>Compute cosine similarity between "court order" and "judicial mandate" in TF-IDF space</li>
+        <li>Find the semantic gap: TF-IDF gives them ~0.1 similarity even though they're legally identical</li>
+      </ul>
+      <p style="margin-top:10px;"><strong>Also tonight:</strong> Watch 3Blue1Brown videos 3–4 (backpropagation, training). Come Wednesday knowing: what happens when the model is wrong, and how weights update.</p>
+      <p style="margin-top:8px;font-size:0.88rem;color:var(--muted);">No hard deadline — submit in Slack <code>#deliverables</code> when complete.</p>
     </div>
   </div>
 
@@ -255,9 +269,17 @@
   </div>
 
   <div class="day-block">
-    <div class="day-title">🎯 Wednesday Task</div>
+    <div class="day-title">📓 Wednesday Assignment — Day 3: Embeddings + LLM Motivation</div>
     <div class="day-body">
-      <p>By end of Wednesday (or that evening): complete Exercises 7 and 8 using your own results. Write your findings in the reflection cells. This is the first time you're doing real research — you're discovering <em>which model failure mode is most common</em> in your specific batch run. Keep that finding. You'll use it for your project proposal.</p>
+      <p>Download <a href="notebooks/day3_embeddings.ipynb" download><strong>day3_embeddings.ipynb</strong></a>. This is the payoff of the 3-day story. You will:</p>
+      <ul>
+        <li>Install <code>sentence-transformers</code> and embed HIPAA phrases with a pre-trained model</li>
+        <li>See "court order" and "judicial mandate" finally score ~0.85 similarity</li>
+        <li>Find the adversarial failure: "implied there might be a court order" also scores ~0.80 near a real court order</li>
+        <li>See why embeddings alone can't solve legal text — and why LLMs reading in context are the next step</li>
+      </ul>
+      <p style="margin-top:10px;">Also complete <strong>Exercises 7–8</strong> in <code>week2_nlp.ipynb</code> using your downloaded cluster results from Exercise 9.</p>
+      <p style="margin-top:8px;font-size:0.88rem;color:var(--muted);">No hard deadline — submit in Slack <code>#deliverables</code> when complete.</p>
     </div>
   </div>
 
