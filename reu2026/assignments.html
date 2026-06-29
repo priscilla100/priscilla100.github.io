@@ -5,215 +5,373 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Assignments — ComplianceGPT Lab REU 2026</title>
 <link rel="stylesheet" href="style.css">
+<style>
+.dl-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: var(--navy); color: #fff; text-decoration: none;
+  padding: 7px 16px; border-radius: 5px;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 0.82rem; font-weight: 600; margin: 4px 6px 4px 0;
+}
+.dl-btn:hover { background: #001f4d; }
+.dl-btn.gold { background: var(--gold); color: #000; }
+.dl-btn.gold:hover { background: #d08f00; }
+.dl-btn.crimson { background: var(--crimson); color: #fff; }
+.dl-btn.crimson:hover { background: #6b0000; }
+
+.assign-card { border: 1px solid var(--border); border-radius: 8px; margin-bottom: 20px; overflow: hidden; }
+.assign-header {
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;
+  background: var(--navy); color: #fff; padding: 12px 20px; gap: 10px;
+}
+.assign-header h3 { margin: 0; font-size: 1rem; }
+.assign-due { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 0.78rem; color: var(--gold); font-weight: 700; }
+.assign-body { padding: 18px 20px; }
+.assign-body p, .assign-body li { font-size: 0.92rem; line-height: 1.65; }
+.assign-body ul, .assign-body ol { padding-left: 20px; margin-top: 6px; }
+
+.week-badge {
+  display: inline-block; background: var(--gold); color: #000;
+  font-family: 'Segoe UI', system-ui, sans-serif; font-size: 0.7rem; font-weight: 800;
+  letter-spacing: .06em; padding: 2px 8px; border-radius: 3px; margin-right: 8px;
+}
+.count-tag {
+  background: var(--crimson); color: #fff; border-radius: 4px;
+  font-family: 'Segoe UI', system-ui, sans-serif; font-size: 0.75rem;
+  font-weight: 700; padding: 3px 10px;
+}
+</style>
 </head>
 <body>
 <aside id="sidebar">
   <div class="logo"><div class="lab-name">ComplianceGPT Lab</div><div class="lab-sub">AI Innovation &amp; Diffusion REU 2026<br>Stony Brook University</div></div>
   <nav>
     <div class="nav-section">Program</div>
-    <a href="index.html">Welcome</a><a href="schedule.html">Weekly Schedule</a><a href="slides-week1.html">Week 1 Slides</a><a href="slides-week2.html">Week 2 Slides</a>
+    <a href="index.html">Welcome</a>
+    <a href="schedule.html">Weekly Schedule</a>
+    <a href="slides-week1.html">Week 1 Slides</a>
+    <a href="slides-week2.html">Week 2 Slides</a>
     <div class="nav-section">Foundations</div>
-    <a href="setup.html">Setup &amp; Tools</a><a href="python.html">Python Fundamentals</a><a href="foundations.html">AI Fundamentals</a><a href="foundations.html#regulations">Regulations</a>
+    <a href="setup.html">Setup &amp; Tools</a>
+    <a href="python.html">Python Fundamentals</a>
+    <a href="foundations.html">AI Fundamentals</a>
+    <a href="foundations.html#origins">Origin Story</a>
+    <a href="foundations.html#nlp">NLP Fundamentals</a>
+    <a href="foundations.html#regulations">Regulations</a>
+    <a href="cluster.html">Cluster Access</a>
+    <a href="slurm.html">SLURM Quick Connect</a>
     <div class="nav-section">Curriculum</div>
-    <a href="week1.html">Week 1 — Intro to AI</a><a href="week2.html">Week 2 — Language &amp; Law</a><a href="week3.html">Week 3 — Prompt Eng.</a><a href="week4.html">Week 4 — RAG</a><a href="week5.html">Week 5 — ComplianceGPT</a><a href="week6.html">Week 6 — Communication</a>
+    <a href="week1.html">Week 1 — Intro to AI</a>
+    <a href="week2.html">Week 2 — AI Fundamentals</a>
+    <a href="week3.html">Week 3 — Language &amp; Law</a>
+    <a href="week4.html">Week 4 — Prompt Eng.</a>
+    <a href="week5.html">Week 5 — RAG</a>
+    <a href="week6.html">Week 6 — Communication</a>
     <div class="nav-section">Research</div>
-    <a href="projects.html">Student Projects</a><a href="readings.html">Reading List</a><a href="assignments.html" class="active">Assignments</a><a href="assignments.html#poster" class="active">Final Poster</a><a href="assignments.html#publication" class="active">Publication</a>
+    <a href="projects.html">Student Projects</a>
+    <a href="readings.html">Reading List</a>
+    <a href="assignments.html" class="active">Assignments</a>
   </nav>
 </aside>
+
 <main id="main">
 <div class="page-header">
   <div class="breadcrumb">Research</div>
-  <h1>Assignments, Final Poster &amp; Publication</h1>
-  <p class="subtitle">Everything you're responsible for — due dates, formats, and what happens after</p>
+  <h1>Assignments</h1>
+  <p class="subtitle">All deliverables, due dates, and downloadable files · <span class="count-tag">9 deliverables total</span></p>
 </div>
 <div class="content">
 
+  <!-- QUICK REFERENCE TABLE -->
   <div class="card card-crimson" style="margin-bottom:28px;">
-    <h3>Key Milestones at a Glance</h3>
-    <table style="margin-top:8px;">
-      <tr><td><strong>Fri Jul 3</strong></td><td><strong>Project selection deadline</strong> — Slack Priscilla: which project (P1–P6) you're choosing and your draft research question.</td></tr>
-      <tr><td><strong>Wed Jul 9</strong></td><td><strong>Project proposal presentations</strong> — 5-min oral pitch of your selected project, method, and plan.</td></tr>
-      <tr><td><strong>Fri Jul 11</strong></td><td><strong>1-page project summary due</strong> — written proposal with RQ, method, hypothesis, and week-by-week milestones.</td></tr>
-      <tr><td><strong>Wed Jul 16</strong></td><td><strong>Mid-point check-in</strong> — show real results so far, confirm scope is achievable.</td></tr>
-      <tr><td><strong>Fri Jul 25</strong></td><td><strong>Poster draft due</strong> — all sections filled, main result visible. Feedback returned by Mon Jul 28.</td></tr>
-      <tr><td><strong>Mon Jul 28</strong></td><td><strong>Poster inspection</strong> — 1:1 review before print. Revisions due Tue Jul 29 noon.</td></tr>
-      <tr><td><strong>Thu Jul 30</strong></td><td><strong>Final poster + write-up due</strong> — print-ready PDF to program coordinator.</td></tr>
-      <tr><td><strong>Thu Jul 31</strong></td><td><strong>REU Closing Ceremony &amp; Poster Presentation</strong></td></tr>
+    <h3>All Assignments at a Glance</h3>
+    <table style="margin-top:10px;font-size:0.88rem;">
+      <thead><tr><th>Week</th><th>Deliverable</th><th>Due</th><th>File</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>W1</strong></td>
+          <td>Pipeline run (5 rows CSV) + 1-page reflection</td>
+          <td>Fri Jun 27</td>
+          <td><a href="notebooks/week1_python.ipynb" download class="dl-btn" style="padding:3px 10px;font-size:0.76rem;">⬇ Notebook</a></td>
+        </tr>
+        <tr>
+          <td><strong>W2</strong></td>
+          <td>Exercises 5–9 notebook + cluster run evidence + 1-page error analysis</td>
+          <td>Fri Jul 3</td>
+          <td><a href="notebooks/week2_nlp.ipynb" download class="dl-btn" style="padding:3px 10px;font-size:0.76rem;">⬇ Notebook</a></td>
+        </tr>
+        <tr>
+          <td><strong>W2</strong></td>
+          <td>Project selection — Slack message to Priscilla</td>
+          <td>Fri Jul 3</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><strong>W3</strong></td>
+          <td>Oral project proposal (5 min, in class)</td>
+          <td>Wed Jul 9</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><strong>W3</strong></td>
+          <td>1-page written project summary</td>
+          <td>Fri Jul 11</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><strong>W4</strong></td>
+          <td>Mid-point pitch (5 min, in class)</td>
+          <td>Wed Jul 16</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><strong>W4</strong></td>
+          <td>Experiment log with incremental results</td>
+          <td>Fri Jul 18</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><strong>W5</strong></td>
+          <td>Poster draft + 2-page write-up draft + final results CSV</td>
+          <td>Fri Jul 25</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><strong>W6</strong></td>
+          <td>Final poster (print-ready PDF) + final write-up</td>
+          <td>Thu Jul 30</td>
+          <td>—</td>
+        </tr>
+        <tr style="background:#fff5f5;">
+          <td><strong>W6</strong></td>
+          <td>Poster presentation — REU Closing Ceremony</td>
+          <td>Thu Jul 31</td>
+          <td>—</td>
+        </tr>
+      </tbody>
     </table>
   </div>
 
-  <h2>Assignment Overview</h2>
-  <table>
-    <thead>
-      <tr><th>Week</th><th>Assignment</th><th>Due</th><th>Format</th></tr>
-    </thead>
-    <tbody>
-      <tr><td>1</td><td>First pipeline run + 1-page reflection</td><td>Fri Jun 27</td><td>CSV + Google Doc</td></tr>
-      <tr><td>2</td><td>Python exercises (1–8) + error analysis + <strong>project selection</strong></td><td>Fri Jul 3</td><td>Notebook + Google Doc + Slack message</td></tr>
-      <tr><td>3</td><td>Project proposal (oral Wed) + <strong>1-page project summary</strong> (written Fri)</td><td>Wed Jul 9 · Fri Jul 11</td><td>Google Doc</td></tr>
-      <tr><td>4</td><td>Mid-point pitch (5 min) + experiment log with incremental results</td><td>Wed Jul 16 · Fri Jul 18</td><td>Google Doc + results CSV</td></tr>
-      <tr><td>5</td><td>Poster draft + 2-page write-up draft + final results CSV</td><td>Fri Jul 25</td><td>PDF/Slides + Google Doc</td></tr>
-      <tr><td>6</td><td><strong>Poster inspection Mon Jul 28</strong> · Final poster + write-up Thu Jul 30</td><td>Mon Jul 28 · Thu Jul 30</td><td>Print-ready PDF + Google Doc</td></tr>
-    </tbody>
-  </table>
+  <!-- DOWNLOADS -->
+  <h2>Downloads</h2>
+  <div class="grid-2" style="margin-bottom:32px;">
+    <div class="card" style="border:1px solid var(--border);">
+      <h3>Week 1 Notebook</h3>
+      <p style="font-size:0.88rem;color:var(--muted);margin-bottom:12px;">Python setup, pipeline run, reading batch results. Exercises 1–4.</p>
+      <a href="notebooks/week1_python.ipynb" download class="dl-btn">⬇ week1_python.ipynb</a>
+    </div>
+    <div class="card" style="border:1px solid var(--border);">
+      <h3>Week 2 Notebook</h3>
+      <p style="font-size:0.88rem;color:var(--muted);margin-bottom:12px;">Tokenization, precision/recall/F1, error analysis, cluster extraction. Exercises 5–9.</p>
+      <a href="notebooks/week2_nlp.ipynb" download class="dl-btn">⬇ week2_nlp.ipynb</a>
+    </div>
+  </div>
 
+  <!-- ASSIGNMENT DETAILS -->
   <h2>Assignment Details</h2>
 
-  <h3>Week 1 — First Pipeline Run + Reflection</h3>
-  <div class="card">
-    <p><strong>Pipeline run:</strong> Run <code>batch_runner.py</code> on 5 rows from the goldcoin dataset. Save to <code>results/[yourname]_week1.csv</code> and commit to GitHub.</p>
-    <p style="margin-top:10px;"><strong>Reflection (1 page):</strong> Answer these 3 questions with roughly 1 paragraph each:</p>
-    <ul>
-      <li>What surprised you most about ComplianceGPT?</li>
-      <li>Did any of your 5 results surprise you? Why?</li>
-      <li>What question about AI and compliance are you most curious about?</li>
-    </ul>
-    <p style="margin-top:10px;color:var(--muted);font-size:0.85rem;">Graded on engagement, not correctness.</p>
+  <!-- W1 -->
+  <div class="assign-card">
+    <div class="assign-header">
+      <h3><span class="week-badge">WEEK 1</span>First Pipeline Run + Reflection</h3>
+      <span class="assign-due">Due: Friday June 27, 5pm</span>
+    </div>
+    <div class="assign-body">
+      <p><strong>Part 1 — Pipeline run:</strong> Run <code>batch_runner.py</code> on 5 rows from the GoldCoin dataset. Save as <code>results/[yourname]_week1.csv</code> and commit to GitHub.</p>
+      <p style="margin-top:10px;"><strong>Part 2 — Reflection (1 page, ~1 paragraph per question):</strong></p>
+      <ul>
+        <li>What surprised you most about how ComplianceGPT works?</li>
+        <li>Did any of your 5 results surprise you? Why?</li>
+        <li>What question about AI and compliance are you most curious about?</li>
+      </ul>
+      <p style="margin-top:10px;"><strong>Submit:</strong> Post CSV filename + Google Doc link in Slack <code>#deliverables</code>.</p>
+      <a href="notebooks/week1_python.ipynb" download class="dl-btn" style="margin-top:10px;">⬇ week1_python.ipynb</a>
+    </div>
   </div>
 
-  <h3>Week 2 — Python Exercises + Error Analysis + Project Selection</h3>
-  <div class="card">
-    <p><strong>Exercises 1–8</strong> in <code>notebooks/week2_nlp.ipynb</code>: token counting, batch accuracy, precision/recall, results filtering, plotting a bar chart.</p>
-    <p style="margin-top:10px;"><strong>Error analysis (1 page):</strong> Choose 2 wrong predictions from your batch. For each: summarize the scenario, identify what field was wrong, propose a fix.</p>
-    <div class="card card-gold" style="margin-top:14px;">
-      <h3>Project Selection — Due Friday Jul 3</h3>
-      <p>By the end of Week 2 you must choose your project (P1–P6 from the <a href="projects.html">Student Projects</a> page). Send Priscilla a Slack message with:</p>
-      <ol style="margin-top:8px;">
-        <li>Which project you're picking (e.g. "P3 — Adversarial Robustness")</li>
-        <li>Your draft research question in one sentence</li>
-        <li>One sentence on why you picked it</li>
+  <!-- W2 -->
+  <div class="assign-card">
+    <div class="assign-header">
+      <h3><span class="week-badge">WEEK 2</span>Exercises 5–9 + Cluster Run + Error Analysis</h3>
+      <span class="assign-due">Due: Friday July 3, 5pm</span>
+    </div>
+    <div class="assign-body">
+      <p><strong>Part 1 — Notebook (all code + reflection cells):</strong></p>
+      <ul>
+        <li><strong>Ex 5 — Token counting:</strong> Count tokens for 3 scenarios, compute % of Gemma3's 8,192 context window, reflect on truncation risk</li>
+        <li><strong>Ex 6 — Precision / Recall / F1:</strong> Implement from scratch (no sklearn), pass all 3 test cases, write interpretation of always-DENIED model result</li>
+        <li><strong>Ex 7 — Batch error analysis:</strong> Group errors by purpose category using pandas groupby, identify worst-performing category</li>
+        <li><strong>Ex 8 — Oracle predicate analysis:</strong> Use Counter to find which oracle predicate over-fires in FP rows</li>
+        <li><strong>Ex 9 — Cluster extraction run:</strong> Write SLURM job script, submit on cluster, download CSV, run Soufflé locally, compute accuracy</li>
+      </ul>
+      <p style="margin-top:14px;"><strong>Part 2 — Cluster run evidence</strong> (post in Slack <code>#deliverables</code>):</p>
+      <ul>
+        <li>Output of <code>sacct -u yournetid</code> — screenshot or paste showing ≥1 completed job</li>
+        <li>Filename of your downloaded extraction CSV (e.g. <code>extractions_48305.csv</code>)</li>
+        <li>One sentence: "I ran X scenarios with [model], got Y% accuracy, most common error was [oracle predicate]."</li>
+      </ul>
+      <p style="margin-top:14px;"><strong>Part 3 — Error analysis (1 page):</strong> Pick 2 wrong predictions from your cluster run. For each:</p>
+      <ul>
+        <li>1-sentence scenario summary</li>
+        <li>Model's verdict vs. correct answer</li>
+        <li>Which oracle predicate is wrong and what it should be</li>
+        <li>Root cause: hallucination / under-extraction / role confusion / purpose OOV</li>
+        <li>One proposed fix</li>
+      </ul>
+      <div class="card card-gold" style="margin-top:16px;">
+        <h3>Also due July 3: Project Selection</h3>
+        <p>Slack Priscilla: (1) which project P1–P6, (2) your draft research question in one sentence, (3) one sentence on why. See <a href="projects.html">Student Projects</a>.</p>
+      </div>
+      <div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:6px;">
+        <a href="notebooks/week2_nlp.ipynb" download class="dl-btn">⬇ week2_nlp.ipynb</a>
+        <a href="slurm.html" class="dl-btn gold">SLURM Quick Connect →</a>
+        <a href="cluster.html" class="dl-btn crimson">Full Cluster Guide →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- W3 -->
+  <div class="assign-card">
+    <div class="assign-header">
+      <h3><span class="week-badge">WEEK 3</span>Project Proposal — Oral + Written</h3>
+      <span class="assign-due">Wed Jul 9 (oral) · Fri Jul 11 (written)</span>
+    </div>
+    <div class="assign-body">
+      <p><strong>Oral (5 min) — Wednesday July 9:</strong> In-class pitch. Cover:</p>
+      <ol>
+        <li>The problem (why does this matter?)</li>
+        <li>Your specific research question (one sentence)</li>
+        <li>Your method (what experiments, data, metric)</li>
+        <li>How you'll know if it worked</li>
       </ol>
-      <p style="margin-top:8px;color:var(--muted);font-size:0.85rem;">This is a commitment, not a final contract. If the project turns out to be infeasible we'll adjust in Week 3. But you need a direction before proposal week.</p>
+      <p style="margin-top:12px;"><strong>1-page written summary — due Friday July 11:</strong></p>
+      <ul>
+        <li><strong>Research question</strong> — 1 sentence, specific and answerable</li>
+        <li><strong>Background</strong> — 2–3 sentences: gap and motivation</li>
+        <li><strong>Method</strong> — bullet list of experiments, data, and metric</li>
+        <li><strong>Expected result</strong> — hypothesis with reasoning</li>
+        <li><strong>Milestones</strong> — what will you have by Jul 18? By Jul 25?</li>
+      </ul>
+      <p style="font-size:0.85rem;color:var(--muted);margin-top:8px;">Graded on specificity. "I will run experiments" is not a milestone.</p>
     </div>
   </div>
 
-  <h3>Week 3 — Project Proposal + 1-Page Project Summary</h3>
-  <div class="card">
-    <p><strong>Oral presentation (5 min) — Wednesday Jul 9:</strong> Informal pitch of your selected project. Cover four things: (1) the problem, (2) your specific research question, (3) your planned method, (4) how you'll know if it worked.</p>
-    <p style="margin-top:10px;"><strong>1-page project summary — due Friday Jul 11:</strong> The written version of your proposal. Must include all of the following:</p>
-    <ul style="margin-top:8px;">
-      <li><strong>Research question</strong> (1 sentence — specific and answerable)</li>
-      <li><strong>Background</strong> (2–3 sentences — why does this matter, what's the gap)</li>
-      <li><strong>Method</strong> (bullet list — what experiments you will run, what data, what metric)</li>
-      <li><strong>Expected result</strong> (your hypothesis — what do you predict and why)</li>
-      <li><strong>Incremental milestones:</strong>
-        <ul>
-          <li>Week 4 milestone: what will you have completed by Jul 18?</li>
-          <li>Week 5 milestone: what will you have completed by Jul 25?</li>
-          <li>Week 6: poster ready for inspection</li>
-        </ul>
-      </li>
-    </ul>
-    <p style="margin-top:10px;color:var(--muted);font-size:0.85rem;">Graded on specificity. "I will run experiments" is not a milestone. "I will run the baseline prompt on 50 adversarial scenarios and compute ASR" is.</p>
-  </div>
-
-  <h3>Week 4 — Mid-Point Pitch + Experiment Log with Incremental Results</h3>
-  <div class="card">
-    <p><strong>Mid-point pitch (5 min) — Wednesday Jul 16:</strong> Show actual results, even if preliminary. Four-part structure:</p>
-    <ol style="margin-top:8px;">
-      <li><strong>Done:</strong> what experiments have you run?</li>
-      <li><strong>Found:</strong> what are the numbers? (show a table or chart)</li>
-      <li><strong>Blocked:</strong> what is not working or unclear?</li>
-      <li><strong>Plan:</strong> exactly what will you do in Weeks 5–6 to finish?</li>
-    </ol>
-    <p style="margin-top:10px;"><strong>Experiment log — due Friday Jul 18:</strong> A running log of every experiment you ran in Weeks 3–4. For each experiment record:</p>
-    <ul style="margin-top:8px;">
-      <li>Date, configuration (model, prompt version, dataset slice)</li>
-      <li>Numeric result (accuracy, ASR, F1, or whatever your metric is)</li>
-      <li>1-sentence observation: what did this tell you?</li>
-      <li>1-sentence next step: what did you change or decide as a result?</li>
-    </ul>
-    <p style="margin-top:8px;">Minimum 5 logged experiments. Include at least 1 table or chart summarizing results so far.</p>
-    <p style="margin-top:8px;color:var(--muted);font-size:0.85rem;">The experiment log documents your thinking, not just your successes. A failed experiment that taught you something is more valuable than a lucky result you can't explain.</p>
-  </div>
-
-  <h3>Week 5 — Poster Draft + 2-Page Write-Up Draft</h3>
-  <div class="card">
-    <p><strong>Poster draft — due Friday Jul 25:</strong> All sections must be present and filled in (not placeholder text). Your main result must be visible as a table or chart. Design does not need to be final — content must be complete enough for substantive feedback.</p>
-    <p style="margin-top:10px;"><strong>2-page write-up draft — due Friday Jul 25:</strong> All 5 sections present (introduction, background, method, results, discussion/conclusion). References required. Feedback returned by Monday Jul 28 morning.</p>
-    <p style="margin-top:10px;"><strong>Final results CSV — due Friday Jul 25:</strong> Complete experimental results committed to <code>results/[yourname]_final.csv</code>. No more experiments after this — Week 6 is writing and presentation only.</p>
-  </div>
-
-  <h3>Week 6 — Poster Inspection + Final Deliverables</h3>
-  <div class="card">
-    <div class="card card-crimson" style="margin-bottom:14px;">
-      <h3>Poster Inspection — Monday Jul 28</h3>
-      <p>Before your poster goes to print, Priscilla will review it with you 1:1. We will check: readability at 6 feet, that the main result is prominent, that the title and conclusion match, and that affiliation and acknowledgment lines are correct. Plan on 15–20 minutes. Schedule your slot by Friday Jul 25.</p>
-      <p style="margin-top:8px;"><strong>After inspection:</strong> incorporate feedback and resubmit by Tuesday Jul 29 at noon. The coordinator needs time to print before Thursday.</p>
+  <!-- W4 -->
+  <div class="assign-card">
+    <div class="assign-header">
+      <h3><span class="week-badge">WEEK 4</span>Mid-Point Pitch + Experiment Log</h3>
+      <span class="assign-due">Wed Jul 16 (pitch) · Fri Jul 18 (log)</span>
     </div>
-    <p><strong>Final poster (print-ready PDF) — due Thursday Jul 30:</strong> 48×36 inches. Font minimums: 24pt body, 36pt headers, 56pt title. Submit to the REU program coordinator.</p>
-    <p style="margin-top:10px;"><strong>Final write-up — due Thursday Jul 30:</strong> Polished 2-page research summary incorporating Week 5 feedback. Goes in the REU portfolio and may become the basis for a publication.</p>
-    <p style="margin-top:10px;"><strong>Poster presentation — Thursday Jul 31:</strong> REU Closing Ceremony. Stand with your printed poster and explain your work to faculty, other students, and guests. You should be able to give a 2-minute summary without notes.</p>
+    <div class="assign-body">
+      <p><strong>Mid-point pitch (5 min) — Wednesday July 16:</strong> Show actual numbers. Structure:</p>
+      <ol>
+        <li><strong>Done</strong> — what experiments ran?</li>
+        <li><strong>Found</strong> — the numbers (table or chart)</li>
+        <li><strong>Blocked</strong> — what's not working?</li>
+        <li><strong>Plan</strong> — exactly what happens in Weeks 5–6?</li>
+      </ol>
+      <p style="margin-top:12px;"><strong>Experiment log — due Friday July 18:</strong> Running log of every experiment in Weeks 3–4. Per experiment:</p>
+      <ul>
+        <li>Date · configuration (model, prompt version, data slice)</li>
+        <li>Numeric result</li>
+        <li>1-sentence observation</li>
+        <li>1-sentence next step</li>
+      </ul>
+      <p style="margin-top:8px;">Minimum 5 experiments logged. At least 1 summary table or chart.</p>
+    </div>
   </div>
 
-  <h2 id="poster" class="section-anchor">Final Poster</h2>
-  <div class="card card-navy">
-    <h3>Poster Requirements</h3>
-    <table style="margin-top:8px;">
-      <tr><td><strong>Size</strong></td><td>48 × 36 inches (landscape)</td></tr>
-      <tr><td><strong>Font (body)</strong></td><td>Minimum 24pt</td></tr>
-      <tr><td><strong>Font (headers)</strong></td><td>Minimum 36pt</td></tr>
-      <tr><td><strong>Font (title)</strong></td><td>Minimum 56pt</td></tr>
-      <tr><td><strong>Sections</strong></td><td>Title, Introduction, Background, Method, Results, Conclusion, References</td></tr>
-      <tr><td><strong>Figures</strong></td><td>At least 1 table or chart (your main result)</td></tr>
-      <tr><td><strong>Affiliation</strong></td><td>Stony Brook University, ComplianceGPT Lab, AI Innovation &amp; Diffusion REU 2026</td></tr>
-      <tr><td><strong>Due</strong></td><td>July 30 (print-ready PDF to program coordinator)</td></tr>
+  <!-- W5 -->
+  <div class="assign-card">
+    <div class="assign-header">
+      <h3><span class="week-badge">WEEK 5</span>Poster Draft + Write-Up Draft + Final Results</h3>
+      <span class="assign-due">Due: Friday July 25, 5pm</span>
+    </div>
+    <div class="assign-body">
+      <p><strong>Poster draft:</strong> All sections filled (not placeholders). Main result visible as table or chart. Feedback returned by Mon Jul 28.</p>
+      <p style="margin-top:10px;"><strong>2-page write-up draft:</strong> Introduction · Background · Method · Results · Discussion/Conclusion. References required.</p>
+      <p style="margin-top:10px;"><strong>Final results CSV:</strong> Commit <code>results/[yourname]_final.csv</code> to GitHub. No new experiments after this date.</p>
+    </div>
+  </div>
+
+  <!-- W6 -->
+  <div class="assign-card">
+    <div class="assign-header">
+      <h3><span class="week-badge">WEEK 6</span>Final Poster + Write-Up + Closing Ceremony</h3>
+      <span class="assign-due">Inspection Mon Jul 28 · Final Thu Jul 30 · Ceremony Thu Jul 31</span>
+    </div>
+    <div class="assign-body">
+      <div class="card card-crimson" style="margin-bottom:14px;">
+        <h3>Poster Inspection — Monday July 28</h3>
+        <p>1:1 with Priscilla (~15 min). We check: readability at 6 feet, main result prominence, title/conclusion match, affiliation lines. Schedule your slot by Fri Jul 25. Incorporate feedback by Tue Jul 29 noon (coordinator needs time to print).</p>
+      </div>
+      <p><strong>Final poster (print-ready PDF) — Thursday July 30:</strong> 48×36 in · min 24pt body · min 56pt title · all required sections · at least 1 figure · SBU affiliation line.</p>
+      <p style="margin-top:10px;"><strong>Final write-up — Thursday July 30:</strong> Polished 2-page research summary with all feedback incorporated.</p>
+      <p style="margin-top:10px;"><strong>Closing Ceremony — Thursday July 31:</strong> Stand at your poster and present to faculty and guests. Prepare a 2-minute summary you can give without notes.</p>
+    </div>
+  </div>
+
+  <!-- POSTER SPECS -->
+  <h2 id="poster" class="section-anchor">Poster Specifications</h2>
+  <div class="card card-navy" style="margin-bottom:20px;">
+    <table style="margin:0;font-size:0.9rem;">
+      <tr><td style="width:160px;"><strong>Size</strong></td><td>48 × 36 inches (landscape)</td></tr>
+      <tr><td><strong>Body</strong></td><td>Minimum 24pt</td></tr>
+      <tr><td><strong>Headers</strong></td><td>Minimum 36pt</td></tr>
+      <tr><td><strong>Title</strong></td><td>Minimum 56pt</td></tr>
+      <tr><td><strong>Sections</strong></td><td>Title · Introduction · Background · Method · Results · Conclusion · References</td></tr>
+      <tr><td><strong>Figures</strong></td><td>At least 1 table or chart showing your main result</td></tr>
+      <tr><td><strong>Affiliation</strong></td><td>Stony Brook University · ComplianceGPT Lab · AI Innovation &amp; Diffusion REU 2026</td></tr>
+      <tr><td><strong>Colors</strong></td><td>Crimson #990000 · Navy #003366 (optional)</td></tr>
     </table>
   </div>
-
-  <h3>Poster Tools</h3>
-  <ul>
-    <li><strong>PowerPoint / Google Slides</strong> — set slide size to 48×36 inches. Most accessible option.</li>
-    <li><strong>Canva</strong> — free, clean templates, easy to use. Export as PDF at high resolution.</li>
-    <li><strong>LaTeX beamerposter</strong> — for students who know LaTeX. Produces the cleanest output.</li>
-  </ul>
-
-  <h3>Poster Design Tips</h3>
-  <ul>
-    <li>Use the 6-foot test: stand 6 feet back. Can you read the title? The main result? If not, increase font size.</li>
-    <li>Your main result should be the largest visual element — a table or chart in the center column.</li>
-    <li>Every figure must have a caption with a 1-sentence takeaway starting with the finding.</li>
-    <li>Maximum 5 sentences per section panel. Cut everything else — bullets are fine.</li>
-    <li>Colors: SBU crimson (#990000) and navy (#003366) if you want brand consistency.</li>
-  </ul>
-
-  <h2 id="publication" class="section-anchor">Publication Opportunities</h2>
-
-  <div class="card card-crimson">
-    <h3>Who gets invited to co-author?</h3>
-    <p>Students whose projects produce a novel finding — not just a replication of existing results. A finding is novel if: (1) the specific comparison hasn't been published, (2) the dataset (adversarial scenarios, annotation rubric) is new, or (3) the result is surprising and well-explained. You don't need to solve a major open problem — you need to answer your research question clearly and credibly.</p>
-  </div>
-
-  <h3>Target Venues</h3>
   <div class="grid-2">
-    <div class="card">
-      <h3>ACL / EMNLP / NAACL Student Research Workshop</h3>
-      <p>The top NLP conferences each have student workshops with a lower bar than the main track. Good fit for 4-page papers from REU projects. Peer reviewed, published proceedings, presentation opportunity.</p>
+    <div>
+      <h3>Tools</h3>
+      <ul>
+        <li><strong>PowerPoint / Google Slides</strong> — set size to 48×36. Most accessible. Export PDF.</li>
+        <li><strong>Canva</strong> — free, clean templates, export high-res PDF.</li>
+        <li><strong>LaTeX beamerposter</strong> — cleanest output if you know LaTeX.</li>
+      </ul>
     </div>
-    <div class="card">
-      <h3>AI + Law Workshops</h3>
-      <p>Workshops co-located with ICAIL, JURIX, or ACL that focus specifically on AI for legal tasks. Our work fits here directly. Often more accessible for shorter papers.</p>
-    </div>
-    <div class="card">
-      <h3>AAAI Undergraduate/Student Track</h3>
-      <p>AAAI has an undergraduate consortium. If your result is strong and you're an undergraduate, this is a good venue. National conference with high visibility.</p>
-    </div>
-    <div class="card">
-      <h3>arXiv Preprint</h3>
-      <p>Even if not submitted to a conference, a polished 4-page arXiv paper is a real artifact. It's citable, shareable, and evidence of research output for graduate school applications.</p>
+    <div>
+      <h3>Design Rules</h3>
+      <ul>
+        <li>The 6-foot test: can you read the title and main result from 6 feet? If not, increase font size.</li>
+        <li>Main result = largest visual element, center column.</li>
+        <li>Caption every figure. Start with the finding, not "Figure 1 shows..."</li>
+        <li>Max 5 sentences per panel. Use bullets.</li>
+      </ul>
     </div>
   </div>
 
-  <h3>The co-authorship process</h3>
-  <p>If your project qualifies:</p>
-  <ol>
-    <li>I tell you before Week 6 ends — "this is publishable, let's write it up."</li>
-    <li>I take your 2-page write-up and expand it to a 4–8 page submission format.</li>
-    <li>You review drafts and revise your sections (method, your specific results).</li>
-    <li>I handle submission logistics, formatting, and correspondence.</li>
-    <li>Your authorship: first author on the portion you led; co-author on a paper with multiple contributors.</li>
-  </ol>
-  <p>Timeline: initial paper draft ~2 months after the program ends. Expect 2–3 revision rounds over 2–4 weeks total.</p>
+  <!-- PUBLICATION -->
+  <h2 id="publication" class="section-anchor">Publication Opportunities</h2>
+  <div class="card card-crimson" style="margin-bottom:16px;">
+    <h3>Who gets co-authorship?</h3>
+    <p>Students whose projects produce a novel finding: (1) the comparison hasn't been published, (2) the dataset is new, or (3) the result is surprising and well-explained. You don't need to solve a major open problem — answer your research question clearly and credibly.</p>
+  </div>
+  <div class="grid-2">
+    <div class="card" style="border:1px solid var(--border);">
+      <h3>Target Venues</h3>
+      <ul style="font-size:0.9rem;">
+        <li><strong>ACL / EMNLP / NAACL SRW</strong> — top NLP conference student workshops, 4-page papers</li>
+        <li><strong>AI + Law Workshops</strong> (ICAIL, JURIX) — direct fit for this work</li>
+        <li><strong>AAAI Undergraduate Consortium</strong> — strong result + undergraduate</li>
+        <li><strong>arXiv preprint</strong> — citable even without conference submission</li>
+      </ul>
+    </div>
+    <div class="card" style="border:1px solid var(--border);">
+      <h3>The Process</h3>
+      <ol style="font-size:0.9rem;">
+        <li>Priscilla tells you before Week 6: "this is publishable"</li>
+        <li>Your 2-page write-up expands to 4–8 pages</li>
+        <li>You review drafts, revise your sections</li>
+        <li>Priscilla handles submission logistics</li>
+        <li>Authorship: first author on your portion</li>
+      </ol>
+    </div>
+  </div>
 
   <footer>ComplianceGPT Lab · AI Innovation &amp; Diffusion REU 2026 · Stony Brook University</footer>
 </div>

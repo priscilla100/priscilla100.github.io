@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SLURM Quick Connect — ComplianceGPT Lab REU 2026</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.step-block {
+  display: flex; gap: 0; margin-bottom: 16px; border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+}
+.step-num {
+  flex-shrink: 0; width: 52px; background: var(--navy); color: var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; font-weight: 900; font-family: 'Segoe UI', system-ui, sans-serif;
+}
+.step-body { flex: 1; padding: 16px 20px; }
+.step-body h3 { color: var(--navy); margin-bottom: 6px; font-size: 1rem; }
+.step-body p, .step-body li { font-size: 0.9rem; line-height: 1.65; }
+.step-body ul, .step-body ol { padding-left: 18px; margin-top: 6px; }
+
+.cmd {
+  display: block; background: #1e1e2e; color: #a6e3a1; border-radius: 5px;
+  padding: 10px 16px; font-family: 'Courier New', Consolas, monospace;
+  font-size: 0.87rem; margin: 8px 0; overflow-x: auto;
+}
+.cmd .com  { color: #6c7086; font-style: italic; }
+.cmd .flag { color: #89dceb; }
+.cmd .str  { color: #a6e3a1; }
+.cmd .num  { color: #fab387; }
+
+.os-tabs { display: flex; gap: 0; margin-bottom: -1px; }
+.os-tab {
+  padding: 8px 18px; border: 1px solid var(--border); border-bottom: none;
+  cursor: pointer; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 0.85rem;
+  border-radius: 6px 6px 0 0; background: #f8f9fa; color: var(--muted);
+}
+.os-tab.active { background: #fff; color: var(--navy); font-weight: 700; border-bottom: 1px solid #fff; }
+.os-panel { display: none; border: 1px solid var(--border); border-radius: 0 6px 6px 6px; padding: 20px; }
+.os-panel.active { display: block; }
+
+.alert-box {
+  border-left: 4px solid var(--gold); background: #fffdf0;
+  padding: 12px 16px; border-radius: 0 6px 6px 0; margin: 14px 0;
+  font-family: 'Segoe UI', system-ui, sans-serif; font-size: 0.9rem;
+}
+.alert-box.red { border-left-color: var(--crimson); background: #fff5f5; }
+.alert-box.green { border-left-color: #1f7a3c; background: #f0fff4; }
+
+.flow {
+  display: flex; align-items: center; gap: 0; flex-wrap: wrap;
+  font-family: 'Segoe UI', system-ui, sans-serif; font-size: 0.85rem; margin: 16px 0;
+}
+.flow-box {
+  border: 1px solid var(--border); border-radius: 6px;
+  padding: 10px 14px; text-align: center; background: #fff;
+}
+.flow-arrow { color: var(--navy); font-size: 1.2rem; padding: 0 8px; }
+</style>
+</head>
+<body>
+<aside id="sidebar">
+  <div class="logo"><div class="lab-name">ComplianceGPT Lab</div><div class="lab-sub">AI Innovation &amp; Diffusion REU 2026<br>Stony Brook University</div></div>
+  <nav>
+    <div class="nav-section">Program</div>
+    <a href="index.html">Welcome</a>
+    <a href="schedule.html">Weekly Schedule</a>
+    <a href="slides-week1.html">Week 1 Slides</a>
+    <a href="slides-week2.html">Week 2 Slides</a>
+    <div class="nav-section">Foundations</div>
+    <a href="setup.html">Setup &amp; Tools</a>
+    <a href="python.html">Python Fundamentals</a>
+    <a href="foundations.html">AI Fundamentals</a>
+    <a href="foundations.html#origins">Origin Story</a>
+    <a href="foundations.html#nlp">NLP Fundamentals</a>
+    <a href="foundations.html#regulations">Regulations</a>
+    <a href="cluster.html">Cluster Access (full guide)</a>
+    <a href="slurm.html" class="active">SLURM Quick Connect</a>
+    <div class="nav-section">Curriculum</div>
+    <a href="week1.html">Week 1 — Intro to AI</a>
+    <a href="week2.html">Week 2 — AI Fundamentals</a>
+    <a href="week3.html">Week 3 — Language &amp; Law</a>
+    <a href="week4.html">Week 4 — Prompt Eng.</a>
+    <a href="week5.html">Week 5 — RAG</a>
+    <a href="week6.html">Week 6 — Communication</a>
+    <div class="nav-section">Research</div>
+    <a href="projects.html">Student Projects</a>
+    <a href="readings.html">Reading List</a>
+    <a href="assignments.html">Assignments</a>
+  </nav>
+</aside>
+
+<main id="main">
+<div class="page-header">
+  <div class="breadcrumb">Foundations · Cluster Access</div>
+  <h1>SLURM Quick Connect</h1>
+  <p class="subtitle">Connect to the AI Cluster, submit an extraction job, download results, run Soufflé locally</p>
+</div>
+<div class="content">
+
+  <div class="alert-box red" style="margin-bottom:24px;">
+    <strong>Critical architecture:</strong> The cluster runs <strong>LLM extraction only</strong> — no Soufflé on the cluster. You extract on the GPU, download the CSV, then run Soufflé on your laptop.
+    <div style="display:flex;align-items:center;gap:0;margin-top:10px;flex-wrap:wrap;">
+      <div class="flow-box" style="border-color:#c53030;background:#fff5f5;"><strong>Cluster (GPU)</strong><br><span style="font-size:0.78rem;color:#888;">llm1_extractor.py<br>→ extractions CSV</span></div>
+      <div class="flow-arrow">→ download →</div>
+      <div class="flow-box" style="border-color:#1f7a3c;background:#f0fff4;"><strong>Your Laptop</strong><br><span style="font-size:0.78rem;color:#888;">hipaa_connector.py → Soufflé<br>→ verdicts + analysis</span></div>
+    </div>
+  </div>
+
+  <!-- STEP 0: CONNECT -->
+  <h2>Step 0 — Connect</h2>
+  <p>You need cluster access first — email <a href="mailto:rt@cs.stonybrook.edu">rt@cs.stonybrook.edu</a> with your NetID before Tuesday. Then choose your connection method:</p>
+
+  <div class="os-tabs">
+    <button class="os-tab active" onclick="switchOS('mac')">Mac / Linux</button>
+    <button class="os-tab" onclick="switchOS('vscode')">Windows — VS Code (Recommended)</button>
+    <button class="os-tab" onclick="switchOS('putty')">Windows — PuTTY</button>
+  </div>
+
+  <div id="panel-mac" class="os-panel active">
+    <ol>
+      <li>Open <strong>Terminal</strong> (Cmd+Space → "Terminal")</li>
+      <li>Connect:
+        <span class="cmd">ssh <span class="flag">yournetid</span>@submit.ai.stonybrook.edu</span>
+      </li>
+      <li>First time: type <code>yes</code> to accept the host key</li>
+      <li>Enter your NetID password when prompted (nothing shows as you type — that's normal)</li>
+    </ol>
+    <p style="margin-top:10px;font-size:0.88rem;color:var(--muted);"><strong>Optional shortcut</strong> — add to <code>~/.ssh/config</code> so you just type <code>ssh ai</code>:</p>
+    <span class="cmd">Host ai
+  HostName submit.ai.stonybrook.edu
+  User <span class="flag">yournetid</span></span>
+  </div>
+
+  <div id="panel-vscode" class="os-panel">
+    <ol>
+      <li>Install <strong>VS Code</strong> if you don't have it yet</li>
+      <li>Install the <strong>Remote - SSH</strong> extension (search in Extensions panel: <code>ms-vscode-remote.remote-ssh</code>)</li>
+      <li>Verify OpenSSH is installed — open PowerShell and run:
+        <span class="cmd">ssh -V</span>
+        Should print something like <code>OpenSSH_8.x</code>. If not, install via Windows Settings → Optional Features → OpenSSH Client.
+      </li>
+      <li>In VS Code: <strong>Ctrl+Shift+P</strong> → type <code>Remote-SSH: Add New SSH Host</code></li>
+      <li>Enter: <code>ssh yournetid@submit.ai.stonybrook.edu</code></li>
+      <li>Click <strong>Connect to Host</strong> → choose Linux when asked about OS</li>
+      <li>Enter your NetID password</li>
+    </ol>
+    <div class="alert-box" style="margin-top:10px;">
+      <strong>Tip:</strong> Once connected, VS Code shows the cluster filesystem in the file Explorer and gives you a built-in terminal at the bottom. You can drag-drop files to download.
+    </div>
+  </div>
+
+  <div id="panel-putty" class="os-panel">
+    <ol>
+      <li>Download <strong>PuTTY</strong> from putty.org</li>
+      <li>Host Name: <code>submit.ai.stonybrook.edu</code> · Port: <code>22</code> · Connection type: SSH</li>
+      <li>Click <strong>Open</strong>, type your NetID and password</li>
+      <li>For file transfer, also download <strong>WinSCP</strong> — use the same host/port/credentials</li>
+    </ol>
+    <div class="alert-box red" style="margin-top:10px;">
+      VS Code is strongly recommended over PuTTY. VS Code lets you browse files, drag-drop downloads, and edit scripts visually — much easier for research.
+    </div>
+  </div>
+
+  <!-- STEP 1: FIRST-TIME SETUP -->
+  <h2 style="margin-top:28px;">Step 1 — First-Time Setup (do this once)</h2>
+  <p>After your first login, run these once to set up your environment. Paste them one at a time.</p>
+
+  <div class="step-block">
+    <div class="step-num">1a</div>
+    <div class="step-body">
+      <h3>Load modules and add to your shell profile</h3>
+      <span class="cmd">module load slurm python3
+echo "module load slurm python3" >> ~/.bashrc</span>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num">1b</div>
+    <div class="step-body">
+      <h3>Install Miniconda (lightweight Python manager)</h3>
+      <span class="cmd">wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh  <span class="com"># accept all defaults</span>
+source ~/.bashrc</span>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num">1c</div>
+    <div class="step-body">
+      <h3>Create the ComplianceGPT conda environment</h3>
+      <span class="cmd">conda create -n compliancegpt python=3.10 -y
+conda activate compliancegpt
+pip install torch transformers accelerate pandas tiktoken</span>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num">1d</div>
+    <div class="step-body">
+      <h3>Create working directories</h3>
+      <span class="cmd">mkdir -p ~/compliancegpt/results ~/compliancegpt/logs</span>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num">1e</div>
+    <div class="step-body">
+      <h3>Test GPU access — submit this job and check the output</h3>
+      <span class="cmd"><span class="com"># Create test job</span>
+cat &gt; ~/test_gpu.sh &lt;&lt; 'EOF'
+#!/bin/bash
+<span class="flag">#SBATCH --job-name=</span><span class="str">test_gpu</span>
+<span class="flag">#SBATCH --output=</span><span class="str">/home/YOURNETID/logs/test_%j.txt</span>
+<span class="flag">#SBATCH --time=</span><span class="num">0-00:05</span>
+<span class="flag">#SBATCH --mem=</span><span class="num">4000</span>
+<span class="flag">#SBATCH --gres=gpu:</span><span class="num">1</span>
+
+source ~/miniconda3/etc/profile.d/conda.sh
+conda activate compliancegpt
+python -c "import torch; print('CUDA:', torch.cuda.is_available()); print('GPU:', torch.cuda.get_device_name(0))"
+EOF
+<span class="com"># Replace YOURNETID above, then:</span>
+sbatch ~/test_gpu.sh</span>
+      <p style="margin-top:8px;font-size:0.88rem;">Wait 1–2 min, then check output: <code>cat ~/logs/test_*.txt</code>. Should say <code>CUDA: True</code> and a GPU name.</p>
+    </div>
+  </div>
+
+  <!-- STEP 2: RUN EXTRACTION -->
+  <h2 style="margin-top:28px;">Step 2 — Run LLM Extraction (Exercise 9)</h2>
+  <p>This is the actual research job. It runs <code>llm1_extractor.py</code> on the GoldCoin dataset and writes a CSV of JSON extractions. <strong>No Soufflé here.</strong></p>
+
+  <div class="step-block">
+    <div class="step-num">2a</div>
+    <div class="step-body">
+      <h3>Create the extraction job script</h3>
+      <span class="cmd">nano ~/compliancegpt/run_extraction.sh</span>
+      <p style="margin-top:8px;">Paste this content (replace <code>YOURNETID</code>):</p>
+      <span class="cmd">#!/bin/bash
+<span class="flag">#SBATCH --job-name=</span><span class="str">cg_extract</span>
+<span class="flag">#SBATCH --output=</span><span class="str">/home/YOURNETID/compliancegpt/logs/extract_%j_out.txt</span>
+<span class="flag">#SBATCH --error=</span><span class="str">/home/YOURNETID/compliancegpt/logs/extract_%j_err.txt</span>
+<span class="flag">#SBATCH --time=</span><span class="num">0-04:00</span>       <span class="com"># 4 hours max</span>
+<span class="flag">#SBATCH --mem=</span><span class="num">32000</span>         <span class="com"># 32 GB RAM</span>
+<span class="flag">#SBATCH --gres=gpu:</span><span class="num">1</span>        <span class="com"># 1 GPU (do not request more)</span>
+
+source ~/miniconda3/etc/profile.d/conda.sh
+conda activate compliancegpt
+
+<span class="com"># Extraction only — Soufflé runs locally after you download this CSV</span>
+python ~/compliancegpt/connector/llm1_extractor.py \
+    --model google/gemma-3-4b-it \
+    --data  ~/compliancegpt/data/goldcoin_hhs_merged.csv \
+    --output ~/compliancegpt/results/extractions_$SLURM_JOB_ID.csv</span>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num">2b</div>
+    <div class="step-body">
+      <h3>Submit and monitor</h3>
+      <span class="cmd">sbatch ~/compliancegpt/run_extraction.sh   <span class="com"># submit — note the job ID printed</span>
+squeue -u yournetid                          <span class="com"># check status (PD=pending, R=running)</span>
+tail -f ~/compliancegpt/logs/extract_*_out.txt  <span class="com"># watch live output</span></span>
+      <p style="margin-top:8px;font-size:0.88rem;">The job typically takes 3–8 minutes per scenario on a V100. Full 137-scenario run takes ~15–30 minutes. Ctrl+C to stop <code>tail</code> — it won't cancel the job.</p>
+    </div>
+  </div>
+
+  <div class="step-block">
+    <div class="step-num">2c</div>
+    <div class="step-body">
+      <h3>Verify the output when done</h3>
+      <span class="cmd">ls -lh ~/compliancegpt/results/            <span class="com"># confirm CSV exists</span>
+head -2 ~/compliancegpt/results/extractions_*.csv  <span class="com"># peek at first 2 rows</span>
+sacct -u yournetid --format=JobID,Elapsed,State  <span class="com"># job history</span></span>
+    </div>
+  </div>
+
+  <!-- STEP 3: DOWNLOAD -->
+  <h2 style="margin-top:28px;">Step 3 — Download the Extraction CSV</h2>
+
+  <div class="os-tabs">
+    <button class="os-tab active" onclick="switchDL('dl-mac')">Mac / Linux</button>
+    <button class="os-tab" onclick="switchDL('dl-vscode')">Windows — VS Code</button>
+    <button class="os-tab" onclick="switchDL('dl-winscp')">Windows — WinSCP</button>
+  </div>
+
+  <div id="panel-dl-mac" class="os-panel active">
+    <p>In a <strong>local</strong> terminal on your laptop (not on the cluster):</p>
+    <span class="cmd">scp yournetid@submit.ai.stonybrook.edu:\
+  ~/compliancegpt/results/extractions_JOBID.csv \
+  ~/Downloads/</span>
+    <p style="margin-top:8px;font-size:0.88rem;">Replace <code>JOBID</code> with the number printed when you ran <code>sbatch</code>. Or use <code>*</code> to grab all CSVs: <code>.../results/extractions_*.csv</code></p>
+  </div>
+
+  <div id="panel-dl-vscode" class="os-panel">
+    <ol>
+      <li>In VS Code with the cluster connected, open the Explorer panel</li>
+      <li>Navigate to <code>/home/yournetid/compliancegpt/results/</code></li>
+      <li>Right-click the CSV → <strong>Download</strong></li>
+      <li>Choose your local Downloads folder</li>
+    </ol>
+  </div>
+
+  <div id="panel-dl-winscp" class="os-panel">
+    <ol>
+      <li>Open WinSCP · Host: <code>submit.ai.stonybrook.edu</code> · Port: 22 · Protocol: SFTP</li>
+      <li>Login with your NetID and password</li>
+      <li>Navigate to <code>/home/yournetid/compliancegpt/results/</code></li>
+      <li>Drag the CSV to your local Downloads folder on the left panel</li>
+    </ol>
+  </div>
+
+  <!-- STEP 4: LOCAL SOUFFLE -->
+  <h2 style="margin-top:28px;">Step 4 — Run Soufflé Locally (on your laptop)</h2>
+  <p>Open <code>week2_nlp.ipynb</code> on your laptop. Go to <strong>Exercise 9, Step 3</strong>. Set <code>EXTRACTION_CSV</code> to your downloaded file path and run the cell — it feeds each <code>scenario_json</code> to the local Soufflé engine and writes a new CSV with <code>verdict_norm</code> added.</p>
+
+  <div class="alert-box green">
+    <strong>Why this split?</strong> LLM inference (thousands of forward passes through a 4B-parameter model) takes hours on CPU but minutes on GPU. Soufflé (pure logic evaluation) takes milliseconds on any machine. Run the expensive part on the cluster; everything else stays local.
+  </div>
+
+  <!-- SLURM COMMANDS REFERENCE -->
+  <h2 style="margin-top:28px;">SLURM Commands Reference</h2>
+  <table>
+    <thead><tr><th>Command</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td><code>sbatch myjob.sh</code></td><td>Submit a job — returns a job ID</td></tr>
+      <tr><td><code>squeue -u yournetid</code></td><td>Show your queued/running jobs (PD=pending, R=running)</td></tr>
+      <tr><td><code>squeue</code></td><td>Show all jobs on the cluster</td></tr>
+      <tr><td><code>scancel JOBID</code></td><td>Cancel a job</td></tr>
+      <tr><td><code>sacct -u yournetid</code></td><td>Job history including elapsed time and exit status</td></tr>
+      <tr><td><code>sinfo</code></td><td>Show all nodes and their availability</td></tr>
+      <tr><td><code>tail -f logfile.txt</code></td><td>Watch a log file update in real time (Ctrl+C to exit)</td></tr>
+    </tbody>
+  </table>
+
+  <!-- SBATCH FLAGS -->
+  <h2 style="margin-top:24px;">Job Script Flags — ComplianceGPT Defaults</h2>
+  <table>
+    <thead><tr><th>Flag</th><th>Value</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td><code>--gres=gpu:1</code></td><td>1 GPU</td><td>One GPU is enough for 4B inference. Do not request more — other users need them.</td></tr>
+      <tr><td><code>--mem=32000</code></td><td>32 GB RAM</td><td>Gemma3:4B needs ~24 GB VRAM + system overhead</td></tr>
+      <tr><td><code>--time=0-04:00</code></td><td>4 hours</td><td>Full 137-scenario run takes ~30 min; 4 hrs gives buffer</td></tr>
+      <tr><td><code>--output=..._%j.txt</code></td><td><code>%j</code> = job ID</td><td>Unique log file per job — don't clobber previous runs</td></tr>
+    </tbody>
+  </table>
+
+  <!-- TROUBLESHOOTING -->
+  <h2 style="margin-top:24px;">Troubleshooting</h2>
+  <table>
+    <thead><tr><th>Problem</th><th>Fix</th></tr></thead>
+    <tbody>
+      <tr><td>Connection refused / timeout</td><td>You're not on campus network or VPN — connect to SBU VPN first (vpn.stonybrook.edu)</td></tr>
+      <tr><td><code>Permission denied</code></td><td>Wrong NetID or password. Try again. Password is case-sensitive.</td></tr>
+      <tr><td>Job stuck in PD forever</td><td>All GPUs busy. Run <code>sinfo</code> to see which nodes are free. Try adding <code>--nodelist=gpu1</code> to target a specific node.</td></tr>
+      <tr><td><code>conda: command not found</code></td><td>Run <code>source ~/.bashrc</code> or log out and back in</td></tr>
+      <tr><td><code>CUDA: False</code> in test job</td><td>Forgot <code>--gres=gpu:1</code> in your <code>#SBATCH</code> flags — job ran on a CPU node</td></tr>
+      <tr><td>Empty output CSV</td><td>Check <code>logs/extract_*_err.txt</code> — usually a Python import error or wrong file path</td></tr>
+      <tr><td>Can't download CSV</td><td>Make sure you're running <code>scp</code> from your laptop terminal, not from inside the cluster</td></tr>
+    </tbody>
+  </table>
+
+  <div class="card card-navy" style="margin-top:24px;">
+    <h3>Questions?</h3>
+    <p>Slack <code>#cluster-help</code> or email <a href="mailto:priscillakyeidanso@gmail.com" style="color:var(--gold);">priscillakyeidanso@gmail.com</a>. Include your job ID and paste the contents of your error log.</p>
+    <p style="margin-top:8px;">Full hardware specs and advanced usage: <a href="cluster.html" style="color:var(--gold);">cluster.html</a></p>
+  </div>
+
+  <footer>ComplianceGPT Lab · AI Innovation &amp; Diffusion REU 2026 · Stony Brook University</footer>
+</div>
+</main>
+
+<script>
+function switchOS(id) {
+  ['mac','vscode','putty'].forEach(k => {
+    document.getElementById('panel-' + k).classList.toggle('active', k === id);
+  });
+  document.querySelectorAll('.os-tabs:first-of-type .os-tab').forEach((b, i) => {
+    b.classList.toggle('active', ['mac','vscode','putty'][i] === id);
+  });
+}
+function switchDL(id) {
+  ['dl-mac','dl-vscode','dl-winscp'].forEach(k => {
+    document.getElementById('panel-' + k).classList.toggle('active', k === id);
+  });
+  document.querySelectorAll('.os-tabs:last-of-type .os-tab').forEach((b, i) => {
+    b.classList.toggle('active', ['dl-mac','dl-vscode','dl-winscp'][i] === id);
+  });
+}
+</script>
+</body>
+</html>
