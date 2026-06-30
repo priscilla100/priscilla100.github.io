@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Instructor Notebooks — ComplianceGPT Lab REU 2026</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.nb-card {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  background: #fff;
+}
+.nb-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 22px;
+  border-bottom: 1px solid var(--border);
+}
+.nb-num {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; font-weight: 900;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  flex-shrink: 0;
+}
+.nb-title { flex: 1; }
+.nb-title h3 { margin: 0 0 3px 0; font-size: 1.05rem; }
+.nb-title .nb-sub { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 0.78rem; color: var(--muted); }
+.nb-dl-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  text-decoration: none;
+  padding: 8px 18px; border-radius: 5px;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 0.83rem; font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.nb-body { padding: 18px 22px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.nb-section h4 { font-size: 0.78rem; font-weight: 700; font-family: 'Segoe UI', system-ui, sans-serif; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: 6px; }
+.nb-section ul { padding-left: 16px; margin: 0; }
+.nb-section li { font-size: 0.87rem; line-height: 1.7; margin-bottom: 2px; }
+.nb-section p { font-size: 0.87rem; line-height: 1.65; margin: 0; }
+.tag { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 0.7rem; font-weight: 700; font-family: 'Segoe UI', system-ui, sans-serif; margin: 2px 2px 2px 0; }
+.tag-ml  { background: #fee2e2; color: #991b1b; }
+.tag-dl  { background: #ede9fe; color: #5b21b6; }
+.tag-nlp { background: #d1fae5; color: #065f46; }
+.tag-tr  { background: #dbeafe; color: #1e3a8a; }
+.tag-enc { background: #fef3c7; color: #92400e; }
+.tag-llm { background: #d1fae5; color: #064e3b; }
+.prereq-bar { background: #f8f9fa; border-top: 1px solid var(--border); padding: 10px 22px; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 0.8rem; color: var(--muted); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.prereq-bar strong { color: #212529; }
+.moment-box { background: #fffdf0; border-left: 3px solid var(--gold); padding: 8px 12px; border-radius: 0 4px 4px 0; font-size: 0.86rem; font-style: italic; margin-top: 4px; }
+</style>
+</head>
+<body>
+
+<aside id="sidebar">
+  <div class="logo">
+    <div class="lab-name">ComplianceGPT Lab</div>
+    <div class="lab-sub">AI Innovation &amp; Diffusion REU 2026<br>Stony Brook University</div>
+  </div>
+  <nav>
+    <div class="nav-section">Program</div>
+    <a href="index.html">Welcome</a>
+    <a href="schedule.html">Weekly Schedule</a>
+    <a href="slides-week1.html">Week 1 Slides</a>
+    <a href="slides-week2.html">Week 2 Slides</a>
+    <a href="slides-ai-progression.html">ML→LLM Progression Slides</a>
+    <div class="nav-section">Teaching</div>
+    <a href="instructor.html" class="active">Instructor Notebooks</a>
+    <a href="assignments.html">Assignments</a>
+    <a href="slurm.html">SLURM Connect</a>
+    <div class="nav-section">Foundations</div>
+    <a href="setup.html">Software &amp; Setup</a>
+    <a href="python.html">Python Fundamentals</a>
+    <a href="foundations.html">AI Fundamentals</a>
+    <a href="cluster.html">Cluster Access</a>
+    <div class="nav-section">Curriculum</div>
+    <a href="week1.html">Week 1 — Intro to AI</a>
+    <a href="week2.html">Week 2 — AI Fundamentals</a>
+    <a href="week3.html">Week 3 — Language &amp; Law</a>
+    <a href="week4.html">Week 4 — RAG</a>
+    <a href="week5.html">Week 5 — ComplianceGPT</a>
+    <a href="week6.html">Week 6 — Communication</a>
+    <div class="nav-section">Research</div>
+    <a href="projects.html">Student Projects</a>
+    <a href="readings.html">Reading List</a>
+  </nav>
+</aside>
+
+<main id="main">
+<div class="page-header">
+  <div class="breadcrumb">ComplianceGPT Lab · Week 2</div>
+  <h1>Instructor Notebooks</h1>
+  <p class="subtitle">6 pre-worked teaching scripts — run top-to-bottom in class, no surprises</p>
+</div>
+
+<div class="content">
+
+  <div class="card card-gold" style="margin-bottom:28px;">
+    <div style="display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap;">
+      <div style="flex:1;min-width:200px;">
+        <h3>Before Class Checklist</h3>
+        <ul style="font-size:0.9rem;margin-top:6px;">
+          <li>Run notebook 05 once to download <code>all-MiniLM-L6-v2</code> (~80MB, needs internet)</li>
+          <li>Verify <code>FIFA_PATH</code> in notebooks 01–02 points to your Downloads folder</li>
+          <li>Verify <code>HIPAA_PATH</code> in notebooks 01–06 points to <code>final_vast_gemma3_4b.csv</code></li>
+          <li>Open all 6 in Jupyter before class — kernel warm-up takes ~10s</li>
+        </ul>
+      </div>
+      <div style="font-family:'Segoe UI',system-ui,sans-serif;font-size:0.82rem;background:#fff;border-radius:6px;padding:12px 16px;min-width:200px;">
+        <div style="font-weight:700;margin-bottom:8px;color:var(--navy);">Data paths</div>
+        <div style="margin-bottom:4px;"><strong>FIFA:</strong> <code style="font-size:0.75rem;">/Users/priscilladanso/Downloads/FIFA - 2014.csv</code></div>
+        <div><strong>HIPAA:</strong> <code style="font-size:0.75rem;">.../finalserverrun/final_vast_gemma3_4b.csv</code></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:8px;margin-bottom:20px;font-family:'Segoe UI',system-ui,sans-serif;font-size:0.82rem;align-items:center;flex-wrap:wrap;">
+    <span style="color:var(--muted);">Jump to:</span>
+    <a href="#nb01" style="color:var(--crimson);font-weight:600;">01 ML</a> ·
+    <a href="#nb02" style="color:#5b21b6;font-weight:600;">02 DL</a> ·
+    <a href="#nb03" style="color:#065f46;font-weight:600;">03 NLP</a> ·
+    <a href="#nb04" style="color:var(--navy);font-weight:600;">04 Transformers</a> ·
+    <a href="#nb05" style="color:#92400e;font-weight:600;">05 Encoders</a> ·
+    <a href="#nb06" style="color:#064e3b;font-weight:600;">06 LLMs</a>
+  </div>
+
+  <!-- ─── NOTEBOOK 01 ────────────────────────────────────────── -->
+  <div class="nb-card" id="nb01">
+    <div class="nb-header" style="background:#fff5f5;">
+      <div class="nb-num" style="background:#fee2e2;color:#991b1b;">01</div>
+      <div class="nb-title">
+        <h3>Machine Learning</h3>
+        <div class="nb-sub">25 cells · FIFA 2014 + HIPAA · sklearn only · no GPU</div>
+      </div>
+      <a href="notebooks/teach_01_ml.ipynb" download class="nb-dl-btn" style="background:var(--crimson);color:#fff;">⬇ teach_01_ml.ipynb</a>
+    </div>
+    <div class="nb-body">
+      <div class="nb-section">
+        <h4>What you cover</h4>
+        <ul>
+          <li>Data replaces rules — the core ML idea</li>
+          <li>Features, labels, the training loop</li>
+          <li>Logistic Regression (weights)</li>
+          <li>Decision Tree (readable rules)</li>
+          <li>Random Forest (ensemble voting)</li>
+          <li>Pivot: HIPAA text → feature extraction wall</li>
+        </ul>
+      </div>
+      <div class="nb-section">
+        <h4>Teaching moment</h4>
+        <div class="moment-box">"The algorithm predicted which teams reached the quarterfinals from stats alone. Now look at a HIPAA scenario — 300 words of legal text. You can't feed that to sklearn. You need to convert text to numbers first. That's everything we do for the rest of this week."</div>
+      </div>
+      <div class="nb-section">
+        <h4>Key outputs</h4>
+        <ul>
+          <li>FIFA: 3-model accuracy table</li>
+          <li>Decision Tree rules printed as text</li>
+          <li>LR feature weights bar chart</li>
+          <li>RF feature importances</li>
+          <li>TF-IDF baseline on HIPAA (teaser)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="prereq-bar">
+      <strong>Requires:</strong> pandas, numpy, sklearn &nbsp;|&nbsp;
+      <strong>Data:</strong> FIFA 2014 CSV · HIPAA results CSV &nbsp;|&nbsp;
+      <strong>When:</strong> Monday (Day 1)
+    </div>
+  </div>
+
+  <!-- ─── NOTEBOOK 02 ────────────────────────────────────────── -->
+  <div class="nb-card" id="nb02">
+    <div class="nb-header" style="background:#f5f3ff;">
+      <div class="nb-num" style="background:#ede9fe;color:#5b21b6;">02</div>
+      <div class="nb-title">
+        <h3>Deep Learning</h3>
+        <div class="nb-sub">17 cells · synthetic + HIPAA · sklearn MLP · no PyTorch required</div>
+      </div>
+      <a href="notebooks/teach_02_dl.ipynb" download class="nb-dl-btn" style="background:#5b21b6;color:#fff;">⬇ teach_02_dl.ipynb</a>
+    </div>
+    <div class="nb-body">
+      <div class="nb-section">
+        <h4>What you cover</h4>
+        <ul>
+          <li>XOR — what logistic regression cannot solve</li>
+          <li>Neural network = layers of learned transforms</li>
+          <li>Manual neuron: weighted sum → ReLU</li>
+          <li>Backprop training loop (live loss curve)</li>
+          <li>Depth vs accuracy on checkerboard problem</li>
+          <li>Scale table: Perceptron → GPT-4</li>
+        </ul>
+      </div>
+      <div class="nb-section">
+        <h4>Teaching moment</h4>
+        <div class="moment-box">"Logistic Regression gets 50% on XOR — a coin flip. The neural network gets 100% with one hidden layer. The hidden layer learned a new coordinate system where the problem is linearly separable. That's the magic of depth."</div>
+      </div>
+      <div class="nb-section">
+        <h4>Key outputs</h4>
+        <ul>
+          <li>XOR: LR fails (50%), MLP succeeds (100%)</li>
+          <li>Live loss curve — 200 epochs printed</li>
+          <li>Depth comparison: 4 architectures vs checkerboard</li>
+          <li>Scale table (8 models, params, compute)</li>
+          <li>HIPAA: MLP vs LR vs DT accuracy</li>
+        </ul>
+      </div>
+    </div>
+    <div class="prereq-bar">
+      <strong>Requires:</strong> pandas, numpy, sklearn &nbsp;|&nbsp;
+      <strong>Data:</strong> HIPAA results CSV &nbsp;|&nbsp;
+      <strong>When:</strong> Monday (Day 1) or Tuesday
+    </div>
+  </div>
+
+  <!-- ─── NOTEBOOK 03 ────────────────────────────────────────── -->
+  <div class="nb-card" id="nb03">
+    <div class="nb-header" style="background:#f0fdf4;">
+      <div class="nb-num" style="background:#d1fae5;color:#065f46;">03</div>
+      <div class="nb-title">
+        <h3>NLP — Text as Numbers</h3>
+        <div class="nb-sub">19 cells · real HIPAA scenarios · sklearn · no GPU</div>
+      </div>
+      <a href="notebooks/teach_03_nlp.ipynb" download class="nb-dl-btn" style="background:#065f46;color:#fff;">⬇ teach_03_nlp.ipynb</a>
+    </div>
+    <div class="nb-body">
+      <div class="nb-section">
+        <h4>What you cover</h4>
+        <ul>
+          <li>Text representation problem: numbers only</li>
+          <li>Bag of Words — manual, then sklearn</li>
+          <li>IDF intuition: "subpoena" vs "the"</li>
+          <li>TF-IDF + bigrams — top features per class</li>
+          <li>Cosine similarity matrix on legal phrases</li>
+          <li>The semantic gap demonstrated on HIPAA</li>
+        </ul>
+      </div>
+      <div class="nb-section">
+        <h4>Teaching moment</h4>
+        <div class="moment-box">"TF-IDF cosine similarity: 'court order' vs 'judicial mandate' = 0.08. Zero word overlap = near-zero similarity. Legally they trigger the exact same HIPAA exception. TF-IDF doesn't know that. This is the semantic gap."</div>
+      </div>
+      <div class="nb-section">
+        <h4>Key outputs</h4>
+        <ul>
+          <li>BoW matrix printed on toy sentences</li>
+          <li>IDF scores for 7 legal words</li>
+          <li>TF-IDF top features → PERMITTED vs DENIED</li>
+          <li>6×6 cosine similarity matrix</li>
+          <li>False negative example from real HIPAA</li>
+          <li>4-method accuracy comparison</li>
+        </ul>
+      </div>
+    </div>
+    <div class="prereq-bar">
+      <strong>Requires:</strong> pandas, numpy, sklearn &nbsp;|&nbsp;
+      <strong>Data:</strong> HIPAA results CSV &nbsp;|&nbsp;
+      <strong>When:</strong> Tuesday (Day 2)
+    </div>
+  </div>
+
+  <!-- ─── NOTEBOOK 04 ────────────────────────────────────────── -->
+  <div class="nb-card" id="nb04">
+    <div class="nb-header" style="background:#eff6ff;">
+      <div class="nb-num" style="background:#dbeafe;color:#1e3a8a;">04</div>
+      <div class="nb-title">
+        <h3>Transformers &amp; Attention</h3>
+        <div class="nb-sub">19 cells · tiktoken (optional) · numpy only · no GPU</div>
+      </div>
+      <a href="notebooks/teach_04_transformers.ipynb" download class="nb-dl-btn" style="background:var(--navy);color:#fff;">⬇ teach_04_transformers.ipynb</a>
+    </div>
+    <div class="nb-body">
+      <div class="nb-section">
+        <h4>What you cover</h4>
+        <ul>
+          <li>Tokenization: text → integer IDs (subword)</li>
+          <li>Token count distribution across 137 scenarios</li>
+          <li>RNN information decay simulation</li>
+          <li>Self-attention: manual attention weights</li>
+          <li>"order" = court order vs medication order</li>
+          <li>Attention math (Q, K, V matrices)</li>
+          <li>Positional encoding (sinusoidal)</li>
+          <li>Gemma3-4B architecture specs</li>
+        </ul>
+      </div>
+      <div class="nb-section">
+        <h4>Teaching moment</h4>
+        <div class="moment-box">"Same word 'order' in two sentences. In the legal sentence, it attends strongly to 'judge' and 'signed'. In the medical sentence, it attends to 'physician' and 'medication'. Same word, different representation. This is what TF-IDF fundamentally cannot do."</div>
+      </div>
+      <div class="nb-section">
+        <h4>Key outputs</h4>
+        <ul>
+          <li>Token pieces for 4 HIPAA sentences</li>
+          <li>RNN decay table: 95% signal lost by token 50</li>
+          <li>Attention weight bar chart (legal context)</li>
+          <li>Attention weight bar chart (medical context)</li>
+          <li>Q/K/V attention matrix (toy, 5 tokens)</li>
+          <li>Sinusoidal PE table (10 pos × 8 dims)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="prereq-bar">
+      <strong>Requires:</strong> numpy, pandas &nbsp;|&nbsp;
+      <strong>Optional:</strong> tiktoken (pip install tiktoken) &nbsp;|&nbsp;
+      <strong>When:</strong> Tuesday or Wednesday
+    </div>
+  </div>
+
+  <!-- ─── NOTEBOOK 05 ────────────────────────────────────────── -->
+  <div class="nb-card" id="nb05">
+    <div class="nb-header" style="background:#fffbeb;">
+      <div class="nb-num" style="background:#fef3c7;color:#92400e;">05</div>
+      <div class="nb-title">
+        <h3>Encoders &amp; Sentence Embeddings</h3>
+        <div class="nb-sub">13 cells · sentence-transformers · CPU · pre-download model before class</div>
+      </div>
+      <a href="notebooks/teach_05_encoders.ipynb" download class="nb-dl-btn" style="background:#92400e;color:#fff;">⬇ teach_05_encoders.ipynb</a>
+    </div>
+    <div class="nb-body">
+      <div class="nb-section">
+        <h4>What you cover</h4>
+        <ul>
+          <li>Encoder vs Decoder: two paths from one arch</li>
+          <li>Sentence embeddings: meaning as geometry</li>
+          <li>Closing the semantic gap (0.08 → 0.85+)</li>
+          <li>Adversarial failure: "implied court order" still close</li>
+          <li>HIPAA classification with embeddings</li>
+          <li>Semantic search on 137 real scenarios</li>
+          <li>Failure case analysis: nearest neighbor</li>
+        </ul>
+      </div>
+      <div class="nb-section">
+        <h4>Teaching moment</h4>
+        <div class="moment-box">"Embedding similarity: 'court order' ↔ 'implied there might be a court order' = 0.79. That phrase is ABOUT court orders, it just isn't one. Embeddings capture topic, not legal validity. This is exactly the error pattern in 3 of our 8 failures."</div>
+      </div>
+      <div class="nb-section">
+        <h4>Key outputs</h4>
+        <ul>
+          <li>TF-IDF vs embedding similarity table (12 phrases)</li>
+          <li>Adversarial analysis: group C near group A</li>
+          <li>Accuracy: TF-IDF vs embeddings vs LLM+engine</li>
+          <li>Semantic search: "judicial mandate" → top 5 cases</li>
+          <li>8 failures: nearest neighbor analysis</li>
+        </ul>
+      </div>
+    </div>
+    <div class="prereq-bar">
+      <strong>Requires:</strong> sentence-transformers (auto-installs) &nbsp;|&nbsp;
+      <strong>⚠ Pre-download:</strong> run Cell 1 before class (downloads all-MiniLM-L6-v2, ~80MB) &nbsp;|&nbsp;
+      <strong>When:</strong> Wednesday (Day 3)
+    </div>
+  </div>
+
+  <!-- ─── NOTEBOOK 06 ────────────────────────────────────────── -->
+  <div class="nb-card" id="nb06">
+    <div class="nb-header" style="background:#f0fdf4;">
+      <div class="nb-num" style="background:#d1fae5;color:#064e3b;">06</div>
+      <div class="nb-title">
+        <h3>LLMs — Real System Results</h3>
+        <div class="nb-sub">19 cells · pandas only · Gemma3-4B actual output · no inference required</div>
+      </div>
+      <a href="notebooks/teach_06_llm.ipynb" download class="nb-dl-btn" style="background:#064e3b;color:#fff;">⬇ teach_06_llm.ipynb</a>
+    </div>
+    <div class="nb-body">
+      <div class="nb-section">
+        <h4>What you cover</h4>
+        <ul>
+          <li>System overview: full pipeline walkthrough</li>
+          <li>94.2% accuracy — what 129/137 means</li>
+          <li>One case start-to-finish: text → JSON → verdict</li>
+          <li>The 8 failures: FP vs FN classification</li>
+          <li>Oracle hallucination anatomy (FP)</li>
+          <li>Under-extraction anatomy (FN)</li>
+          <li>Latency analysis (avg 15.8s/case)</li>
+          <li>Research directions: your 5.8% target</li>
+        </ul>
+      </div>
+      <div class="nb-section">
+        <h4>Teaching moment</h4>
+        <div class="moment-box">"These 8 cases are your research targets this summer. Every error is an oracle extraction failure — either the model hallucinated a predicate that wasn't there, or it missed one that was. You've now seen every layer of this system. Which one do you want to fix?"</div>
+      </div>
+      <div class="nb-section">
+        <h4>Key outputs</h4>
+        <ul>
+          <li>Stats box: 129/137, latency, GPU info</li>
+          <li>Full JSON extraction for one correct case</li>
+          <li>Deep dive: one FP + one FN case</li>
+          <li>Oracle risk table: which predicates fail most</li>
+          <li>Latency stats + FP/FN latency comparison</li>
+          <li>6 research directions printed</li>
+          <li><code>show_case(N)</code> for live class exploration</li>
+        </ul>
+      </div>
+    </div>
+    <div class="prereq-bar">
+      <strong>Requires:</strong> pandas, numpy, sklearn &nbsp;|&nbsp;
+      <strong>Data:</strong> HIPAA results CSV &nbsp;|&nbsp;
+      <strong>When:</strong> Wednesday (Day 3) or Thursday
+    </div>
+  </div>
+
+  <!-- QUICK REFERENCE -->
+  <h2 style="margin-top:32px;">Quick Reference</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Topic</th>
+        <th>Data</th>
+        <th>Key demo</th>
+        <th>Day</th>
+        <th>Download</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="tag tag-ml">01</span></td>
+        <td><strong>Machine Learning</strong></td>
+        <td>FIFA 2014 + HIPAA</td>
+        <td>3 classifiers on FIFA → HIPAA feature wall</td>
+        <td>Mon</td>
+        <td><a href="notebooks/teach_01_ml.ipynb" download style="color:var(--crimson);font-weight:700;">⬇ Download</a></td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-dl">02</span></td>
+        <td><strong>Deep Learning</strong></td>
+        <td>Synthetic + HIPAA</td>
+        <td>XOR: LR fails, MLP succeeds; backprop loop</td>
+        <td>Mon/Tue</td>
+        <td><a href="notebooks/teach_02_dl.ipynb" download style="color:#5b21b6;font-weight:700;">⬇ Download</a></td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-nlp">03</span></td>
+        <td><strong>NLP</strong></td>
+        <td>HIPAA CSV</td>
+        <td>Semantic gap: "court order" ↔ "judicial mandate" = 0.08</td>
+        <td>Tue</td>
+        <td><a href="notebooks/teach_03_nlp.ipynb" download style="color:#065f46;font-weight:700;">⬇ Download</a></td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-tr">04</span></td>
+        <td><strong>Transformers</strong></td>
+        <td>HIPAA CSV</td>
+        <td>"order" = different token depending on context</td>
+        <td>Tue/Wed</td>
+        <td><a href="notebooks/teach_04_transformers.ipynb" download style="color:var(--navy);font-weight:700;">⬇ Download</a></td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-enc">05</span></td>
+        <td><strong>Encoders</strong></td>
+        <td>HIPAA CSV</td>
+        <td>Gap closed to 0.85 — adversarial still 0.79</td>
+        <td>Wed</td>
+        <td><a href="notebooks/teach_05_encoders.ipynb" download style="color:#92400e;font-weight:700;">⬇ Download</a></td>
+      </tr>
+      <tr style="background:#f0fdf4;">
+        <td><span class="tag tag-llm">06</span></td>
+        <td><strong>LLMs</strong></td>
+        <td>Gemma3 results CSV</td>
+        <td>8 failures live — <code>show_case(N)</code> for any case</td>
+        <td>Wed/Thu</td>
+        <td><a href="notebooks/teach_06_llm.ipynb" download style="color:#064e3b;font-weight:700;">⬇ Download</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="card card-navy" style="margin-top:28px;">
+    <h3>The progression these notebooks teach</h3>
+    <p>Each notebook ends at the wall the next one solves. Students can see exactly why each technique was necessary — not just that it happened, but what problem it fixed.</p>
+    <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:12px;font-family:'Segoe UI',system-ui,sans-serif;font-size:0.85rem;">
+      <span style="background:rgba(255,255,255,0.1);border-radius:5px;padding:5px 10px;">Rules → ~60%</span>
+      <span style="color:var(--gold);">→</span>
+      <span style="background:rgba(255,255,255,0.1);border-radius:5px;padding:5px 10px;">ML + hand features → ~90%</span>
+      <span style="color:var(--gold);">→</span>
+      <span style="background:rgba(255,255,255,0.1);border-radius:5px;padding:5px 10px;">TF-IDF → ~80%</span>
+      <span style="color:var(--gold);">→</span>
+      <span style="background:rgba(255,255,255,0.1);border-radius:5px;padding:5px 10px;">Embeddings → ~87%</span>
+      <span style="color:var(--gold);">→</span>
+      <span style="background:#f0a500;color:#000;border-radius:5px;padding:5px 10px;font-weight:700;">LLM + engine → 94.2%</span>
+    </div>
+  </div>
+
+  <footer>ComplianceGPT Lab · AI Innovation &amp; Diffusion REU 2026 · Stony Brook University</footer>
+</div>
+</main>
+</body>
+</html>

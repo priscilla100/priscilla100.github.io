@@ -193,6 +193,45 @@
   </div>
   <p style="font-size:0.88rem;color:var(--muted);margin-bottom:28px;">Daily notebooks have no hard deadline — submit in Slack <code>#deliverables</code> when complete.</p>
 
+  <!-- INSTRUCTOR NOTEBOOKS -->
+  <h2>Instructor Notebooks — Pre-worked Teaching Scripts</h2>
+  <p style="font-size:0.9rem;color:var(--muted);margin-bottom:14px;">Run top-to-bottom in class. All cells pre-written, all outputs deterministic. Uses real FIFA 2014 and HIPAA GoldCoin data.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:24px;">
+    <div class="card" style="border:2px solid var(--crimson);">
+      <h3 style="color:var(--crimson);">01 · Machine Learning</h3>
+      <p style="font-size:0.82rem;color:var(--muted);margin-bottom:10px;">FIFA 2014 → features → LogReg/DT/RF → pivot to HIPAA. The feature extraction wall.</p>
+      <a href="notebooks/teach_01_ml.ipynb" download class="dl-btn crimson">⬇ teach_01_ml.ipynb</a>
+    </div>
+    <div class="card" style="border:2px solid var(--crimson);">
+      <h3 style="color:var(--crimson);">02 · Deep Learning</h3>
+      <p style="font-size:0.82rem;color:var(--muted);margin-bottom:10px;">XOR shows LR limits. MLP solves it. Backprop loop. Scale table. HIPAA MLP comparison.</p>
+      <a href="notebooks/teach_02_dl.ipynb" download class="dl-btn crimson">⬇ teach_02_dl.ipynb</a>
+    </div>
+    <div class="card" style="border:2px solid var(--crimson);">
+      <h3 style="color:var(--crimson);">03 · NLP</h3>
+      <p style="font-size:0.82rem;color:var(--muted);margin-bottom:10px;">BoW → TF-IDF → n-grams on real HIPAA text. Semantic gap: "court order" vs "judicial mandate" = 0.08.</p>
+      <a href="notebooks/teach_03_nlp.ipynb" download class="dl-btn crimson">⬇ teach_03_nlp.ipynb</a>
+    </div>
+    <div class="card" style="border:2px solid var(--navy);">
+      <h3 style="color:var(--navy);">04 · Transformers</h3>
+      <p style="font-size:0.82rem;color:var(--muted);margin-bottom:10px;">Tokenization. RNN decay simulation. Attention intuition. "order" in medical vs legal context.</p>
+      <a href="notebooks/teach_04_transformers.ipynb" download class="dl-btn">⬇ teach_04_transformers.ipynb</a>
+    </div>
+    <div class="card" style="border:2px solid var(--navy);">
+      <h3 style="color:var(--navy);">05 · Encoders</h3>
+      <p style="font-size:0.82rem;color:var(--muted);margin-bottom:10px;">Sentence embeddings close the gap. Adversarial failure. Semantic search. HIPAA classification.</p>
+      <a href="notebooks/teach_05_encoders.ipynb" download class="dl-btn">⬇ teach_05_encoders.ipynb</a>
+    </div>
+    <div class="card" style="border:2px solid var(--green);">
+      <h3 style="color:var(--green);">06 · LLMs — Real Results</h3>
+      <p style="font-size:0.82rem;color:var(--muted);margin-bottom:10px;">Gemma3-4B actual output. 8 failure deep-dive. Oracle hallucination anatomy. Research directions.</p>
+      <a href="notebooks/teach_06_llm.ipynb" download class="dl-btn gold">⬇ teach_06_llm.ipynb</a>
+    </div>
+  </div>
+  <div class="card card-gold" style="margin-bottom:28px;">
+    <p style="font-size:0.9rem;margin:0;"><strong>Note:</strong> Instructor notebooks use absolute paths to the FIFA and ComplianceGPT data on your machine. Update <code>FIFA_PATH</code> and <code>HIPAA_PATH</code> at the top of each notebook if paths change. Run <code>all-MiniLM-L6-v2</code> download before class (notebook 05).</p>
+  </div>
+
   <!-- ASSIGNMENT DETAILS -->
   <h2>Assignment Details</h2>
 
