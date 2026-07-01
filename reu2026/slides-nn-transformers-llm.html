@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Neural Networks → Transformers → LLMs · ComplianceGPT Lab REU 2026</title>
+<style>
+:root { --crimson:#990000; --navy:#003366; --gold:#f0a500; --green:#1f7a3c; --border:#dee2e6; --muted:#6c757d; }
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:Georgia,'Times New Roman',serif; background:#1a1a2e; color:#fff; }
+
+.slide-controls { position:fixed; bottom:24px; right:28px; z-index:999; display:flex; gap:8px; }
+.slide-controls button { background:rgba(255,255,255,0.15); color:#fff; border:1px solid rgba(255,255,255,0.25); padding:8px 18px; border-radius:6px; cursor:pointer; font-size:0.9rem; font-family:'Segoe UI',system-ui,sans-serif; backdrop-filter:blur(4px); }
+.slide-controls button:hover { background:rgba(255,255,255,0.3); }
+.slide-controls.on-light button { background:rgba(0,51,102,0.1); color:#003366; border:1px solid rgba(0,51,102,0.25); }
+#slide-counter { position:fixed; bottom:30px; left:28px; z-index:999; font-family:'Segoe UI',system-ui,sans-serif; font-size:0.8rem; color:rgba(255,255,255,0.45); }
+#slide-counter.on-light { color:rgba(0,0,0,0.3); }
+#progress-bar { position:fixed; top:0; left:0; height:3px; background:var(--gold); transition:width 0.3s; z-index:999; }
+
+.slide { display:none; min-height:100vh; padding:52px 72px; position:relative; flex-direction:column; justify-content:center; }
+.slide.active { display:flex; }
+
+.slide-dark    { background:#0d1b3e; }
+.slide-crimson { background:linear-gradient(135deg,#6b0000 0%,#990000 100%); }
+.slide-navy    { background:linear-gradient(135deg,#001f4d 0%,#003366 100%); }
+.slide-teal    { background:linear-gradient(135deg,#003333 0%,#005f5f 100%); }
+.slide-white   { background:#fff; color:#212529; }
+.slide-light   { background:#f8f9fa; color:#212529; }
+.slide-green   { background:linear-gradient(135deg,#0a3d1f 0%,#1f7a3c 100%); }
+.slide-purple  { background:linear-gradient(135deg,#1a0a3d 0%,#3d1a7a 100%); }
+.slide-amber   { background:linear-gradient(135deg,#3d2a00 0%,#7a5200 100%); }
+
+.slide-label { font-family:'Segoe UI',system-ui,sans-serif; font-size:0.7rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--gold); margin-bottom:10px; }
+.slide-white .slide-label,.slide-light .slide-label { color:var(--crimson); }
+.slide-green .slide-label { color:#a8f0c8; }
+.slide-purple .slide-label { color:#c8a8ff; }
+.slide-amber .slide-label { color:#f0c870; }
+
+.slide h1 { font-size:2.85rem; line-height:1.15; font-weight:700; margin-bottom:18px; }
+.slide h2 { font-size:1.9rem; line-height:1.2; font-weight:700; margin-bottom:14px; }
+.slide h3 { font-size:1.15rem; font-weight:700; margin-bottom:8px; }
+.slide p  { font-size:1.02rem; line-height:1.65; margin-bottom:10px; }
+.slide li { font-size:0.95rem; line-height:1.6; margin-bottom:6px; }
+.slide ul { padding-left:20px; }
+.slide-white h2,.slide-white h3 { color:var(--navy); }
+.slide-light h2,.slide-light h3 { color:var(--navy); }
+.subtitle { font-size:1.1rem; color:rgba(255,255,255,0.65); font-style:italic; }
+.subtitle-dark { color:var(--muted); font-style:italic; font-size:0.98rem; }
+
+.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:16px; }
+.grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-top:16px; }
+
+.card { border-radius:8px; padding:16px 20px; font-family:'Segoe UI',system-ui,sans-serif; }
+.card-glass { background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); }
+.card-white { background:#fff; color:#212529; box-shadow:0 2px 8px rgba(0,0,0,0.12); }
+.card-gold  { background:#fffdf5; border-left:4px solid var(--gold); color:#212529; }
+.card-crimson { background:#fff5f5; border-left:4px solid var(--crimson); color:#212529; }
+.card-green { background:#f0fff4; border-left:4px solid var(--green); color:#212529; }
+.card h3 { font-size:0.9rem; margin-bottom:7px; }
+.card p,.card li { font-size:0.84rem; line-height:1.55; }
+.card ul { padding-left:16px; }
+
+.code-block { background:#1e1e2e; color:#cdd6f4; border-radius:6px; padding:14px 18px; font-family:'Courier New',Consolas,monospace; font-size:0.8rem; line-height:1.55; margin:10px 0; overflow-x:auto; }
+.code-block .kw  { color:#cba6f7; }
+.code-block .str { color:#a6e3a1; }
+.code-block .num { color:#fab387; }
+.code-block .com { color:#6c7086; font-style:italic; }
+.code-block .out { color:#f5c2e7; font-style:italic; }
+
+.highlight      { background:var(--gold);    color:#000; padding:2px 8px; border-radius:4px; font-weight:700; }
+.highlight-red  { background:var(--crimson); color:#fff; padding:2px 8px; border-radius:4px; font-weight:700; }
+.highlight-green{ background:var(--green);   color:#fff; padding:2px 8px; border-radius:4px; font-weight:700; }
+
+.tag { display:inline-block; padding:2px 9px; border-radius:3px; font-size:0.7rem; font-weight:700; font-family:'Segoe UI',system-ui,sans-serif; margin:2px; }
+.tag-gold   { background:var(--gold);    color:#000; }
+.tag-red    { background:var(--crimson); color:#fff; }
+.tag-green  { background:var(--green);   color:#fff; }
+.tag-navy   { background:var(--navy);    color:#fff; }
+.tag-purple { background:#5b21b6;        color:#fff; }
+.tag-teal   { background:#0f766e;        color:#fff; }
+
+.flow { display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin:14px 0; font-family:'Segoe UI',system-ui,sans-serif; }
+.flow-box { border-radius:6px; padding:9px 14px; text-align:center; min-width:90px; font-size:0.83rem; }
+.flow-arrow { font-size:1.3rem; color:var(--gold); flex-shrink:0; }
+
+.section-divider { position:absolute; top:20px; left:72px; font-family:'Segoe UI',system-ui,sans-serif; font-size:0.7rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; opacity:0.4; }
+.slide-num { position:absolute; top:20px; right:28px; font-family:'Segoe UI',system-ui,sans-serif; font-size:0.75rem; color:rgba(255,255,255,0.2); }
+.slide-white .slide-num,.slide-light .slide-num { color:rgba(0,0,0,0.15); }
+
+.neuron { width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.68rem; font-weight:700; font-family:'Segoe UI',system-ui,sans-serif; }
+
+.section-banner { display:inline-block; background:var(--gold); color:#000; font-family:'Segoe UI',system-ui,sans-serif; font-size:0.73rem; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; padding:4px 14px; border-radius:4px; margin-bottom:14px; }
+
+table.data-table { width:100%; border-collapse:collapse; font-family:'Segoe UI',system-ui,sans-serif; font-size:0.82rem; }
+table.data-table th { text-align:left; padding:7px 10px; background:rgba(255,255,255,0.08); font-weight:700; }
+table.data-table td { padding:6px 10px; }
+.slide-light table.data-table th, .slide-white table.data-table th { background:var(--navy); color:#fff; }
+.slide-light table.data-table tr:nth-child(even) td, .slide-white table.data-table tr:nth-child(even) td { background:#f8f9fa; }
+.mono { font-family:'Courier New',Consolas,monospace; }
+.verified { display:inline-block; font-size:0.62rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:1px 7px; border-radius:3px; background:rgba(31,122,60,0.25); color:#a8f0c8; border:1px solid rgba(168,240,200,0.35); margin-left:6px; }
+.slide-light .verified, .slide-white .verified { background:#f0fff4; color:#1f7a3c; border-color:#c3e6cb; }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div id="slide-counter">1 / 34</div>
+<div class="slide-controls">
+  <button onclick="prevSlide()">← Prev</button>
+  <button onclick="nextSlide()">Next →</button>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     TITLE
+     ══════════════════════════════════════════════════════ -->
+<div class="slide slide-navy active">
+  <span class="slide-num">1</span>
+  <div class="slide-label">ComplianceGPT Lab · AI Innovation &amp; Diffusion REU 2026</div>
+  <h1>Neural Networks → Transformers → LLMs</h1>
+  <p class="subtitle">A detailed walkthrough of how we got from a single neuron to Gemma3-4B — matched to notebooks 02, 04, 05, 06</p>
+  <div style="margin-top:32px;font-family:'Segoe UI',system-ui,sans-serif;">
+    <div class="flow">
+      <div class="flow-box" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);">
+        <div style="font-size:0.68rem;color:var(--gold);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;">teach_02</div>
+        <div style="font-weight:700;">Neural Networks</div>
+        <div style="font-size:0.72rem;color:rgba(255,255,255,0.5);margin-top:2px;">XOR, backprop, depth, scale</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);">
+        <div style="font-size:0.68rem;color:var(--gold);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;">teach_04</div>
+        <div style="font-weight:700;">Transformers</div>
+        <div style="font-size:0.72rem;color:rgba(255,255,255,0.5);margin-top:2px;">tokens, attention, Q/K/V</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);">
+        <div style="font-size:0.68rem;color:var(--gold);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;">teach_05</div>
+        <div style="font-weight:700;">Encoders</div>
+        <div style="font-size:0.72rem;color:rgba(255,255,255,0.5);margin-top:2px;">sentence embeddings</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="background:rgba(255,165,0,0.2);border:2px solid var(--gold);">
+        <div style="font-size:0.68rem;color:var(--gold);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;">teach_06</div>
+        <div style="font-weight:700;">LLMs — Real Results</div>
+        <div style="font-size:0.72rem;color:rgba(255,255,255,0.5);margin-top:2px;">94.2% on GoldCoin</div>
+      </div>
+    </div>
+  </div>
+  <div class="card card-glass" style="margin-top:24px;">
+    <p style="font-size:0.92rem;">Every number on a <span class="verified">verified</span> slide was computed live from this repo's actual data during prep for today — <span class="mono" style="font-size:0.8rem;">experiments/finalserverrun/final_vast_gemma3_4b.csv</span> (137 cases) and the four instructor notebooks. Two demo cells needed a fix before class — flagged where they come up.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PART 1 — NEURAL NETWORKS
+     ══════════════════════════════════════════════════════ -->
+<div class="slide slide-purple">
+  <span class="slide-num">2</span>
+  <div class="section-divider">Part 1 — Neural Networks</div>
+  <div class="section-banner" style="background:#7c3aed;color:#fff;">Part 1 · Neural Networks (teach_02_dl.ipynb)</div>
+  <h2>Learning Arc</h2>
+  <p style="color:rgba(255,255,255,0.8);">Five steps, in order, each one motivated by the failure of the step before it.</p>
+  <div class="grid-2" style="margin-top:18px;">
+    <div class="card card-glass">
+      <h3 style="color:#c8a8ff;">Today's arc</h3>
+      <ol style="font-size:0.9rem;padding-left:18px;line-height:1.9;">
+        <li>Show what a <strong>linear</strong> model can't do (XOR)</li>
+        <li>A neural network = layers of learned, non-linear transforms</li>
+        <li><strong>Backpropagation</strong> — the training loop, live</li>
+        <li><strong>Depth</strong> — why more layers solve harder problems</li>
+        <li><strong>Scale</strong> — same math, 10 billion× more parameters = LLM</li>
+      </ol>
+    </div>
+    <div class="card card-glass">
+      <h3 style="color:#c8a8ff;">Why this comes before Transformers</h3>
+      <p style="font-size:0.88rem;">Every Transformer layer is built from the same two primitives you'll see today: a matrix multiply + non-linearity, trained by backpropagation. Gemma3-4B has no new math — it has 4 billion of the same parameters you're about to train 17 of.</p>
+    </div>
+  </div>
+</div>
+
+<div class="slide slide-dark">
+  <span class="slide-num">3</span>
+  <div class="section-divider">Part 1 — Neural Networks</div>
+  <h2>The Wall — What Logistic Regression Can't Do</h2>
+  <p style="color:rgba(255,255,255,0.7);">Logistic Regression draws one straight line (or flat plane) to separate classes. XOR is the smallest problem where that's mathematically impossible.</p>
+  <div class="grid-2" style="margin-top:20px;">
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">XOR(A, B) = 1 only when exactly one is 1</h3>
+      <table class="data-table" style="margin-top:8px;">
+        <tr><th>A</th><th>B</th><th>XOR</th></tr>
+        <tr><td>0</td><td>0</td><td>0</td></tr>
+        <tr><td>0</td><td>1</td><td>1</td></tr>
+        <tr><td>1</td><td>0</td><td>1</td></tr>
+        <tr><td>1</td><td>1</td><td>0</td></tr>
+      </table>
+      <p style="font-size:0.85rem;margin-top:10px;">The two 1s sit in opposite corners of the plane. No single straight line separates them from the two 0s.</p>
+    </div>
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">Logistic Regression on XOR <span class="verified">verified</span></h3>
+      <div class="code-block">
+<span class="kw">from</span> sklearn.linear_model <span class="kw">import</span> LogisticRegression
+lr = LogisticRegression()
+lr.fit(X_xor, y_xor)
+<span class="com"># Predictions: [0 0 0 0]</span>
+<span class="com"># True labels: [0 1 1 0]</span>
+<span class="out"># Accuracy: 50%</span>
+      </div>
+      <p style="font-size:0.87rem;">A coin flip. It predicts the majority class every time — there is no line to find, so gradient descent gives up at the best it can do.</p>
+    </div>
+  </div>
+</div>
+
+<div class="slide slide-navy">
+  <span class="slide-num">4</span>
+  <div class="section-divider">Part 1 — Neural Networks</div>
+  <h2>Solving XOR — and a Live Gotcha <span class="verified">verified</span></h2>
+  <p style="color:rgba(255,255,255,0.75);">One hidden layer (4 neurons, ReLU) should learn a new coordinate system where XOR becomes linearly separable. Run live today, it doesn't always — and that's worth teaching too.</p>
+  <div class="grid-2" style="margin-top:18px;">
+    <div class="card card-glass" style="border-left:3px solid #f08080;">
+      <h3 style="color:#f08080;">As scripted (relu + adam + seed 42)</h3>
+      <div class="code-block" style="font-size:0.76rem;">
+MLPClassifier(hidden_layer_sizes=(4,),
+  activation=<span class="str">'relu'</span>, random_state=42)
+<span class="out"># Predictions: [0 0 0 0]
+# Accuracy: 50%  ← stuck!</span>
+      </div>
+      <p style="font-size:0.85rem;">This exact configuration hits a <strong>dead ReLU</strong>: with this seed's initial weights, every hidden unit's input starts negative, ReLU zeroes it, and the gradient is zero everywhere — training can't escape.</p>
+    </div>
+    <div class="card card-glass" style="border-left:3px solid #a8f0c8;">
+      <h3 style="color:#a8f0c8;">The fix — swap activation to tanh</h3>
+      <div class="code-block" style="font-size:0.76rem;">
+MLPClassifier(hidden_layer_sizes=(4,),
+  activation=<span class="str">'tanh'</span>, random_state=42)
+<span class="out"># Predictions: [0 1 1 0]
+# Accuracy: 100%
+# Params: 17 (12 weights + 5 bias)</span>
+      </div>
+      <p style="font-size:0.85rem;">tanh can't die the same way (its output is never flat-zero for negative inputs), so it always finds the fold. Same architecture, same seed, different result.</p>
+    </div>
+  </div>
+  <div class="card card-gold" style="margin-top:14px;">
+    <h3>Teaching moment</h3>
+    <p style="font-size:0.88rem;"><strong>"Whether a network trains isn't just about whether the function is representable — it's about whether gradient descent can find it from this starting point."</strong> This is the single most common real-world debugging issue with neural nets, and you just watched it happen on the simplest possible example. <em>Before class: edit the activation in <span class="mono">teach_02_dl.ipynb</span> cell 4 from <span class="mono">'relu'</span> to <span class="mono">'tanh'</span>, or the printed narration ("→ 100%") will contradict the printed accuracy line.</em></p>
+  </div>
+</div>
+
+<div class="slide slide-purple">
+  <span class="slide-num">5</span>
+  <div class="section-divider">Part 1 — Neural Networks</div>
+  <h2>What a Neuron Actually Computes</h2>
+  <p style="color:rgba(255,255,255,0.8);">A neural network is a function built from millions of copies of one simple unit.</p>
+  <div class="grid-2" style="margin-top:18px;">
+    <div>
+      <div class="card card-glass" style="margin-bottom:14px;">
+        <div style="background:rgba(0,0,0,0.35);border-radius:4px;padding:12px;font-family:'Courier New',monospace;font-size:0.85rem;text-align:center;margin-bottom:8px;">
+          output = ReLU(w₁x₁ + w₂x₂ + ... + wₙxₙ + bias)
+        </div>
+        <ul style="font-size:0.85rem;">
+          <li><strong>w</strong> — weights, learned during training</li>
+          <li><strong>bias</strong> — offset, also learned</li>
+          <li><strong>ReLU(z) = max(0, z)</strong> — the non-linearity. Without it, stacking layers is mathematically identical to one layer.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card card-glass">
+      <h3 style="color:#c8a8ff;">Manual neuron: w₁=0.7, w₂=0.3, bias=−0.2 <span class="verified">verified</span></h3>
+      <table class="data-table" style="margin-top:8px;">
+        <tr><th>Input (x₁,x₂)</th><th>z = 0.7x₁+0.3x₂−0.2</th><th>ReLU(z)</th></tr>
+        <tr><td>(0, 0)</td><td>−0.20</td><td>0.00</td></tr>
+        <tr><td>(0, 1)</td><td>+0.10</td><td>0.10</td></tr>
+        <tr><td>(1, 0)</td><td>+0.50</td><td>0.50</td></tr>
+        <tr><td>(1, 1)</td><td>+0.80</td><td>0.80</td></tr>
+      </table>
+      <p style="font-size:0.85rem;margin-top:10px;">One neuron is a weighted vote with a floor at zero. Gemma3-4B repeats this ~4 billion times, arranged in 34 layers.</p>
+    </div>
+  </div>
+</div>
+
+<div class="slide slide-dark">
+  <span class="slide-num">6</span>
+  <div class="section-divider">Part 1 — Neural Networks</div>
+  <h2>Backpropagation — the Training Loop, Live <span class="verified">verified</span></h2>
+  <p style="color:rgba(255,255,255,0.7);">Training is four steps repeated until the loss stops improving. Below: real loss values training an 8×4 hidden network on XOR (tanh, lr=0.1).</p>
+  <div style="margin-top:16px;font-family:'Segoe UI',system-ui,sans-serif;">
+    <div style="display:flex;gap:0;border:1px solid rgba(255,255,255,0.15);border-radius:8px;overflow:hidden;">
+      <div style="flex:1;padding:14px;border-right:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);">
+        <div style="font-size:0.65rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;">1 · Forward</div>
+        <p style="font-size:0.82rem;">Input flows through every layer. Final layer produces a prediction.</p>
+      </div>
+      <div style="flex:1;padding:14px;border-right:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);">
+        <div style="font-size:0.65rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;">2 · Loss</div>
+        <p style="font-size:0.82rem;">Compare prediction to the true label. One number: how wrong.</p>
+      </div>
+      <div style="flex:1;padding:14px;border-right:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);">
+        <div style="font-size:0.65rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;">3 · Backward</div>
+        <p style="font-size:0.82rem;">Chain rule: how much did each weight contribute to the error?</p>
+      </div>
+      <div style="flex:1;padding:14px;background:rgba(255,255,255,0.04);">
+        <div style="font-size:0.65rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;">4 · Update</div>
+        <p style="font-size:0.82rem;">Nudge every weight to reduce the loss. Repeat from step 1.</p>
+      </div>
+    </div>
+  </div>
+  <div class="card card-glass" style="margin-top:16px;">
+    <h3 style="color:var(--gold);">Loss curve — 200 epochs on XOR</h3>
+    <table class="data-table" style="margin-top:8px;">
+      <tr><th>Epoch</th><th>1</th><th>10</th><th>25</th><th>50</th><th>100</th><th>150</th><th>200</th></tr>
+      <tr><td>Loss</td><td>0.685</td><td>0.340</td><td>0.152</td><td>0.085</td><td>0.072</td><td>0.071</td><td>0.071</td></tr>
+    </table>
+    <p style="font-size:0.85rem;margin-top:10px;">Sharp drop in the first ~50 epochs, then it flattens near zero — the network has found the fold in feature space that separates the two classes. Final accuracy: 100%.</p>
+  </div>
+</div>
+
+<div class="slide slide-dark">
+  <span class="slide-num">7</span>
+  <div class="section-divider">Part 1 — Neural Networks</div>
+  <h2>Why Depth Matters <span class="verified">verified</span></h2>
+  <p style="color:rgba(255,255,255,0.7);">XOR needed one hidden layer. A harder, checkerboard-shaped pattern (200 points, 4 alternating quadrant classes) needs more.</p>
+  <table class="data-table" style="margin-top:16px;">
+    <tr><th>Architecture</th><th>5-fold CV accuracy</th><th></th></tr>
+    <tr><td>Logistic Regression (0 hidden)</td><td>46.5%</td><td>█████████</td></tr>
+    <tr><td>Shallow MLP (1 layer × 8)</td><td>45.0%</td><td>█████████</td></tr>
+    <tr><td>Deeper MLP (2 layers, 32×16)</td><td>65.0%</td><td>█████████████</td></tr>
+    <tr><td>Deep MLP (4 layers, 64×32×16×8)</td><td><strong style="color:var(--gold);">73.5%</strong></td><td>███████████████</td></tr>
+  </table>
+  <div class="grid-2" style="margin-top:16px;">
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">Read this carefully</h3>
+      <p style="font-size:0.86rem;">A single hidden layer is barely better than no hidden layer at all on this problem — it's actually <em>worse</em> here (45.0% vs 46.5%) due to optimization noise on a hard, highly non-linear boundary. Depth is what buys the real gain: 2 layers → 65%, 4 layers → 73.5%.</p>
+    </div>
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">The 2012 AlexNet moment</h3>
+      <p style="font-size:0.86rem;">ImageNet: best 2011 approach, 26% error. AlexNet — a deep network on GPUs — 15.3% error. A 10-point gap overnight. Every layer refines the representation: edges → shapes → objects. In text: tokens → phrases → legal concepts.</p>
+    </div>
+  </div>
+</div>
+
+<div class="slide slide-light">
+  <span class="slide-num">8</span>
+  <div class="section-divider">Part 1 — Neural Networks</div>
+  <h2>Scale — Parameters and Compute</h2>
+  <p class="subtitle-dark">Same math you just ran (17 parameters). Modern LLMs are the identical architecture, scaled by ten billion.</p>
+  <table class="data-table" style="margin-top:16px;">
+    <tr><th>Model</th><th>Parameters</th><th>Training compute</th><th>Notes</th></tr>
+    <tr><td>Perceptron (1958)</td><td>1</td><td>punch cards</td><td>XOR impossible</td></tr>
+    <tr><td>Early MLP (1980s)</td><td>1,000</td><td>CPU seconds</td><td>toy problems</td></tr>
+    <tr><td>LeNet (1998)</td><td>60,000</td><td>CPU hours</td><td>MNIST digits</td></tr>
+    <tr><td>AlexNet (2012)</td><td>61,000,000</td><td>GPU days</td><td>ImageNet photos</td></tr>
+    <tr><td>BERT-base (2018)</td><td>110,000,000</td><td>GPU weeks</td><td>NLP understanding</td></tr>
+    <tr><td>GPT-3 (2020)</td><td>175,000,000,000</td><td>GPU months</td><td>few-shot learning</td></tr>
+    <tr style="background:#fffdf0;"><td><strong>Gemma3-4B (our model)</strong></td><td><strong>4,000,000,000</strong></td><td><strong>≈4 GPU-days</strong></td><td><strong>fits on one V100</strong></td></tr>
+    <tr><td>GPT-4 (est., 2023)</td><td>1,800,000,000,000</td><td>months (est.)</td><td>frontier model</td></tr>
+  </table>
+  <div class="card card-gold" style="margin-top:14px;">
+    <p style="font-size:0.88rem;">Every one of those parameters is a <span class="mono" style="font-size:0.8rem;">w</span> in a neuron exactly like the one on slide 5. Nothing new happens conceptually between here and Gemma3 — only scale, and (next section) how it reads sequences.</p>
+  </div>
+</div>
+
+<div class="slide slide-dark">
+  <span class="slide-num">9</span>
+  <div class="section-divider">Part 1 — Neural Networks</div>
+  <h2>Back to HIPAA — Does Depth Help? <span class="verified">verified</span></h2>
+  <p style="color:rgba(255,255,255,0.7);">Take the 9 boolean oracle predicates already extracted by Gemma3-4B for all 137 GoldCoin cases. Predict PERMITTED/DENIED from those 9 numbers alone — does a deeper network do better?</p>
+  <table class="data-table" style="margin-top:16px;">
+    <tr><th>Model (on 9 extracted booleans)</th><th>5-fold CV accuracy</th></tr>
+    <tr><td>Logistic Regression</td><td>68.0%</td></tr>
+    <tr><td>Decision Tree (depth 5)</td><td>64.3%</td></tr>
+    <tr><td>MLP (16×8)</td><td>63.6%</td></tr>
+    <tr><td>Deep MLP (64×32×16)</td><td>63.6%</td></tr>
+    <tr style="background:rgba(255,165,0,0.15);"><td><strong>Actual system: LLM extraction → Soufflé engine</strong></td><td><strong style="color:var(--gold);">94.2%</strong></td></tr>
+  </table>
+  <div class="card card-glass" style="margin-top:14px;border-left:3px solid var(--gold);">
+    <h3 style="color:var(--gold);">The honest, more interesting result</h3>
+    <p style="font-size:0.88rem;">Depth does <em>not</em> help here — a plain Logistic Regression on 9 clean booleans (68.0%) slightly beats every MLP variant. That's not a contradiction of slide 7: depth helps when the network has to <em>discover structure from raw signal</em> (pixels, checkerboard coordinates, raw text). Once Gemma3 has already collapsed a 300-word legal narrative into 9 clean flags, there's no more structure left to discover — the hard part was the <strong>extraction</strong>, not the classification. That's the whole thesis of this week.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PART 2 — TRANSFORMERS & ATTENTION
+     ══════════════════════════════════════════════════════ -->
+<div class="slide slide-crimson">
+  <span class="slide-num">10</span>
+  <div class="section-divider">Part 2 — Transformers &amp; Attention</div>
+  <div class="section-banner">Part 2 · Transformers &amp; Attention (teach_04_transformers.ipynb)</div>
+  <h2>Learning Arc</h2>
+  <p style="color:rgba(255,255,255,0.85);">Neural networks need numeric input. Text isn't numeric, and it's sequential. This section answers: how does a network read a sentence, and why does context change meaning?</p>
+  <div class="grid-2" style="margin-top:18px;">
+    <div class="card card-glass">
+      <ol style="font-size:0.88rem;padding-left:18px;line-height:1.85;">
+        <li><strong>Tokenization</strong> — text → integers</li>
+        <li>The <strong>RNN problem</strong> — why sequential processing fades</li>
+        <li><strong>Self-attention</strong> — every token to every token</li>
+        <li>Same word, different meaning by context</li>
+        <li><strong>Positional encoding</strong> — how order survives</li>
+      </ol>
+    </div>
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">No GPU, no HuggingFace download</h3>
+      <p style="font-size:0.87rem;">Every demo in this section runs in plain <span class="mono" style="font-size:0.8rem;">numpy</span> on a laptop CPU — the attention mechanism is simple linear algebra. Scale (34 layers × 8 billion multiplications) is the only thing that requires a GPU.</p>
+    </div>
+  </div>
+</div>
+
+<div class="slide slide-dark">
+  <span class="slide-num">11</span>
+  <div class="section-divider">Part 2 — Transformers &amp; Attention</div>
+  <h2>Tokenization — Text Becomes Integers <span class="verified">verified</span></h2>
+  <p style="color:rgba(255,255,255,0.7);">LLMs process <strong>subword tokens</strong>, not words. GPT-4's tokenizer (cl100k_base, ~100k vocabulary) is used here as a stand-in — Gemma3 uses a similarly-sized vocabulary (256,128 tokens).</p>
+  <div class="grid-2" style="margin-top:18px;">
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">Real HIPAA sentence, tokenized</h3>
+      <div style="background:rgba(0,0,0,0.3);border-radius:4px;padding:10px;font-family:'Courier New',monospace;font-size:0.78rem;">
+        "HIPAA §164.512(e) permits<br>disclosure with a court order."
+      </div>
+      <p style="font-size:0.85rem;margin-top:8px;">Legal citations like <span class="mono" style="font-size:0.78rem;">§164.512(e)</span> split into several small pieces — the symbol §, the section number, the parenthetical — each an independent token the model must reassemble meaning from.</p>
+    </div>
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">Token counts, all 137 GoldCoin scenarios</h3>
+      <table class="data-table" style="margin-top:8px;">
+        <tr><th>Min</th><th>Median</th><th>Mean</th><th>Max</th></tr>
+        <tr><td>47</td><td>58</td><td>58.0</td><td>76</td></tr>
+      </table>
+      <p style="font-size:0.85rem;margin-top:10px;">Gemma3-4B context window: <strong>8,192 tokens</strong>. Even the longest scenario prompt uses under 1% of it — plenty of headroom for the schema + instructions template on top.</p>
+    </div>
+  </div>
+</div>
+
+<div class="slide slide-teal">
+  <span class="slide-num">12</span>
+  <div class="section-divider">Part 2 — Transformers &amp; Attention</div>
+  <h2>The RNN Problem — Why Sequential Fails <span class="verified">verified</span></h2>
+  <p style="color:rgba(255,255,255,0.75);">Before Transformers, RNNs read text one token at a time, passing a "hidden state" forward. Each step compresses everything seen so far into one fixed-size vector.</p>
+  <div class="grid-2" style="margin-top:18px;">
+    <div class="card card-teal" style="background:rgba(0,95,95,0.4);border:1px solid rgba(0,200,200,0.25);">
+      <h3>Signal retention: hidden = 0.9 × hidden + 0.1 × new input</h3>
+      <table class="data-table" style="margin-top:8px;">
+        <tr><th>After N tokens</th><th>Signal remaining</th></tr>
+        <tr><td>1</td><td>90.0%</td></tr>
+        <tr><td>5</td><td>59.0%</td></tr>
+        <tr><td>10</td><td>34.9%</td></tr>
+        <tr><td>20</td><td>12.2%</td></tr>
+        <tr><td>50</td><td>0.5%</td></tr>
+      </table>
+    </div>
+    <div class="card card-teal" style="background:rgba(0,95,95,0.4);border:1px solid rgba(0,200,200,0.25);">
+      <h3>Real HIPAA sentence (34 words)</h3>
+      <p style="font-size:0.85rem;font-style:italic;">"The <strong>patient</strong>, who was admitted after a workplace injury treated by a physician who had previously disclosed records in an unrelated matter, filed for damages claiming the hospital had shared information <strong>without court authorization</strong>."</p>
+      <p style="font-size:0.85rem;margin-top:8px;">Subject ("patient") is at word 2. Key fact ("without court authorization") is at word 34.</p>
+      <p style="font-size:0.9rem;margin-top:8px;color:#a8f0c8;font-weight:700;">Signal from "patient" surviving to word 34: <strong>2.78%</strong></p>
+    </div>
+  </div>
+  <p style="margin-top:12px;color:rgba(255,255,255,0.6);font-size:0.85rem;font-family:'Segoe UI',system-ui,sans-serif;">→ By the time an RNN reaches the legal fact, it has essentially forgotten who the subject is. This is the vanishing gradient problem, and it's exactly why Transformers throw sequential processing out entirely.</p>
+</div>
+
+<div class="slide slide-crimson">
+  <span class="slide-num">13</span>
+  <div class="section-divider">Part 2 — Transformers &amp; Attention</div>
+  <h2>Self-Attention — Every Token to Every Token</h2>
+  <p style="color:rgba(255,255,255,0.85);">For each token, compute a score for how much it should "look at" every other token. Same word, different sentence, different attention pattern, different meaning. <em style="font-size:0.85rem;">(Illustrative weights below — in a trained model these are learned, not hand-set.)</em></p>
+  <div class="grid-2" style="margin-top:18px;">
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">LEGAL: "The judge signed the order to release records"</h3>
+      <div style="background:rgba(0,0,0,0.3);border-radius:4px;padding:10px;font-family:'Segoe UI',system-ui,sans-serif;font-size:0.78rem;margin-top:8px;">
+        <div>judge&nbsp;&nbsp;<span style="color:#a8f0c8;">0.20</span> &nbsp;signed&nbsp;<span style="color:#a8f0c8;">0.15</span> &nbsp;release&nbsp;<span style="color:#a8f0c8;">0.09</span></div>
+        <div style="margin-top:4px;color:var(--gold);">→ order = COURT ORDER → has_court_order = true</div>
+      </div>
+    </div>
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">MEDICAL: "The physician wrote a medication order"</h3>
+      <div style="background:rgba(0,0,0,0.3);border-radius:4px;padding:10px;font-family:'Segoe UI',system-ui,sans-serif;font-size:0.78rem;margin-top:8px;">
+        <div>physician&nbsp;<span style="color:#90c4ff;">0.18</span> &nbsp;medication&nbsp;<span style="color:#90c4ff;">0.24</span></div>
+        <div style="margin-top:4px;color:#90c4ff;">→ order = MEDICATION ORDER → has_court_order = false</div>
+      </div>
+    </div>
+  </div>
+  <div class="card card-glass" style="margin-top:16px;text-align:center;">
+    <p style="font-size:1rem;font-weight:700;">SAME WORD. DIFFERENT CONTEXT. DIFFERENT MEANING.<br><span style="font-weight:400;font-size:0.88rem;">This is exactly what TF-IDF (Part 3, next section) cannot represent — and exactly why transformers exist.</span></p>
+  </div>
+</div>
+
+<div class="slide slide-dark">
+  <span class="slide-num">14</span>
+  <div class="section-divider">Part 2 — Transformers &amp; Attention</div>
+  <h2>Attention Math — Q, K, V <span class="verified">verified</span></h2>
+  <p style="color:rgba(255,255,255,0.7);">From "Attention Is All You Need" (Vaswani et al., 2017):</p>
+  <div style="background:rgba(0,0,0,0.35);border-radius:6px;padding:14px;text-align:center;font-family:'Courier New',monospace;font-size:1.05rem;margin:10px 0;">
+    Attention(Q, K, V) = softmax( QKᵀ / √dₖ ) V
+  </div>
+  <div class="grid-2" style="margin-top:12px;">
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">What Q, K, V mean</h3>
+      <ul style="font-size:0.87rem;">
+        <li><strong>Q</strong> (Query) — what is this token looking for?</li>
+        <li><strong>K</strong> (Key) — what does each token offer?</li>
+        <li><strong>V</strong> (Value) — what information does it carry?</li>
+        <li><strong>√dₖ</strong> — scales the dot product so gradients don't explode</li>
+      </ul>
+    </div>
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">Toy attention matrix — 5 tokens, d_model=4</h3>
+      <div class="code-block" style="font-size:0.72rem;">
+      tok0  tok1  tok2  tok3  tok4
+tok0: 0.20  0.21  0.14  0.14  0.30
+tok1: 0.21  0.18  0.12  0.16  0.34
+tok2: 0.16  0.17  0.09  0.13  0.45
+tok3: 0.20  0.14  0.19  0.34  0.13
+tok4: 0.14  0.25  0.35  0.14  0.11
+      </div>
+      <p style="font-size:0.8rem;">Each row sums to 1.0 — a probability distribution over "how much attention this token pays to every token."</p>
+    </div>
+  </div>
+  <p style="margin-top:10px;font-size:0.85rem;color:rgba(255,255,255,0.5);font-family:'Segoe UI',system-ui,sans-serif;">In Gemma3-4B: d_model=2048, seq_len up to 8,192 → an 8,192×8,192 attention matrix (67M values) computed in parallel on GPU, for every one of 8 attention heads, at every one of 34 layers.</p>
+</div>
+
+<div class="slide slide-purple">
+  <span class="slide-num">15</span>
+  <div class="section-divider">Part 2 — Transformers &amp; Attention</div>
+  <h2>Positional Encoding — How Order Survives <span class="verified">verified</span></h2>
+  <p style="color:rgba(255,255,255,0.8);">If every token attends to every other token simultaneously, attention alone can't tell "court order" from "order court" — it's permutation-invariant. Transformers add a positional vector to each token's embedding.</p>
+  <div class="grid-2" style="margin-top:16px;">
+    <div class="card card-glass">
+      <div style="background:rgba(0,0,0,0.35);border-radius:6px;padding:12px;text-align:center;font-family:'Courier New',monospace;font-size:0.92rem;margin-bottom:10px;">
+        PE(pos, 2i) = sin(pos / 10000^(2i/d))<br>
+        PE(pos, 2i+1) = cos(pos / 10000^(2i/d))
+      </div>
+      <p style="font-size:0.85rem;">Sinusoidal, fixed (not learned). Each position gets a unique fingerprint; nearby positions get similar fingerprints, so the model can infer relative distance.</p>
+    </div>
+    <div class="card card-glass">
+      <h3 style="color:#c8a8ff;">First 6 positions, 8 dimensions</h3>
+      <div class="code-block" style="font-size:0.68rem;">
+pos0: +0.00 +1.00 +0.00 +1.00 +0.00 +1.00 +0.00 +1.00
+pos1: +0.84 +0.54 +0.10 +1.00 +0.01 +1.00 +0.00 +1.00
+pos2: +0.91 -0.42 +0.20 +0.98 +0.02 +1.00 +0.00 +1.00
+pos3: +0.14 -0.99 +0.30 +0.96 +0.03 +1.00 +0.00 +1.00
+pos4: -0.76 -0.65 +0.39 +0.92 +0.04 +1.00 +0.00 +1.00
+pos5: -0.96 +0.28 +0.48 +0.88 +0.05 +1.00 +0.00 +1.00
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide slide-dark">
+  <span class="slide-num">16</span>
+  <div class="section-divider">Part 2 — Transformers &amp; Attention</div>
+  <h2>The Full Forward Pass + Gemma3-4B Specs</h2>
+  <div style="margin-top:14px;font-family:'Segoe UI',system-ui,sans-serif;font-size:0.8rem;">
+    <div style="display:flex;flex-direction:column;gap:2px;">
+      <div style="display:flex;gap:12px;background:rgba(255,255,255,0.05);border-radius:5px;padding:8px 14px;"><strong style="min-width:110px;color:var(--gold);">TOKENIZE</strong><span>"The judge signed a court order" → [512, 4008, 9431, 287, 2267, 1502]</span></div>
+      <div style="display:flex;gap:12px;background:rgba(255,255,255,0.05);border-radius:5px;padding:8px 14px;"><strong style="min-width:110px;color:var(--gold);">EMBED</strong><span>each ID → 2048-dim vector (learned lookup table)</span></div>
+      <div style="display:flex;gap:12px;background:rgba(255,255,255,0.05);border-radius:5px;padding:8px 14px;"><strong style="min-width:110px;color:var(--gold);">+ POSITION</strong><span>add positional encoding to each embedding</span></div>
+      <div style="display:flex;gap:12px;background:rgba(255,255,255,0.05);border-radius:5px;padding:8px 14px;"><strong style="min-width:110px;color:var(--gold);">LAYERS 1–34</strong><span>self-attention + feed-forward + residual, repeated. Early: syntax. Mid: semantics. Late: reasoning.</span></div>
+      <div style="display:flex;gap:12px;background:rgba(31,122,60,0.2);border-radius:5px;padding:8px 14px;"><strong style="min-width:110px;color:#a8f0c8;">OUTPUT</strong><span>final hidden states → 256,128 vocabulary scores → next-token probabilities</span></div>
+    </div>
+  </div>
+  <div class="card card-glass" style="margin-top:16px;">
+    <h3 style="color:var(--gold);">Gemma3-4B specifications</h3>
+    <div class="grid-3" style="margin-top:6px;">
+      <div style="font-size:0.85rem;"><strong>Parameters:</strong> 4 billion<br><strong>Layers:</strong> 34<br><strong>d_model:</strong> 2,048</div>
+      <div style="font-size:0.85rem;"><strong>Attention heads:</strong> 8<br><strong>Context window:</strong> 8,192 tokens<br><strong>Vocabulary:</strong> 256,128</div>
+      <div style="font-size:0.85rem;"><strong>GPU memory:</strong> ~8GB @ 4-bit<br><strong>Fits on:</strong> one V100 (cluster)</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PART 3 — ENCODERS & SENTENCE EMBEDDINGS
+     ══════════════════════════════════════════════════════ -->
+<div class="slide slide-amber">
+  <span class="slide-num">17</span>
+  <div class="section-divider">Part 3 — Encoders &amp; Embeddings</div>
+  <div class="section-banner" style="background:#b45309;color:#fff;">Part 3 · Encoders &amp; Sentence Embeddings (teach_05_encoders.ipynb)</div>
+  <h2>Learning Arc</h2>
+  <p style="color:rgba(255,255,255,0.85);">The Transformer architecture splits into two families. We use the understanding half — an encoder — to finally represent whole-sentence meaning as geometry.</p>
+  <table class="data-table" style="margin-top:16px;">
+    <tr><th></th><th>Encoder (BERT)</th><th>Decoder (GPT, Gemma)</th></tr>
+    <tr><td><strong>Direction</strong></td><td>Bidirectional (left + right)</td><td>Left-to-right only</td></tr>
+    <tr><td><strong>Training task</strong></td><td>Predict masked words</td><td>Predict next word</td></tr>
+    <tr><td><strong>Use for</strong></td><td>Understanding, classification</td><td>Generation, completion</td></tr>
+    <tr><td><strong>Today's example</strong></td><td>Sentence embeddings</td><td>LLM oracle extraction</td></tr>
+  </table>
+</div>
+
+<div class="slide slide-light">
+  <span class="slide-num">18</span>
+  <div class="section-divider">Part 3 — Encoders &amp; Embeddings</div>
+  <h2>Closing the Semantic Gap <span class="verified">verified</span></h2>
+  <p class="subtitle-dark">Query: "A court order was issued requiring release of the records." Cosine similarity to other phrases, computed live with <span class="mono" style="font-size:0.85rem;">all-MiniLM-L6-v2</span>.</p>
+  <table class="data-table" style="margin-top:14px;">
+    <tr><th>Phrase</th><th>TF-IDF sim</th><th>Embedding sim</th></tr>
+    <tr><td>"A judicial mandate compelled disclosure of patient information"</td><td>0.058</td><td><strong style="color:var(--green);">0.566</strong></td></tr>
+    <tr><td>"The subpoena issued by the court authorized disclosure"</td><td>0.128</td><td><strong style="color:var(--green);">0.599</strong></td></tr>
+    <tr><td>"Law enforcement asked the hospital to turn over the file"</td><td>0.060</td><td>0.617</td></tr>
+    <tr><td>"The officer implied there might be a court order forthcoming"</td><td>0.162</td><td>0.561</td></tr>
+    <tr><td>"The physician requested records for treatment purposes"</td><td>0.043</td><td>0.638</td></tr>
+  </table>
+  <div class="card card-gold" style="margin-top:14px;">
+    <p style="font-size:0.88rem;"><strong>TF-IDF</strong>: "court order" and "judicial mandate" score 0.058 — near zero, despite triggering the identical HIPAA exception. <strong>Embeddings</strong> lift that to 0.566 — real progress, but notice it's not close to 1.0 either. Embeddings capture rough topic similarity, not legal validity — and interestingly, the hedged "implied there might be a court order" (0.561) scores about the <em>same</em> as genuine court-order language, not clearly higher. Embeddings alone can't reliably tell real authority from a passing mention of authority. That's the gap the LLM has to close.</p>
+  </div>
+</div>
+
+<div class="slide slide-white">
+  <span class="slide-num">19</span>
+  <div class="section-divider">Part 3 — Encoders &amp; Embeddings</div>
+  <h2>Does It Actually Improve Classification? <span class="verified">verified</span></h2>
+  <p class="subtitle-dark">Real 5-fold cross-validation, all 137 GoldCoin scenarios, predicting PERMITTED vs DENIED from text representation alone (no LLM extraction).</p>
+  <table class="data-table" style="margin-top:16px;">
+    <tr><th>Method</th><th>Accuracy</th><th></th></tr>
+    <tr><td>Majority-class baseline</td><td>63.5%</td><td style="color:var(--muted);">████████████</td></tr>
+    <tr><td>TF-IDF (uni+bigrams) + LogReg</td><td>63.5%</td><td style="color:var(--crimson);">████████████ (no better than guessing!)</td></tr>
+    <tr><td>Sentence embeddings + LogReg</td><td><strong>82.0%</strong> (±16.2%)</td><td style="color:var(--gold);">████████████████</td></tr>
+    <tr style="background:#fffdf0;"><td><strong>LLM extraction → formal engine</strong></td><td><strong style="color:var(--green);">94.2%</strong></td><td style="color:var(--green);">██████████████████</td></tr>
+  </table>
+  <div class="card card-crimson" style="margin-top:14px;">
+    <h3>The number that should surprise you</h3>
+    <p>TF-IDF + Logistic Regression gets <strong>exactly</strong> the majority-baseline accuracy — it learns nothing useful from the text at all on this task. Embeddings jump to 82% but with high fold-to-fold variance (±16.2%) — on 137 examples, embeddings are unstable. Only reading the full text in context, with an LLM, closes the rest of the gap reliably.</p>
+  </div>
+</div>
+
+<div class="slide slide-dark">
+  <span class="slide-num">20</span>
+  <div class="section-divider">Part 3 — Encoders &amp; Embeddings</div>
+  <h2>Semantic Search on Real GoldCoin Cases</h2>
+  <p style="color:rgba(255,255,255,0.7);">Embeddings let you search by <em>meaning</em>, not keywords — useful when writing adversarial test scenarios: find the real cases most similar to a hypothetical you're designing.</p>
+  <div class="code-block" style="margin-top:12px;">
+<span class="kw">def</span> semantic_search(query, top_k=5):
+    q_emb = model.encode([query])
+    sims = cosine_similarity(q_emb, X_emb)[0]
+    <span class="kw">return</span> sims.argsort()[::-1][:top_k]
+
+semantic_search(<span class="str">"judicial mandate requiring disclosure"</span>)
+<span class="com"># → ranks all 137 cases by embedding similarity,</span>
+<span class="com">#   not by shared vocabulary</span>
+  </div>
+  <div class="card card-glass" style="margin-top:14px;">
+    <h3 style="color:var(--gold);">Why this matters for your project</h3>
+    <p style="font-size:0.88rem;">If you're pursuing <strong>P1 Adversarial Robustness</strong>, this is your tool: write a new hedged scenario, embed it, and see which real cases it lands closest to. If it lands close to a DENIED case but you designed it to look PERMITTED, you've likely found a real Gemma3 failure mode before you even run the model.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PART 4 — LLMS: THE REAL SYSTEM
+     ══════════════════════════════════════════════════════ -->
+<div class="slide slide-green">
+  <span class="slide-num">21</span>
+  <div class="section-divider">Part 4 — LLMs: The Real System</div>
+  <div class="section-banner" style="background:#065f46;color:#fff;">Part 4 · LLMs — Real System Results (teach_06_llm.ipynb)</div>
+  <h2>Learning Arc</h2>
+  <p style="color:rgba(255,255,255,0.85);">Everything so far was building intuition on toy or synthetic data. This section is 100% real: the actual Gemma3-4B experiment on the Stony Brook cluster, 137 real GoldCoin court cases.</p>
+  <div class="flow" style="margin-top:12px;">
+    <div class="flow-box" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);">Court case text</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);">Gemma3-4B (V100 GPU)</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);">JSON: 5-tuple + 24 oracles</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);">Soufflé Datalog engine</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="background:rgba(255,165,0,0.25);border:1px solid var(--gold);">PERMITTED / DENIED</div>
+  </div>
+</div>
+
+<div class="slide slide-navy">
+  <span class="slide-num">22</span>
+  <div class="section-divider">Part 4 — LLMs: The Real System</div>
+  <h2>Headline Numbers <span class="verified">verified</span></h2>
+  <div class="grid-3" style="margin-top:16px;">
+    <div class="card card-glass" style="text-align:center;padding:18px;"><div style="font-size:2.2rem;font-weight:900;color:var(--gold);">129 / 137</div><div style="font-size:0.85rem;color:rgba(255,255,255,0.6);font-family:'Segoe UI',system-ui,sans-serif;">correct — 94.2% accuracy</div></div>
+    <div class="card card-glass" style="text-align:center;padding:18px;"><div style="font-size:2.2rem;font-weight:900;color:var(--gold);">87 / 50</div><div style="font-size:0.85rem;color:rgba(255,255,255,0.6);font-family:'Segoe UI',system-ui,sans-serif;">PERMITTED / DENIED ground truth</div></div>
+    <div class="card card-glass" style="text-align:center;padding:18px;"><div style="font-size:2.2rem;font-weight:900;color:var(--gold);">15.8s</div><div style="font-size:0.85rem;color:rgba(255,255,255,0.6);font-family:'Segoe UI',system-ui,sans-serif;">mean latency per case (V100)</div></div>
+  </div>
+  <div class="grid-2" style="margin-top:16px;">
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">Latency distribution</h3>
+      <table class="data-table" style="margin-top:6px;">
+        <tr><th>Min</th><th>Median</th><th>Mean</th><th>Max</th><th>Std</th></tr>
+        <tr><td>8.3s</td><td>14.3s</td><td>15.8s</td><td>41.4s</td><td>4.6s</td></tr>
+      </table>
+      <p style="font-size:0.82rem;margin-top:8px;">Total GPU time for all 137 cases: 36.0 minutes. Throughput: ~228 cases/hour on one V100.</p>
+    </div>
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">GPU used</h3>
+      <p style="font-size:0.87rem;">V100 32GB — Stony Brook AI Cluster. This is the exact hardware you'll submit your own extraction job to this afternoon (Exercise 9).</p>
+    </div>
+  </div>
+</div>
+
+<div class="slide slide-light">
+  <span class="slide-num">23</span>
+  <div class="section-divider">Part 4 — LLMs: The Real System</div>
+  <h2>One Case, Start to Finish <span class="verified">verified</span></h2>
+  <p class="subtitle-dark">Case row_id 4 — a correct PERMITTED prediction.</p>
+  <div class="card card-white" style="border:1px solid var(--border);margin-top:12px;">
+    <h3>STEP 1 — Input text (as truncated for the model)</h3>
+    <p style="font-size:0.85rem;font-style:italic;">"In early 2005, a legal battle unfolded involving Anthony Camillo, a plaintiff familiar with Medicare billing practices, and Kenneth Hall Regional Hospital, the defendant. The crux of the dispute was the hospital's billing and refund records, which Camillo suspected contained evidence of fraudulent M…"</p>
+  </div>
+  <div class="grid-2" style="margin-top:12px;">
+    <div class="card card-white" style="border:1px solid var(--border);">
+      <h3>STEP 2 — Extracted CI 5-tuple</h3>
+      <table class="data-table" style="font-size:0.78rem;">
+        <tr><td>sender</td><td>Kenneth Hall Regional Hospital</td></tr>
+        <tr><td>receiver</td><td>Anthony Camillo (plaintiff)</td></tr>
+        <tr><td>subject</td><td>patients</td></tr>
+        <tr><td>attribute</td><td>medical information</td></tr>
+        <tr><td>purpose</td><td>litigation</td></tr>
+      </table>
+    </div>
+    <div class="card card-white" style="border:1px solid var(--border);">
+      <h3>STEP 3 — Oracles set TRUE (of 24)</h3>
+      <ul style="font-size:0.78rem;">
+        <li>has_court_order</li>
+        <li>has_lawful_process_with_assurance</li>
+        <li>in_compliance_with_court_order</li>
+        <li>mentions_protective_order</li>
+        <li>is_authorized_by_law_for_purpose</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card card-gold" style="margin-top:12px;">
+    <p style="font-size:0.85rem;"><strong>STEP 4 — Soufflé verdict:</strong> PERMITTED (cites §164.512(e)(1)(ii) — subpoena with satisfactory assurance). <strong>Match: ✓ correct.</strong> Inference latency: 19.6s.</p>
+  </div>
+</div>
+
+<div class="slide slide-crimson">
+  <span class="slide-num">24</span>
+  <div class="section-divider">Part 4 — LLMs: The Real System</div>
+  <h2>The 8 Failures — FP vs FN <span class="verified">verified</span></h2>
+  <div class="grid-2" style="margin-top:16px;">
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">3 False Positives</h3>
+      <p style="font-size:0.87rem;">Model said <strong>PERMITTED</strong>, ground truth was <strong>DENIED</strong>.</p>
+      <p style="font-size:0.85rem;margin-top:8px;">→ Safety-critical: this is a real PHI disclosure that shouldn't have happened.</p>
+      <p style="font-size:0.8rem;margin-top:6px;color:rgba(255,255,255,0.6);">Cases: row_id 40, 46, 123</p>
+    </div>
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">5 False Negatives</h3>
+      <p style="font-size:0.87rem;">Model said <strong>DENIED</strong>, ground truth was <strong>PERMITTED</strong>.</p>
+      <p style="font-size:0.85rem;margin-top:8px;">→ Over-blocking: a lawful disclosure got incorrectly rejected.</p>
+      <p style="font-size:0.8rem;margin-top:6px;color:rgba(255,255,255,0.6);">Cases: row_id 16, 27, 30, 59, 66</p>
+    </div>
+  </div>
+  <div class="card card-glass" style="margin-top:14px;text-align:center;">
+    <p style="font-size:0.95rem;">FNs outnumber FPs 5-to-3 on this run — Gemma3-4B leans slightly toward <em>under</em>-granting access, not over-granting it. That's the safer failure direction, but it's still 5 real cases of incorrectly blocked lawful disclosure.</p>
+  </div>
+</div>
+
+<div class="slide slide-dark">
+  <span class="slide-num">25</span>
+  <div class="section-divider">Part 4 — LLMs: The Real System</div>
+  <h2>Anatomy of a False Positive — Case 40 <span class="verified">verified</span></h2>
+  <p style="color:rgba(255,255,255,0.7);">Truth: DENIED (cites §164.502(a)). Model said: PERMITTED.</p>
+  <div class="card card-glass" style="margin-top:12px;">
+    <p style="font-size:0.85rem;font-style:italic;">"In 2012, an individual found himself requiring emergency medical services and was taken by ambulance to a hospital. To receive this necessary medical attention, he provided the ambulance service, operated by the Philadelphia Fire Department EMS, with his personal and sen[sitive information]…"</p>
+  </div>
+  <div class="grid-2" style="margin-top:12px;">
+    <div class="card card-glass" style="border-left:3px solid #f08080;">
+      <h3>Oracles hallucinated TRUE</h3>
+      <p style="font-size:0.8rem;font-family:'Courier New',monospace;">is_business_associate · believes_unlawful_conduct · believes_victim_of_crime · is_required_by_law · mentions_patient_notice · has_ba_agreement</p>
+    </div>
+    <div class="card card-glass" style="border-left:3px solid #f0a8a8;">
+      <h3>What the model said</h3>
+      <p style="font-size:0.82rem;">"…permitted under 45 CFR §164.502(a)(1)(i), which allows disclosure to the individual or their personal representative…" — a plausible-sounding citation attached to the wrong exception. It over-generalized routine EMS billing/payment processing into six separate enabling oracles that weren't actually satisfied.</p>
+    </div>
+  </div>
+</div>
+
+<div class="slide slide-dark">
+  <span class="slide-num">26</span>
+  <div class="section-divider">Part 4 — LLMs: The Real System</div>
+  <h2>Anatomy of a False Negative — Case 16 <span class="verified">verified</span></h2>
+  <p style="color:rgba(255,255,255,0.7);">Truth: PERMITTED (cites §164.502). Model said: DENIED.</p>
+  <div class="card card-glass" style="margin-top:12px;">
+    <p style="font-size:0.85rem;font-style:italic;">"In a small town, A.S., a young woman with a developmental disability, was under the care of her parents who were appointed as her guardians by a probate court. Throughout her education, A.S. received special education services due to her condition. When she turned eighteen in 2003, her parents became…"</p>
+  </div>
+  <div class="grid-2" style="margin-top:12px;">
+    <div class="card card-glass" style="border-left:3px solid #fab387;">
+      <h3>Oracles the model DID get right</h3>
+      <p style="font-size:0.8rem;font-family:'Courier New',monospace;">has_authority_to_act · provider_patient · believes_minimum_necessary · is_in_designated_record_set</p>
+    </div>
+    <div class="card card-glass" style="border-left:3px solid #fab387;">
+      <h3>Where it went wrong</h3>
+      <p style="font-size:0.82rem;">The model answered "DENIED under §164.203(a)(1)" — reasoning about a related-but-wrong provision (mental-health-evaluation confidentiality) instead of the guardian-authority exception that actually governs this case. It extracted correct facts but the LLM's own explanation cites the wrong rule — a reasoning failure downstream of extraction, not just an oracle miss.</p>
+    </div>
+  </div>
+</div>
+
+<div class="slide slide-light">
+  <span class="slide-num">27</span>
+  <div class="section-divider">Part 4 — LLMs: The Real System</div>
+  <h2>Oracle Risk Table — Which Predicates Fail Most? <span class="verified">verified</span></h2>
+  <p class="subtitle-dark">How often each oracle predicate is set TRUE in failure cases vs. correct cases (real counts, 137 cases).</p>
+  <table class="data-table" style="margin-top:12px;">
+    <tr><th>Oracle predicate</th><th>In failures</th><th>In correct cases</th></tr>
+    <tr><td>provider_patient</td><td>5</td><td>52</td></tr>
+    <tr><td>has_treatment_relationship</td><td>5</td><td>59</td></tr>
+    <tr><td>has_authority_to_act</td><td>3</td><td>73</td></tr>
+    <tr><td>believes_minimum_necessary</td><td>2</td><td>24</td></tr>
+    <tr><td>prohibited_by_other_law</td><td>2</td><td>3</td></tr>
+    <tr><td>is_required_by_law</td><td>2</td><td>59</td></tr>
+    <tr><td>believes_unlawful_conduct</td><td>2</td><td>26</td></tr>
+    <tr><td>has_ba_agreement</td><td>2</td><td>13</td></tr>
+  </table>
+  <div class="card card-gold" style="margin-top:12px;">
+    <p style="font-size:0.86rem;">No single predicate dominates the failure set — the 8 errors are spread across 20 different oracles, each appearing 1–5 times. There's no one broken rule to patch. This is consistent with what you saw in case 40 (over-firing) and case 16 (right facts, wrong reasoning): the errors are contextual, not systematic.</p>
+  </div>
+</div>
+
+<div class="slide slide-navy">
+  <span class="slide-num">28</span>
+  <div class="section-divider">Part 4 — LLMs: The Real System</div>
+  <h2>Does Confidence Predict Correctness? <span class="verified">verified</span></h2>
+  <p style="color:rgba(255,255,255,0.75);">Hypothesis: maybe the model "hesitates" (takes longer) on cases it's about to get wrong. Real latency data says otherwise.</p>
+  <div class="grid-2" style="margin-top:16px;">
+    <div class="card card-glass" style="text-align:center;padding:20px;">
+      <div style="font-size:1.8rem;font-weight:900;color:var(--gold);">15.92s</div>
+      <div style="font-size:0.85rem;color:rgba(255,255,255,0.6);font-family:'Segoe UI',system-ui,sans-serif;">mean latency — correct cases</div>
+    </div>
+    <div class="card card-glass" style="text-align:center;padding:20px;">
+      <div style="font-size:1.8rem;font-weight:900;color:#f08080;">13.49s</div>
+      <div style="font-size:0.85rem;color:rgba(255,255,255,0.6);font-family:'Segoe UI',system-ui,sans-serif;">mean latency — failed cases</div>
+    </div>
+  </div>
+  <div class="card card-crimson" style="margin-top:16px;">
+    <h3>The counter-intuitive real finding</h3>
+    <p>Failures were <em>faster</em>, not slower. There's no latency signal for uncertainty here — if anything, wrong answers were produced slightly more decisively. Don't trust "the model took a while, it must be thinking hard" as a proxy for correctness. Confidence (fast, fluent output) and correctness are simply not the same thing — this is the RLHF effect from Part 4's training discussion: models are optimized to sound sure of themselves.</p>
+  </div>
+</div>
+
+<div class="slide slide-green">
+  <span class="slide-num">29</span>
+  <div class="section-divider">Part 4 — LLMs: The Real System</div>
+  <h2>Your Research — Six Directions on the Same 5.8% Gap</h2>
+  <p style="color:rgba(255,255,255,0.8);">You've now seen every layer: neuron → attention → embedding → extraction → engine. The 8 remaining errors are your research target. Project selection due Friday, July 3.</p>
+  <div class="grid-3" style="margin-top:16px;">
+    <div class="card card-glass"><span class="tag tag-gold">P1</span><h3 style="margin-top:6px;">Adversarial Robustness</h3><p style="font-size:0.82rem;">Can you write new scenarios that break the model the same way case 40 broke?</p></div>
+    <div class="card card-glass"><span class="tag tag-gold">P2</span><h3 style="margin-top:6px;">Multi-Regulation</h3><p style="font-size:0.82rem;">Does this same error pattern show up in GDPR / CCPA extraction too?</p></div>
+    <div class="card card-glass"><span class="tag tag-gold">P3</span><h3 style="margin-top:6px;">Model Comparison</h3><p style="font-size:0.82rem;">Does a larger model (Llama3-70B) fix cases 40 and 16?</p></div>
+    <div class="card card-glass"><span class="tag tag-gold">P4</span><h3 style="margin-top:6px;">Prompt Engineering</h3><p style="font-size:0.82rem;">Do stricter oracle definitions or few-shot negatives fix the FPs?</p></div>
+    <div class="card card-glass"><span class="tag tag-gold">P5</span><h3 style="margin-top:6px;">Error Explanation</h3><p style="font-size:0.82rem;">Can you automatically diagnose <em>why</em> a prediction was wrong?</p></div>
+    <div class="card card-glass"><span class="tag tag-gold">P6</span><h3 style="margin-top:6px;">Few-Shot Examples</h3><p style="font-size:0.82rem;">Does adding 3–5 worked examples to the prompt close the gap?</p></div>
+  </div>
+</div>
+
+<div class="slide slide-light">
+  <span class="slide-num">30</span>
+  <h2>The Full Progression — Verified Numbers Side by Side</h2>
+  <p class="subtitle-dark">Every accuracy figure below was computed live on the real 137-case GoldCoin benchmark during prep for today.</p>
+  <table class="data-table" style="margin-top:14px;">
+    <tr><th>Approach</th><th>What you saw today</th><th>Accuracy</th><th>Wall hit</th></tr>
+    <tr><td>Logistic Regression</td><td>Slide 3 — XOR</td><td>50%</td><td>Can't draw a curved boundary</td></tr>
+    <tr><td>Neural network (correct activation)</td><td>Slide 4 — XOR</td><td>100%</td><td>Needs numeric features; text isn't numeric</td></tr>
+    <tr><td>MLP on 9 extracted booleans</td><td>Slide 9 — HIPAA</td><td>68.0%</td><td>Ceiling of the classifier, not the features</td></tr>
+    <tr><td>TF-IDF + Logistic Regression</td><td>Slide 19 — HIPAA</td><td>63.5%</td><td>= majority baseline. Learns nothing.</td></tr>
+    <tr><td>Sentence embeddings + LogReg</td><td>Slide 19 — HIPAA</td><td>82.0% (±16.2%)</td><td>Unstable; can't distinguish hedged from real authority</td></tr>
+    <tr style="background:#fffdf0;border-top:2px solid var(--gold);"><td><strong>LLM extraction → formal engine</strong></td><td><strong>Slide 22 — GoldCoin</strong></td><td><strong style="color:var(--crimson);">94.2%</strong></td><td>8 contextual errors remain — no single broken rule</td></tr>
+  </table>
+</div>
+
+<div class="slide slide-dark">
+  <span class="slide-num">31</span>
+  <h2>Why Each Step Was Necessary</h2>
+  <div style="margin-top:18px;font-family:'Segoe UI',system-ui,sans-serif;">
+    <div style="display:flex;flex-direction:column;gap:3px;">
+      <div style="display:flex;align-items:center;gap:16px;background:rgba(255,255,255,0.05);border-radius:5px;padding:11px 16px;">
+        <span class="tag tag-purple" style="min-width:120px;text-align:center;">Neural nets</span>
+        <span style="font-size:0.87rem;flex:1;">Non-linear boundaries: solved XOR (100%) where linear models cap at 50%.</span>
+        <span style="font-size:0.78rem;color:rgba(255,255,255,0.4);">Still needs numeric input</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;background:rgba(255,255,255,0.05);border-radius:5px;padding:11px 16px;">
+        <span class="tag tag-navy" style="min-width:120px;text-align:center;">Tokenization</span>
+        <span style="font-size:0.87rem;flex:1;">Text → integers. Legal citations split into pieces the model reassembles.</span>
+        <span style="font-size:0.78rem;color:rgba(255,255,255,0.4);">No meaning yet, just IDs</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;background:rgba(255,255,255,0.05);border-radius:5px;padding:11px 16px;">
+        <span class="tag tag-teal" style="min-width:120px;text-align:center;">Self-attention</span>
+        <span style="font-size:0.87rem;flex:1;">Context-dependent meaning: "order" = court order or medication order, decided by neighbors.</span>
+        <span style="font-size:0.78rem;color:rgba(255,255,255,0.4);">Solved what RNNs (2.78% signal at word 34) couldn't</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;background:rgba(255,255,255,0.05);border-radius:5px;padding:11px 16px;">
+        <span class="tag tag-green" style="min-width:120px;text-align:center;">Sentence embeddings</span>
+        <span style="font-size:0.87rem;flex:1;">Meaning as geometry: "court order" ↔ "judicial mandate" rose from 0.058 to 0.566 similarity.</span>
+        <span style="font-size:0.78rem;color:rgba(255,255,255,0.4);">Still can't separate real from hedged authority</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;background:rgba(255,165,0,0.18);border:2px solid var(--gold);border-radius:5px;padding:11px 16px;">
+        <span class="tag tag-gold" style="min-width:120px;text-align:center;font-size:0.78rem;">Full LLM (Gemma3)</span>
+        <span style="font-size:0.87rem;flex:1;">Scale + full-context reading: 4B parameters get you to 94.2% — real, contextual, mostly correct legal reasoning.</span>
+        <span style="font-size:0.78rem;color:var(--gold);font-weight:700;">8 cases left — your research</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide slide-navy">
+  <span class="slide-num">32</span>
+  <h2>Two Things to Fix Before You Run These Notebooks Live</h2>
+  <p style="color:rgba(255,255,255,0.75);">Discovered while verifying today's numbers — both notebooks currently have never been executed, so these haven't surfaced yet.</p>
+  <div class="grid-2" style="margin-top:16px;">
+    <div class="card card-crimson">
+      <h3>teach_02_dl.ipynb — cell 4 (XOR neural net)</h3>
+      <p style="font-size:0.85rem;">With <span class="mono" style="font-size:0.8rem;">activation='relu', random_state=42</span>, the network hits a dead-ReLU state and prints <strong>Accuracy: 50%</strong> — but the next line still says <em>"→ 100%. The hidden layer learned…"</em>, contradicting its own output live in front of students.</p>
+      <p style="font-size:0.85rem;margin-top:6px;"><strong>Fix:</strong> change <span class="mono" style="font-size:0.8rem;">activation='relu'</span> → <span class="mono" style="font-size:0.8rem;">'tanh'</span> in that cell (and the loss-curve cell right after it). Verified: gives 100% and a clean decreasing loss curve.</p>
+    </div>
+    <div class="card card-crimson">
+      <h3>teach_05_encoders.ipynb — adversarial-gap cell</h3>
+      <p style="font-size:0.85rem;">The script's narration claims group C (hedged phrases) embeds <em>closer</em> to group A (real court orders) than group B does. Run live with <span class="mono" style="font-size:0.8rem;">all-MiniLM-L6-v2</span>, the opposite comes out: avg(C→A)=0.401 vs avg(B→A)=0.460.</p>
+      <p style="font-size:0.85rem;margin-top:6px;"><strong>Fix:</strong> use slide 18/19 of this deck instead — the single-phrase table (A1 vs. others) still makes the core point honestly, and the full-dataset classification comparison (63.5% → 82.0% → 94.2%) is a more robust, real result than the 12-phrase toy demo.</p>
+    </div>
+  </div>
+</div>
+
+<div class="slide slide-crimson">
+  <span class="slide-num">33</span>
+  <h2>This Week's Notebooks — Quick Reference</h2>
+  <table class="data-table" style="margin-top:16px;">
+    <tr><th>#</th><th>Topic</th><th>Key demo</th><th>When</th></tr>
+    <tr><td>01</td><td>Machine Learning</td><td>3 classifiers on FIFA → HIPAA feature-extraction wall</td><td>Mon</td></tr>
+    <tr><td>02</td><td>Deep Learning</td><td>XOR: LR fails (50%), MLP succeeds (100% with tanh)</td><td>Mon/Tue</td></tr>
+    <tr><td>03</td><td>NLP</td><td>Semantic gap: "court order" ↔ "judicial mandate" = 0.06–0.13</td><td>Tue</td></tr>
+    <tr style="background:rgba(255,255,255,0.08);"><td>04</td><td>Transformers</td><td>"order" = different meaning by context; 2.78% RNN signal at word 34</td><td>Tue/Wed</td></tr>
+    <tr style="background:rgba(255,255,255,0.08);"><td>05</td><td>Encoders</td><td>Embedding similarity 0.566–0.638; classification 63.5%→82.0%</td><td>Wed</td></tr>
+    <tr style="background:rgba(255,255,255,0.08);"><td>06</td><td>LLMs</td><td>129/137 = 94.2%; 8 failures live via <span class="mono" style="font-size:0.78rem;">show_case(N)</span></td><td>Wed/Thu</td></tr>
+  </table>
+  <p style="margin-top:14px;font-size:0.9rem;color:rgba(255,255,255,0.75);">Today (Wed, Jul 1): notebooks 04, 05, 06 — everything in Parts 2–4 of this deck.</p>
+</div>
+
+<div class="slide slide-navy">
+  <span class="slide-num">34</span>
+  <h2>94.2% — Now You Know Every Wall That Led Here</h2>
+  <div class="grid-2" style="margin-top:20px;">
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">What you built today, by hand</h3>
+      <ul style="font-size:0.88rem;">
+        <li>A neuron, and watched why it can fail to train</li>
+        <li>Backpropagation, epoch by epoch, watching loss fall</li>
+        <li>Self-attention, on paper, disambiguating "order"</li>
+        <li>A sentence embedding space, and where it still fails</li>
+        <li>Full failure analysis of a real 4-billion-parameter model</li>
+      </ul>
+    </div>
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">This afternoon</h3>
+      <p style="font-size:0.9rem;">Exercise 9 — submit your own Gemma3-4B extraction job to the V100 cluster you just read the specs of. Then Exercises 7–8: find your own failure case, and diagnose it exactly the way we diagnosed cases 40 and 16.</p>
+    </div>
+  </div>
+  <div class="card card-gold" style="margin-top:18px;">
+    <p style="font-size:0.95rem;"><strong>"You've seen every wall that led here. Now: which one do you want to try to climb?"</strong></p>
+  </div>
+</div>
+
+<script>
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+const counter = document.getElementById('slide-counter');
+const bar = document.getElementById('progress-bar');
+const controls = document.querySelector('.slide-controls');
+
+function showSlide(n) {
+  slides[current].classList.remove('active');
+  current = (n + slides.length) % slides.length;
+  slides[current].classList.add('active');
+  counter.textContent = (current + 1) + ' / ' + slides.length;
+  bar.style.width = ((current + 1) / slides.length * 100) + '%';
+  const light = slides[current].classList.contains('slide-white') ||
+                slides[current].classList.contains('slide-light');
+  controls.classList.toggle('on-light', light);
+  counter.classList.toggle('on-light', light);
+}
+function nextSlide() { showSlide(current + 1); }
+function prevSlide() { showSlide(current - 1); }
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+  if (e.key === 'ArrowLeft') prevSlide();
+});
+</script>
+</body>
+</html>
