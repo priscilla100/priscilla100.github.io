@@ -49,8 +49,8 @@
     <div class="nav-section">Program</div>
     <a href="index.html">Welcome</a>
     <a href="schedule.html">Weekly Schedule</a>
-    <a href="slides-week1.html">Week 1 Slides</a>
-    <a href="slides-week2.html">Week 2 Slides</a>
+    <a href="slides-prompting-101.html">Prompting 101 (Start Here)</a><a href="ollama-playground.html">Ollama Playground</a><a href="slides-week1.html">Week 1 Slides</a>
+    <a href="slides-week2.html">Week 2 Slides</a><a href="slides-week3.html">Week 3 Slides</a><a href="slides-llm-foundations.html">LLM Foundations Slides</a><a href="slides-agentic-systems.html">Agentic Systems Slides</a>
     <div class="nav-section">Foundations</div>
     <a href="setup.html">Setup &amp; Tools</a>
     <a href="python.html">Python Fundamentals</a>
@@ -124,11 +124,23 @@
           <td>Fri Jul 3</td>
           <td>—</td>
         </tr>
+        <tr style="background:#fffdf0;">
+          <td><strong>W3 Mon</strong></td>
+          <td>Prompting exercises (zero/few-shot/CoT on a real failure case)</td>
+          <td>Flexible</td>
+          <td><a href="notebooks/week3_prompting.ipynb" download class="dl-btn" style="padding:3px 10px;font-size:0.76rem;">⬇ week3_prompting</a></td>
+        </tr>
         <tr>
           <td><strong>W3</strong></td>
           <td>Oral project proposal (5 min, in class)</td>
           <td>Wed Jul 9</td>
           <td>—</td>
+        </tr>
+        <tr style="background:#fffdf0;">
+          <td><strong>W3 Bonus</strong></td>
+          <td>Agentic mini-lab (reflective wrapper on 15 scenarios, before/after accuracy)</td>
+          <td>Flexible</td>
+          <td><a href="notebooks/teach_07_agentic.ipynb" download class="dl-btn" style="padding:3px 10px;font-size:0.76rem;">⬇ teach_07_agentic</a></td>
         </tr>
         <tr>
           <td><strong>W3</strong></td>
@@ -190,6 +202,11 @@
       <a href="notebooks/day2_nlp.ipynb" download class="dl-btn crimson">⬇ Day 2 · NLP Representations</a>
       <a href="notebooks/day3_embeddings.ipynb" download class="dl-btn crimson">⬇ Day 3 · Embeddings</a>
     </div>
+    <div class="card" style="border:1px solid var(--border);">
+      <h3>Week 3 Notebook</h3>
+      <p style="font-size:0.85rem;color:var(--muted);margin-bottom:12px;">Zero-shot, few-shot, chain-of-thought on a real failing case. Runs locally via Ollama — no cluster needed.</p>
+      <a href="notebooks/week3_prompting.ipynb" download class="dl-btn">⬇ week3_prompting.ipynb</a>
+    </div>
   </div>
   <p style="font-size:0.88rem;color:var(--muted);margin-bottom:28px;">Daily notebooks have no hard deadline — submit in Slack <code>#deliverables</code> when complete.</p>
 
@@ -226,6 +243,11 @@
       <h3 style="color:var(--green);">06 · LLMs — Real Results</h3>
       <p style="font-size:0.82rem;color:var(--muted);margin-bottom:10px;">Gemma3-4B actual output. 8 failure deep-dive. Oracle hallucination anatomy. Research directions.</p>
       <a href="notebooks/teach_06_llm.ipynb" download class="dl-btn gold">⬇ teach_06_llm.ipynb</a>
+    </div>
+    <div class="card" style="border:2px solid #5b21b6;">
+      <h3 style="color:#5b21b6;">07 · Agentic Systems</h3>
+      <p style="font-size:0.82rem;color:var(--muted);margin-bottom:10px;">Real Qwen2.5:72B ablation: RAG costs 8pp, reflection recovers it. Row-level regressions/recoveries. Live reflective wrapper.</p>
+      <a href="notebooks/teach_07_agentic.ipynb" download class="dl-btn" style="background:#5b21b6;">⬇ teach_07_agentic.ipynb</a>
     </div>
   </div>
   <div class="card card-gold" style="margin-bottom:28px;">
@@ -298,18 +320,30 @@
   <!-- W3 -->
   <div class="assign-card">
     <div class="assign-header">
-      <h3><span class="week-badge">WEEK 3</span>Project Proposal — Oral + Written</h3>
-      <span class="assign-due">Wed Jul 9 (oral) · Fri Jul 11 (written)</span>
+      <h3><span class="week-badge">WEEK 3</span>Prompting Notebook + Project Proposal</h3>
+      <span class="assign-due">Flexible (notebook) · Wed Jul 9 (oral) · Fri Jul 11 (written)</span>
     </div>
     <div class="assign-body">
-      <p><strong>Oral (5 min) — Wednesday July 9:</strong> In-class pitch. Cover:</p>
+      <p><strong>Part 1 — Prompting notebook (no hard deadline, complete before Friday):</strong></p>
+      <ul>
+        <li><strong>Ex 1 — Zero-shot</strong> (worked example): run it, read the real hallucination it produces</li>
+        <li><strong>Ex 2 — Few-shot:</strong> write 2 examples of your own, shaped like the failing case</li>
+        <li><strong>Ex 3 — Chain-of-thought:</strong> write your own 4–5 step reasoning instructions</li>
+        <li><strong>Ex 4 — Compare:</strong> build the 3-strategy comparison table; answer the reflection question</li>
+        <li><strong>Ex 5 — Temperature (bonus):</strong> temp=0 vs temp=0.9, 3 runs each</li>
+        <li><strong>Ex 6 — Your own case:</strong> repeat Exercises 1–4 on a wrong prediction from <em>your</em> Week 2 cluster run</li>
+      </ul>
+      <p style="margin-top:10px;font-size:0.85rem;color:var(--muted);">Runs entirely on your laptop via local Ollama (<code>gemma3:4b</code>) — no cluster, no API key. Submit in Slack <code>#deliverables</code> when complete.</p>
+      <a href="notebooks/week3_prompting.ipynb" download class="dl-btn" style="margin-top:8px;">⬇ week3_prompting.ipynb</a>
+
+      <p style="margin-top:16px;"><strong>Part 2 — Oral proposal (5 min) — Wednesday July 9:</strong> In-class pitch. Cover:</p>
       <ol>
         <li>The problem (why does this matter?)</li>
         <li>Your specific research question (one sentence)</li>
         <li>Your method (what experiments, data, metric)</li>
         <li>How you'll know if it worked</li>
       </ol>
-      <p style="margin-top:12px;"><strong>1-page written summary — due Friday July 11:</strong></p>
+      <p style="margin-top:12px;"><strong>Part 3 — 1-page written summary — due Friday July 11:</strong></p>
       <ul>
         <li><strong>Research question</strong> — 1 sentence, specific and answerable</li>
         <li><strong>Background</strong> — 2–3 sentences: gap and motivation</li>
@@ -318,6 +352,26 @@
         <li><strong>Milestones</strong> — what will you have by Jul 18? By Jul 25?</li>
       </ul>
       <p style="font-size:0.85rem;color:var(--muted);margin-top:8px;">Graded on specificity. "I will run experiments" is not a milestone.</p>
+    </div>
+  </div>
+
+  <!-- W3 Bonus — Agentic -->
+  <div class="assign-card">
+    <div class="assign-header">
+      <h3><span class="week-badge">WEEK 3 · BONUS</span>Agentic Mini-Lab — Reflective Wrapper</h3>
+      <span class="assign-due">Flexible — no hard deadline, good stretch work for Thu/Fri</span>
+    </div>
+    <div class="assign-body">
+      <p>Companion to <a href="slides-agentic-systems.html">Agentic Systems slides</a> and <code>teach_07_agentic.ipynb</code> (watch it built live in class first, then adapt it yourself).</p>
+      <ol>
+        <li>Pick 15 GoldCoin-HHS scenarios — include the wrong prediction you used in the Week 3 prompting exercise.</li>
+        <li>Run each through baseline <code>extract()</code> — one pass, no reflection.</li>
+        <li>Build your own one-step reflection wrapper: re-prompt the model with its own extracted facts and ask it to double-check the riskiest field(s), the same pattern shown live in the notebook.</li>
+        <li>Run all 15 through your wrapper.</li>
+      </ol>
+      <p style="margin-top:10px;"><strong>Report:</strong> accuracy before vs. after, and for every case that flipped (right→wrong or wrong→right) one sentence on why — grounded in the actual scenario text, not a guess.</p>
+      <p style="margin-top:10px;font-size:0.85rem;color:var(--muted);">This is a small-scale rehearsal of the real Qwen2.5:72B ablation shown in class, where the same reflection pattern recovered 19 of 21 scenarios that raw RAG had broken. Directly useful groundwork if your project is Prompt Engineering Study or Error Taxonomy.</p>
+      <a href="notebooks/teach_07_agentic.ipynb" download class="dl-btn" style="margin-top:8px;">⬇ teach_07_agentic.ipynb</a>
     </div>
   </div>
 
