@@ -68,7 +68,7 @@
     <div class="nav-section">Program</div>
     <a href="index.html">Welcome</a>
     <a href="schedule.html">Weekly Schedule</a>
-    <a href="slides-prompting-101.html">Prompting 101 (Start Here)</a><a href="ollama-playground.html">Ollama Playground</a><a href="slides-week1.html">Week 1 Slides</a>
+    <a href="slides-prompting-101.html">Prompting 101 (Start Here)</a><a href="prompting-playground.html">Prompting Playground</a><a href="ollama-playground.html">Ollama Playground</a><a href="slides-week1.html">Week 1 Slides</a>
     <a href="slides-week2.html">Week 2 Slides</a><a href="slides-week3.html">Week 3 Slides</a><a href="slides-llm-foundations.html">LLM Foundations Slides</a><a href="slides-agentic-systems.html">Agentic Systems Slides</a>
     <a href="slides-ai-progression.html">ML→LLM Progression Slides</a>
     <a href="slides-nn-transformers-llm.html">NN → Transformers → LLM (Detailed)</a>
@@ -98,7 +98,7 @@
 <div class="page-header">
   <div class="breadcrumb">ComplianceGPT Lab · Week 2</div>
   <h1>Instructor Notebooks</h1>
-  <p class="subtitle">6 pre-worked teaching scripts — run top-to-bottom in class, no surprises</p>
+  <p class="subtitle">7 teaching scripts — 01–06 run top-to-bottom, no surprises; 07 has student TODO cells</p>
 </div>
 
 <div class="content">
@@ -129,7 +129,8 @@
     <a href="#nb03" style="color:#065f46;font-weight:600;">03 NLP</a> ·
     <a href="#nb04" style="color:var(--navy);font-weight:600;">04 Transformers</a> ·
     <a href="#nb05" style="color:#92400e;font-weight:600;">05 Encoders</a> ·
-    <a href="#nb06" style="color:#064e3b;font-weight:600;">06 LLMs</a>
+    <a href="#nb06" style="color:#064e3b;font-weight:600;">06 LLMs</a> ·
+    <a href="#nb07" style="color:#6b21a8;font-weight:600;">07 Prompting 101</a>
   </div>
 
   <!-- ─── NOTEBOOK 01 ────────────────────────────────────────── -->
@@ -402,6 +403,49 @@
       <strong>Requires:</strong> pandas, numpy, sklearn &nbsp;|&nbsp;
       <strong>Data:</strong> HIPAA results CSV &nbsp;|&nbsp;
       <strong>When:</strong> Wednesday (Day 3) or Thursday
+    </div>
+  </div>
+
+  <!-- ─── NOTEBOOK 07 ────────────────────────────────────────── -->
+  <div class="nb-card" id="nb07">
+    <div class="nb-header" style="background:#faf5ff;">
+      <div class="nb-num" style="background:#f3e8ff;color:#6b21a8;">07</div>
+      <div class="nb-title">
+        <h3>Prompting 101</h3>
+        <div class="nb-sub">35 cells · fully generic, zero HIPAA · local Ollama · has student TODO cells, not fully pre-worked</div>
+      </div>
+      <a href="notebooks/prompting_101.ipynb" download class="nb-dl-btn" style="background:#6b21a8;color:#fff;">⬇ prompting_101.ipynb</a>
+    </div>
+    <div class="nb-body">
+      <div class="nb-section">
+        <h4>What you cover</h4>
+        <ul>
+          <li>Vague vs. specific prompts, side by side</li>
+          <li>Zero-shot (worked) → where it breaks on ambiguous cases</li>
+          <li>Few-shot (worked) → student writes their own</li>
+          <li>Chain-of-thought on a trick riddle → student writes their own</li>
+          <li>Reflection: a real 2-pass self-critique, by hand</li>
+          <li>4 failure modes, each with a broken/fixed prompt pair: format drift, sycophancy, instruction drop, ambiguity</li>
+        </ul>
+      </div>
+      <div class="nb-section">
+        <h4>Teaching moment</h4>
+        <div class="moment-box">"Everything here is one small model, generic examples, one or two calls. Our real pipeline runs these same four ideas — zero-shot, few-shot, CoT, reflection — on real HIPAA scenarios at much bigger scale, and the results aren't always intuitive: adding retrieval alone made Qwen2.5:72B <em>worse</em> (92.7%→84.7%), and reflection's real job turned out to be undoing that damage, not adding new capability. You can't guess that from theory — you have to run the ablation."</div>
+      </div>
+      <div class="nb-section">
+        <h4>Key outputs</h4>
+        <ul>
+          <li>Side-by-side vague/specific, zero/few-shot, direct/CoT text outputs</li>
+          <li>Pass-1 vs. pass-2 reflection comparison (by hand, no scoring code)</li>
+          <li>JSON-validity check on the format-drift pair (a real <code>json.loads()</code> pass/fail)</li>
+          <li>Closing table: real Qwen2.5:72B ablation numbers as a bridge to Agentic Systems</li>
+        </ul>
+      </div>
+    </div>
+    <div class="prereq-bar">
+      <strong>Requires:</strong> requests, a running local Ollama (any small model — <code>llama3.2</code>, <code>gemma2:2b</code>) &nbsp;|&nbsp;
+      <strong>Data:</strong> none — fully generic, no repo CSVs &nbsp;|&nbsp;
+      <strong>When:</strong> Monday (Week 3, Day 1) — pairs with <code>slides-prompting-101.html</code>
     </div>
   </div>
 

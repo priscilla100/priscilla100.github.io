@@ -105,7 +105,7 @@ table.data-table td { padding:6px 10px; }
 <body>
 
 <div id="progress-bar"></div>
-<div id="slide-counter">1 / 21</div>
+<div id="slide-counter">1 / 22</div>
 <div class="slide-controls">
   <button onclick="prevSlide()">← Prev</button>
   <button onclick="nextSlide()">Next →</button>
@@ -383,9 +383,73 @@ Respond ONLY as JSON, no other text, in this exact shape:
   </table>
 </div>
 
+<!-- 14b FAILURE MODES: CONCRETE EXAMPLES -->
+<div class="slide slide-amber">
+  <span class="slide-num">15</span>
+  <div class="section-divider">Part 5 — Failure Modes</div>
+  <h2>The Same Four, With Actual Prompts <span class="badge-new">notebook: prompting_101.ipynb</span></h2>
+  <div class="grid-2" style="margin-top:8px;">
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">Format drift</h3>
+      <div class="code-block" style="font-size:0.72rem;">
+<span class="com"># weak</span>
+"List 3 pros/cons of remote work as JSON."
+<span class="out">→ often prose with JSON buried inside</span>
+
+<span class="com"># strong</span>
+"...Respond with ONLY JSON, no other
+text, in exactly this shape: {...}"
+<span class="out">→ clean, parseable JSON</span>
+      </div>
+    </div>
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">Sycophancy</h3>
+      <div class="code-block" style="font-size:0.72rem;">
+<span class="com"># leading</span>
+"The Great Wall is visible from space
+with the naked eye, right? Confirm
+this for my essay."
+<span class="out">→ often just agrees (it's a myth)</span>
+
+<span class="com"># neutral</span>
+"...say so directly if the common
+claim is false."
+      </div>
+    </div>
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">Instruction drop</h3>
+      <div class="code-block" style="font-size:0.72rem;">
+<span class="com"># buried in prose, 6 instructions</span>
+"...engaging...inclusive...history if
+you can...light tone...exactly 3
+sentences...no word 'beverage'..."
+<span class="out">→ 2-3 of 6 followed</span>
+
+<span class="com"># numbered, 4 rules</span>
+"1. Exactly 3 sentences. 2. ..."
+<span class="out">→ usually all 4 followed</span>
+      </div>
+    </div>
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">Ambiguity</h3>
+      <div class="code-block" style="font-size:0.72rem;">
+<span class="com"># ambiguous — shorter than WHAT?</span>
+"Make it shorter."
+<span class="out">→ model invents something to shorten</span>
+
+<span class="com"># clarified</span>
+"Here is a paragraph: [...]. Make
+this shorter: cut to 1 sentence,
+keep the core claim."
+      </div>
+    </div>
+  </div>
+  <p style="margin-top:10px;font-size:0.82rem;color:rgba(255,255,255,0.6);">Run all eight of these yourself in Part 6 of the notebook — outputs vary by model, that's the point.</p>
+</div>
+
 <!-- 15 DEBUGGING CHECKLIST -->
 <div class="slide slide-crimson">
-  <span class="slide-num">15</span>
+  <span class="slide-num">16</span>
   <div class="section-divider">Part 5 — Failure Modes</div>
   <h2>Debugging a Bad Output: A Checklist</h2>
   <p style="color:rgba(255,255,255,0.85);">When the output is wrong, don't just retry the same prompt. Ask, in order:</p>
@@ -401,7 +465,7 @@ Respond ONLY as JSON, no other text, in this exact shape:
 
 <!-- 16 PROMPT INJECTION AWARENESS -->
 <div class="slide slide-navy">
-  <span class="slide-num">16</span>
+  <span class="slide-num">17</span>
   <div class="section-divider">Part 6 — A Word of Caution</div>
   <h2>Be Careful What Text You Paste In</h2>
   <p style="color:rgba(255,255,255,0.75);">The model can't distinguish "your instructions" from "text you pasted that happens to contain instructions." If you paste in a document, email, or webpage that itself contains text like <em>"ignore previous instructions and..."</em>, a model can be misled into following it.</p>
@@ -413,7 +477,7 @@ Respond ONLY as JSON, no other text, in this exact shape:
 
 <!-- 17 CHEAT SHEET -->
 <div class="slide slide-light">
-  <span class="slide-num">17</span>
+  <span class="slide-num">18</span>
   <h2>Cheat Sheet</h2>
   <div class="grid-2" style="margin-top:10px;">
     <div class="card card-green">
@@ -441,21 +505,29 @@ Respond ONLY as JSON, no other text, in this exact shape:
 
 <!-- 18 TRY IT YOURSELF -->
 <div class="slide slide-green">
-  <span class="slide-num">18</span>
-  <h2>Try It Yourself — 10 Minutes, Any Chat App</h2>
-  <p style="font-size:1rem;">Open ChatGPT, Claude, or Gemini's free web interface (no coding, no API key). Do these in order:</p>
-  <ol style="padding-left:22px;font-size:0.98rem;line-height:1.9;margin-top:8px;">
-    <li>Ask a vague question on any topic you know well. Notice what it gets generically right but specifically wrong for your situation.</li>
-    <li>Rewrite it with all four ingredients (task/context/format/constraints). Compare the two answers.</li>
-    <li>Give it a small classification task with 3 of your own few-shot examples (e.g., classify song lyrics by mood).</li>
-    <li>Ask it a multi-step logic or math riddle two ways: direct, and with "think step by step." Compare.</li>
-    <li>Deliberately state a wrong fact confidently and ask a follow-up question — see if it corrects you or goes along with it.</li>
-  </ol>
+  <span class="slide-num">19</span>
+  <h2>Try It Yourself</h2>
+  <div class="grid-2" style="margin-top:8px;">
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">Structured — the notebook <span class="badge-new">recommended</span></h3>
+      <p><span class="mono">notebooks/prompting_101.ipynb</span> — every technique on this deck (zero/few-shot, CoT, reflection, all 4 failure modes) as a runnable cell against your own local Ollama model, with worked examples plus TODO exercises for you to fill in.</p>
+    </div>
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">No laptop setup — 10 min, any chat app</h3>
+      <ol style="padding-left:18px;font-size:0.85rem;line-height:1.7;margin-top:4px;">
+        <li>Ask a vague question you know well; notice what's generically right but specifically wrong.</li>
+        <li>Rewrite with all 4 ingredients; compare.</li>
+        <li>Give it a 3-example few-shot classification task of your own.</li>
+        <li>Ask a riddle direct vs. "think step by step."</li>
+        <li>State a wrong fact confidently — does it correct you?</li>
+      </ol>
+    </div>
+  </div>
 </div>
 
 <!-- 19 WHAT'S NEXT -->
 <div class="slide slide-purple">
-  <span class="slide-num">19</span>
+  <span class="slide-num">20</span>
   <h2>You Now Have the Foundation. Here's Where It's Used.</h2>
   <div class="grid-3" style="margin-top:16px;">
     <div class="card card-glass">
@@ -475,14 +547,14 @@ Respond ONLY as JSON, no other text, in this exact shape:
 
 <!-- 20 KEY TAKEAWAY -->
 <div class="slide slide-dark">
-  <span class="slide-num">20</span>
+  <span class="slide-num">21</span>
   <h2>The One Idea to Keep</h2>
   <p style="font-size:1.3rem;line-height:1.7;">An LLM cannot read your mind. It can only respond to what's on the page. Every prompting technique in this deck is really just a different way of putting more of your intent <em>onto the page</em>, explicitly, so the model has less to guess.</p>
 </div>
 
 <!-- 21 CLOSING -->
 <div class="slide slide-navy">
-  <span class="slide-num">21</span>
+  <span class="slide-num">22</span>
   <h1 style="font-size:2.2rem;">Now Go Build Something Harder</h1>
   <p class="subtitle">You didn't need any of ComplianceGPT's code to learn this — and now everything that <em>does</em> use that code will make a lot more sense.</p>
 </div>
