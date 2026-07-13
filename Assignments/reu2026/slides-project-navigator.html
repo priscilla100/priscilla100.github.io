@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Navigator · ComplianceGPT Lab REU 2026</title>
+<style>
+:root { --crimson:#990000; --navy:#003366; --gold:#f0a500; --green:#1f7a3c; --border:#dee2e6; --muted:#6c757d; }
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:Georgia,'Times New Roman',serif; background:#1a1a2e; color:#fff; }
+
+.slide-controls { position:fixed; bottom:24px; right:28px; z-index:999; display:flex; gap:8px; }
+.slide-controls button { background:rgba(255,255,255,0.15); color:#fff; border:1px solid rgba(255,255,255,0.25); padding:8px 18px; border-radius:6px; cursor:pointer; font-size:0.9rem; font-family:'Segoe UI',system-ui,sans-serif; backdrop-filter:blur(4px); }
+.slide-controls button:hover { background:rgba(255,255,255,0.3); }
+.slide-controls.on-light button { background:rgba(0,51,102,0.1); color:#003366; border:1px solid rgba(0,51,102,0.25); }
+#slide-counter { position:fixed; bottom:30px; left:28px; z-index:999; font-family:'Segoe UI',system-ui,sans-serif; font-size:0.8rem; color:rgba(255,255,255,0.45); }
+#slide-counter.on-light { color:rgba(0,0,0,0.3); }
+#progress-bar { position:fixed; top:0; left:0; height:3px; background:var(--gold); transition:width 0.3s; z-index:999; }
+
+.slide { display:none; min-height:100vh; padding:52px 72px; position:relative; flex-direction:column; justify-content:center; }
+.slide.active { display:flex; }
+
+.slide-dark    { background:#0d1b3e; }
+.slide-crimson { background:linear-gradient(135deg,#6b0000 0%,#990000 100%); }
+.slide-navy    { background:linear-gradient(135deg,#001f4d 0%,#003366 100%); }
+.slide-teal    { background:linear-gradient(135deg,#003333 0%,#005f5f 100%); }
+.slide-white   { background:#fff; color:#212529; }
+.slide-light   { background:#f8f9fa; color:#212529; }
+.slide-green   { background:linear-gradient(135deg,#0a3d1f 0%,#1f7a3c 100%); }
+.slide-purple  { background:linear-gradient(135deg,#1a0a3d 0%,#3d1a7a 100%); }
+.slide-amber   { background:linear-gradient(135deg,#3d2a00 0%,#7a5200 100%); }
+
+.slide-label { font-family:'Segoe UI',system-ui,sans-serif; font-size:0.7rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--gold); margin-bottom:10px; }
+.slide-white .slide-label,.slide-light .slide-label { color:var(--crimson); }
+.slide-green .slide-label { color:#a8f0c8; }
+.slide-purple .slide-label { color:#c8a8ff; }
+.slide-amber .slide-label { color:#f0c870; }
+
+.slide h1 { font-size:2.85rem; line-height:1.15; font-weight:700; margin-bottom:18px; }
+.slide h2 { font-size:1.9rem; line-height:1.2; font-weight:700; margin-bottom:14px; }
+.slide h3 { font-size:1.15rem; font-weight:700; margin-bottom:8px; }
+.slide p  { font-size:1.02rem; line-height:1.65; margin-bottom:10px; }
+.slide li { font-size:0.95rem; line-height:1.6; margin-bottom:6px; }
+.slide ul { padding-left:20px; }
+.slide-white h2,.slide-white h3 { color:var(--navy); }
+.slide-light h2,.slide-light h3 { color:var(--navy); }
+.subtitle { font-size:1.1rem; color:rgba(255,255,255,0.65); font-style:italic; }
+.subtitle-dark { color:var(--muted); font-style:italic; font-size:0.98rem; }
+
+.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:16px; }
+.grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-top:16px; }
+.grid-4 { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:14px; margin-top:16px; }
+
+.card { border-radius:8px; padding:16px 20px; font-family:'Segoe UI',system-ui,sans-serif; }
+.card-glass { background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); }
+.card-white { background:#fff; color:#212529; box-shadow:0 2px 8px rgba(0,0,0,0.12); }
+.card-gold  { background:#fffdf5; border-left:4px solid var(--gold); color:#212529; }
+.card-crimson { background:#fff5f5; border-left:4px solid var(--crimson); color:#212529; }
+.card-green { background:#f0fff4; border-left:4px solid var(--green); color:#212529; }
+.card h3 { font-size:0.9rem; margin-bottom:7px; }
+.card p,.card li { font-size:0.84rem; line-height:1.55; }
+.card ul { padding-left:16px; }
+
+.code-block { background:#1e1e2e; color:#cdd6f4; border-radius:6px; padding:14px 18px; font-family:'Courier New',Consolas,monospace; font-size:0.8rem; line-height:1.55; margin:10px 0; overflow-x:auto; white-space:pre-wrap; }
+.code-block .kw  { color:#cba6f7; }
+.code-block .str { color:#a6e3a1; }
+.code-block .num { color:#fab387; }
+.code-block .com { color:#6c7086; font-style:italic; }
+.code-block .out { color:#f5c2e7; font-style:italic; }
+.code-block .flag { color:#89dceb; }
+
+.tag { display:inline-block; padding:2px 9px; border-radius:3px; font-size:0.7rem; font-weight:700; font-family:'Segoe UI',system-ui,sans-serif; margin:2px; }
+.tag-gold   { background:var(--gold);    color:#000; }
+.tag-red    { background:var(--crimson); color:#fff; }
+.tag-green  { background:var(--green);   color:#fff; }
+.tag-navy   { background:var(--navy);    color:#fff; }
+
+.flow { display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin:14px 0; font-family:'Segoe UI',system-ui,sans-serif; }
+.flow-box { border-radius:6px; padding:9px 14px; text-align:center; min-width:90px; font-size:0.83rem; }
+.flow-arrow { font-size:1.3rem; color:var(--gold); flex-shrink:0; }
+
+.section-divider { position:absolute; top:20px; left:72px; font-family:'Segoe UI',system-ui,sans-serif; font-size:0.7rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; opacity:0.4; }
+.slide-num { position:absolute; top:20px; right:28px; font-family:'Segoe UI',system-ui,sans-serif; font-size:0.75rem; color:rgba(255,255,255,0.2); }
+.slide-white .slide-num,.slide-light .slide-num { color:rgba(0,0,0,0.15); }
+
+table.data-table { width:100%; border-collapse:collapse; font-family:'Segoe UI',system-ui,sans-serif; font-size:0.82rem; }
+table.data-table th { text-align:left; padding:7px 10px; background:rgba(255,255,255,0.08); font-weight:700; }
+table.data-table td { padding:6px 10px; }
+.slide-light table.data-table th, .slide-white table.data-table th { background:var(--navy); color:#fff; }
+.slide-light table.data-table tr:nth-child(even) td, .slide-white table.data-table tr:nth-child(even) td { background:#f8f9fa; }
+.mono { font-family:'Courier New',Consolas,monospace; }
+.verified { display:inline-block; font-size:0.62rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:1px 7px; border-radius:3px; background:rgba(31,122,60,0.25); color:#a8f0c8; border:1px solid rgba(168,240,200,0.35); margin-left:6px; }
+.slide-light .verified, .slide-white .verified { background:#f0fff4; color:#1f7a3c; border-color:#c3e6cb; }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div id="slide-counter">1 / 18</div>
+<div class="slide-controls">
+  <button onclick="prevSlide()">← Prev</button>
+  <button onclick="nextSlide()">Next →</button>
+</div>
+
+<!-- 1 TITLE -->
+<div class="slide slide-navy active">
+  <span class="slide-num">1</span>
+  <div class="slide-label">ComplianceGPT Lab · AI Innovation &amp; Diffusion REU 2026</div>
+  <h1>Project Navigator</h1>
+  <p class="subtitle">You understand the theory (Contextual Integrity). Here's how to actually run your project against real code, on real infrastructure, this week.</p>
+</div>
+
+<!-- 2 BRIDGE -->
+<div class="slide slide-light">
+  <span class="slide-num">2</span>
+  <h2>Where This Picks Up</h2>
+  <div class="grid-2" style="margin-top:14px;">
+    <div class="card card-gold">
+      <h3>What you just learned</h3>
+      <p>The CI 5-tuple, why it alone isn't enough (C1–C4), and how to reframe your own research question in that vocabulary.</p>
+    </div>
+    <div class="card card-green">
+      <h3>What this deck adds</h3>
+      <p>The operational path from "I have a research question" to "I have real numbers and a poster" — repo orientation, running things on the cluster, pulling results back, and a concrete checklist for this week.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 3 BIG PICTURE FLOW -->
+<div class="slide slide-teal">
+  <span class="slide-num">3</span>
+  <h2>The Whole Pipeline, One Diagram</h2>
+  <div class="flow" style="margin-top:18px;">
+    <div class="flow-box" style="background:rgba(255,255,255,0.1);">Research<br>question</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="background:rgba(255,255,255,0.1);">Dataset<br>(CSV)</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="background:var(--gold);color:#000;">SLURM<br>extraction (GPU)</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="background:var(--gold);color:#000;">Local<br>verification</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="background:rgba(255,255,255,0.1);">Analysis</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="background:rgba(255,255,255,0.1);">Write-up<br>+ poster</div>
+  </div>
+  <p style="margin-top:16px;font-size:0.92rem;color:rgba(255,255,255,0.65);">The two gold boxes are today's focus — everyone gets stuck there first, and getting comfortable with that loop early is what makes the rest of the week possible.</p>
+</div>
+
+<!-- 4 REPO ORIENTATION -->
+<div class="slide slide-white">
+  <span class="slide-num">4</span>
+  <div class="section-divider">Part 1 — Orientation</div>
+  <h2>Where Things Live</h2>
+  <table class="data-table" style="margin-top:10px;">
+    <tr><th>Path</th><th>What it is</th></tr>
+    <tr><td class="mono">data/</td><td>Your input CSVs — scenarios + ground truth go here</td></tr>
+    <tr><td class="mono">app/batch_runner.py</td><td>The script that runs your data through the pipeline</td></tr>
+    <tr><td class="mono">connector/llm1_extractor.py</td><td>Extraction prompts (the AI/NLP layer you're studying)</td></tr>
+    <tr><td class="mono">connector/hipaa_engine.py</td><td>The verifier interface — you call this, you don't need to read it</td></tr>
+    <tr><td class="mono">datalog_engine/*.dl</td><td>The formal rules — infrastructure, not your research surface</td></tr>
+    <tr><td class="mono">experiments/results/</td><td>Where your output CSVs land</td></tr>
+    <tr><td class="mono">scripts/</td><td>Reusable analysis scripts — check here before writing your own</td></tr>
+  </table>
+</div>
+
+<!-- 5 WHY TWO PHASES -->
+<div class="slide slide-navy">
+  <span class="slide-num">5</span>
+  <div class="section-divider">Part 2 — The Two-Phase Pattern</div>
+  <h2>Why Extraction and Verification Happen in Different Places</h2>
+  <p style="color:rgba(255,255,255,0.8);">The SLURM cluster has GPUs (for the LLM) but no Souffle installed. Your laptop has Souffle but no GPU. So the pipeline splits cleanly across the trust boundary you already learned:</p>
+  <div class="grid-2" style="margin-top:14px;">
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">On SLURM</h3>
+      <p>Run <span class="mono">batch_runner.py</span>. The LLM call happens here. The output CSV's <span class="mono">verdict</span> column will say <span class="mono">ERROR</span> — that's expected, not a bug. <span class="mono">scenario_json</span> and <span class="mono">souffle_facts</span> are what you actually need, and they're fully populated.</p>
+    </div>
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">On your laptop</h3>
+      <p>Pull the CSV back. Re-run verification locally using the already-extracted facts — no LLM call needed here at all, just Souffle. Seconds, not minutes.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 6 STEP 1 CONNECT -->
+<div class="slide slide-light">
+  <span class="slide-num">6</span>
+  <div class="section-divider">Part 3 — Running Something</div>
+  <h2>Step 1 — Connect &amp; Submit</h2>
+  <p class="subtitle-dark">Haven't done the <a href="extraction-warmup.html">Extraction Warm-Up</a> yet? Do that first — 15 minutes, no cluster needed, and the script below stops being a black box once you have. Full connection walkthrough (SSH keys, host, first-time setup) is in <a href="cluster.html">Cluster Access</a> and <a href="slurm.html">SLURM Quick Connect</a>. The short version:</p>
+  <div class="code-block" style="margin-top:10px;">
+ssh yournetid@submit.ai.stonybrook.edu
+cd COMPLIANCEGPT
+sbatch your_job.sh
+squeue -u yournetid   <span class="com"># check it's running</span>
+  </div>
+</div>
+
+<!-- 7 STEP 2 BATCH RUNNER CHEAT SHEET -->
+<div class="slide slide-white">
+  <span class="slide-num">7</span>
+  <div class="section-divider">Part 3 — Running Something</div>
+  <h2>Step 2 — <span class="mono" style="font-size:1.5rem;">batch_runner.py</span> Cheat Sheet</h2>
+  <div class="code-block" style="margin-top:6px;">
+python3 app/batch_runner.py \
+  <span class="flag">--input</span> data/your_scenarios.csv \
+  <span class="flag">--question-col</span> query \
+  <span class="flag">--answer-col</span> ground_truth \
+  <span class="flag">--strategy</span> formal \
+  <span class="flag">--model</span> ollama/llama3.2 \
+  <span class="flag">--output</span> experiments/results/your_run.csv \
+  <span class="flag">--limit</span> 10 \
+  <span class="flag">--delay</span> 1
+  </div>
+  <p style="font-size:0.9rem;">Always test with <span class="mono">--limit 10</span> first. A typo in a column name fails the same way whether you run it on 10 rows or 500 — find out on the 10-row version.</p>
+</div>
+
+<!-- 8 STEP 3 MONITOR + PULL -->
+<div class="slide slide-light">
+  <span class="slide-num">8</span>
+  <div class="section-divider">Part 3 — Running Something</div>
+  <h2>Step 3 — Monitor &amp; Pull Results Back</h2>
+  <div class="code-block" style="margin-top:6px;">
+squeue -u yournetid                    <span class="com"># is it still running?</span>
+tail -f logs/your_job_*_out.txt        <span class="com"># watch it live</span>
+
+<span class="com"># from your laptop, once it's done:</span>
+scp yournetid@submit.ai.stonybrook.edu:\
+  ~/COMPLIANCEGPT/experiments/results/your_run.csv \
+  ./experiments/results/
+  </div>
+</div>
+
+<!-- 9 STEP 4 LOCAL VERIFICATION -->
+<div class="slide slide-navy">
+  <span class="slide-num">9</span>
+  <div class="section-divider">Part 3 — Running Something</div>
+  <h2>Step 4 — Verify Locally</h2>
+  <p style="color:rgba(255,255,255,0.8);">Once the CSV is back on your laptop (with Souffle installed):</p>
+  <div class="code-block" style="margin-top:10px;">
+from connector.hipaa_engine import HIPAAEngine, DatalogScenario
+import json, pandas as pd
+
+engine = HIPAAEngine(souffle_project_dir="datalog_engine")
+df = pd.read_csv("experiments/results/your_run.csv")
+
+for _, row in df.iterrows():
+    scenario = DatalogScenario(**json.loads(row["scenario_json"]))
+    result = engine.check(scenario)
+    print(result.verdict, result.citations)
+  </div>
+  <p style="margin-top:10px;font-size:0.88rem;color:rgba(255,255,255,0.6);">Notice: <span class="mono">HIPAAEngine.check()</span>, not a strategy class with an explainer attached — you don't need natural-language explanations for most analysis, and skipping that step means zero LLM calls, zero chance of hanging on a misconfigured model.</p>
+</div>
+
+<!-- 10 PITFALLS -->
+<div class="slide slide-crimson">
+  <span class="slide-num">10</span>
+  <div class="section-divider">Part 4 — When Something Breaks</div>
+  <h2>Common Pitfalls</h2>
+  <table class="data-table" style="margin-top:10px;">
+    <tr><th>Symptom</th><th>Likely cause</th><th>Fix</th></tr>
+    <tr><td>Every row's verdict is ERROR</td><td>Ran on SLURM (no Souffle) and never re-verified locally</td><td>Expected on SLURM — run Step 4 locally</td></tr>
+    <tr><td>Job fails instantly</td><td>Model not pulled, or wrong <span class="mono">--question-col</span> name</td><td>Test on <span class="mono">--limit 10</span> first, check column names match your CSV exactly</td></tr>
+    <tr><td>Script hangs for a long time</td><td>Used a strategy class that calls an LLM explainer, and no model is configured</td><td>Use <span class="mono">HIPAAEngine.check()</span> directly for verdict-only analysis</td></tr>
+    <tr><td>Extra CSV columns disappeared</td><td><span class="mono">batch_runner.py</span> only outputs its fixed schema</td><td>Re-merge your extra columns back in on <span class="mono">row_id</span> afterward</td></tr>
+  </table>
+</div>
+
+<!-- 11 ANALYSIS -->
+<div class="slide slide-white">
+  <span class="slide-num">11</span>
+  <div class="section-divider">Part 5 — After Verification</div>
+  <h2>Step 5 — Analysis</h2>
+  <p class="subtitle-dark">Once you have real verdicts, compute the metric your research question actually asks for — don't just report raw accuracy if your question is sharper than that.</p>
+  <ul style="margin-top:8px;">
+    <li>Accuracy vs. ground truth — the baseline everyone reports</li>
+    <li>Per-category breakdown — attack type, section, model, whatever your independent variable is</li>
+    <li>One specific wrong-answer example, explained in a sentence — this is what makes a poster memorable</li>
+    <li>Check <span class="mono">scripts/</span> before writing new analysis code — a similar script may already exist</li>
+  </ul>
+</div>
+
+<!-- 12 CHECKLIST -->
+<div class="slide slide-green">
+  <span class="slide-num">12</span>
+  <h2>This Week's Checklist</h2>
+  <ol style="padding-left:22px;font-size:1.02rem;line-height:1.9;">
+    <li>Dataset finalized and saved in <span class="mono">data/</span></li>
+    <li>Test run on SLURM with <span class="mono">--limit 10</span> — confirm no crashes</li>
+    <li>Full run submitted</li>
+    <li>Results pulled back, verified locally</li>
+    <li>First real numbers computed — even rough ones</li>
+    <li>One specific finding written down in a sentence</li>
+  </ol>
+</div>
+
+<!-- 13 KEEP ORGANIZED -->
+<div class="slide slide-light">
+  <span class="slide-num">13</span>
+  <h2>Naming Things So Future You Isn't Confused</h2>
+  <div class="grid-2" style="margin-top:10px;">
+    <div class="card card-gold">
+      <h3>Do</h3>
+      <ul>
+        <li>Name output CSVs with what changed: <span class="mono">_baseline</span>, <span class="mono">_v2</span>, <span class="mono">_gemma</span></li>
+        <li>Keep raw SLURM output separate from locally-reverified output</li>
+        <li>Write one line in your notes when a run finishes: what changed, what you expect</li>
+      </ul>
+    </div>
+    <div class="card card-crimson">
+      <h3 style="color:var(--crimson);">Don't</h3>
+      <ul>
+        <li>Overwrite <span class="mono">results.csv</span> every run — you'll lose the ability to compare</li>
+        <li>Trust a SLURM run's <span class="mono">verdict</span> column without re-verifying locally</li>
+        <li>Wait until Friday to discover Monday's run had a typo</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- 14 WHERE TO GET HELP -->
+<div class="slide slide-navy">
+  <span class="slide-num">14</span>
+  <h2>Where to Get Help</h2>
+  <ul style="font-size:1.05rem;line-height:2.1;">
+    <li>Stuck on cluster/SSH mechanics → <a href="cluster.html" style="color:var(--gold);">Cluster Access</a> / <a href="slurm.html" style="color:var(--gold);">SLURM Quick Connect</a></li>
+    <li>Stuck on prompting concepts → <a href="slides-prompting-101.html" style="color:var(--gold);">Prompting 101</a> / <a href="prompting-playground.html" style="color:var(--gold);">Prompting Playground</a></li>
+    <li>Stuck on what a result even means → <a href="slides-contextual-integrity.html" style="color:var(--gold);">Contextual Integrity</a> slides, today's material</li>
+    <li>Stuck on anything else → ask in Slack with what you tried, not just "it doesn't work"</li>
+  </ul>
+</div>
+
+<!-- 15 A REAL EXAMPLE -->
+<div class="slide slide-white">
+  <span class="slide-num">15</span>
+  <h2>This Pattern Is Already Running for a Real Project</h2>
+  <p class="subtitle-dark">The red-teaming adversarial project uses exactly this two-phase flow: 56 real scenarios extracted on SLURM, re-verified locally with <span class="mono">HIPAAEngine.check()</span>, analyzed for attack success rate by category. If you want a concrete worked reference while building your own pipeline, ask to see it.</p>
+</div>
+
+<!-- 16 RECAP -->
+<div class="slide slide-crimson">
+  <span class="slide-num">16</span>
+  <h2>Recap</h2>
+  <ol style="padding-left:22px;font-size:1.05rem;line-height:2;">
+    <li>Extraction happens on SLURM (GPU, no Souffle); verification happens locally (Souffle, no GPU needed)</li>
+    <li><span class="mono">verdict=ERROR</span> in a SLURM output CSV is expected, not broken</li>
+    <li>Always test with <span class="mono">--limit 10</span> before a full run</li>
+    <li>Use <span class="mono">HIPAAEngine.check()</span> directly when you only need verdicts — faster, and can't hang on a misconfigured LLM</li>
+    <li>Name your files so you can tell runs apart later</li>
+  </ol>
+</div>
+
+<!-- 17 TODAY'S ACTION ITEM -->
+<div class="slide slide-amber">
+  <span class="slide-num">17</span>
+  <h2>Today's Action Item</h2>
+  <p style="font-size:1.2rem;line-height:1.7;">Before you leave: get <em>one</em> row of your own data through the full pipeline — SLURM extraction, pulled back, verified locally, one printed verdict. Not ten rows. Not the final analysis. One row, all the way through. Everything after that is repetition.</p>
+</div>
+
+<!-- 18 CLOSING -->
+<div class="slide slide-navy">
+  <span class="slide-num">18</span>
+  <h1 style="font-size:2.2rem;">Now Go Run Something</h1>
+  <p class="subtitle">You know the theory and you know the pipeline. The only thing left is doing it.</p>
+</div>
+
+<script>
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+const counter = document.getElementById('slide-counter');
+const bar = document.getElementById('progress-bar');
+const controls = document.querySelector('.slide-controls');
+
+function showSlide(n) {
+  slides[current].classList.remove('active');
+  current = (n + slides.length) % slides.length;
+  slides[current].classList.add('active');
+  counter.textContent = (current + 1) + ' / ' + slides.length;
+  bar.style.width = ((current + 1) / slides.length * 100) + '%';
+  const light = slides[current].classList.contains('slide-white') ||
+                slides[current].classList.contains('slide-light');
+  controls.classList.toggle('on-light', light);
+  counter.classList.toggle('on-light', light);
+}
+function nextSlide() { showSlide(current + 1); }
+function prevSlide() { showSlide(current - 1); }
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+  if (e.key === 'ArrowLeft') prevSlide();
+});
+</script>
+</body>
+</html>
