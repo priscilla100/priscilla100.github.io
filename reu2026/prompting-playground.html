@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompting Playground — ComplianceGPT Lab REU 2026</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.step-block { display: flex; gap: 0; margin-bottom: 16px; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.step-num { flex-shrink: 0; width: 52px; background: var(--navy); color: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: 900; font-family: 'Segoe UI', system-ui, sans-serif; }
+.step-body { flex: 1; padding: 16px 20px; }
+.step-body h3 { color: var(--navy); margin-bottom: 6px; font-size: 1rem; }
+.step-body p, .step-body li { font-size: 0.9rem; line-height: 1.65; }
+.step-body ul, .step-body ol { padding-left: 18px; margin-top: 6px; }
+
+.cmd { display: block; background: #1e1e2e; color: #a6e3a1; border-radius: 5px; padding: 10px 16px; font-family: 'Courier New', Consolas, monospace; font-size: 0.87rem; margin: 8px 0; overflow-x: auto; white-space: pre-wrap; }
+.cmd .com  { color: #6c7086; font-style: italic; }
+.cmd .flag { color: #89dceb; }
+.cmd .str  { color: #f5c2e7; }
+.cmd .prompt { color: #fab387; }
+.cmd .blank { color: #f9e2af; font-weight: 700; }
+
+.timer-tag { display: inline-block; background: var(--gold); color: #000; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 0.72rem; font-weight: 800; letter-spacing: .05em; padding: 2px 9px; border-radius: 3px; margin-left: 8px; vertical-align: middle; }
+
+.challenge-card { border: 1px solid var(--border); border-left: 4px solid var(--crimson); border-radius: 6px; padding: 14px 18px; margin-bottom: 12px; background: #fff5f5; }
+.challenge-card h4 { color: var(--crimson); font-size: 0.92rem; margin-bottom: 4px; }
+.challenge-card p { font-size: 0.87rem; margin: 0; }
+.challenge-tag { display: inline-block; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 0.68rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; background: var(--crimson); color: #fff; padding: 2px 8px; border-radius: 3px; margin-bottom: 6px; }
+</style>
+</head>
+<body>
+<aside id="sidebar">
+  <div class="logo"><div class="lab-name">ComplianceGPT Lab</div><div class="lab-sub">AI Innovation &amp; Diffusion REU 2026<br>Stony Brook University</div></div>
+  <nav>
+    <div class="nav-section">Program</div>
+    <a href="index.html">Welcome</a><a href="schedule.html">Weekly Schedule</a><a href="slides-prompting-101.html">Prompting 101 (Start Here)</a><a href="prompting-playground.html">Prompting Playground</a><a href="ollama-playground.html">Ollama Playground</a><a href="extraction-warmup.html">Extraction Warm-Up</a><a href="compliance-qa-app.html">Compliance QA Playground</a><a href="slides-week1.html">Week 1 Slides</a><a href="slides-week2.html">Week 2 Slides</a><a href="slides-week3.html">Week 3 Slides</a><a href="slides-llm-foundations.html">LLM Foundations Slides</a><a href="slides-agentic-systems.html">Agentic Systems Slides</a><a href="slides-contextual-integrity.html">Contextual Integrity Slides</a><a href="slides-project-navigator.html">Project Navigator Slides</a>
+    <div class="nav-section">Foundations</div>
+    <a href="setup.html">Setup &amp; Tools</a><a href="python.html">Python Fundamentals</a><a href="foundations.html">AI Fundamentals</a><a href="foundations.html#regulations">Regulations</a>
+    <div class="nav-section">Curriculum</div>
+    <a href="week1.html">Week 1 — Intro to AI</a><a href="week2.html">Week 2 — Language &amp; Law</a><a href="week3.html">Week 3 — Prompt Eng.</a><a href="week4.html">Week 4 — RAG</a><a href="week5.html">Week 5 — ComplianceGPT</a><a href="week6.html">Week 6 — Communication</a>
+    <div class="nav-section">Research</div>
+    <a href="projects.html">Student Projects</a><a href="readings.html">Reading List</a><a href="assignments.html">Assignments</a>
+  </nav>
+</aside>
+<main id="main">
+<div class="page-header">
+  <div class="breadcrumb">Foundations</div>
+  <h1>Prompting Playground</h1>
+  <p class="subtitle">Copy-paste templates + open-ended challenges — no worked answers here, that's the point. Pairs with <a href="slides-prompting-101.html">Prompting 101</a> and <code>notebooks/prompting_101.ipynb</code>.</p>
+</div>
+<div class="content">
+
+  <p style="background:#fff5f5;border-left:4px solid var(--crimson);padding:12px 16px;border-radius:4px;font-size:0.92rem;">
+    <strong>All terminal, all live.</strong> Same setup as <a href="ollama-playground.html">Ollama Playground</a><a href="extraction-warmup.html">Extraction Warm-Up</a><a href="compliance-qa-app.html">Compliance QA Playground</a>: <code>ollama run llama3.2</code> (or any model you like) in a terminal tab. This page is templates and challenges to fill in with your own ideas — the notebook has the worked examples if you want to see answers first.
+  </p>
+
+  <h2>1. Prompt Pattern Templates — Copy, Paste, Fill In</h2>
+  <div class="step-block">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <p>Five reusable skeletons. Swap anything in <span style="color:#f9e2af;font-weight:700;">CAPS</span> for your own idea, paste into <code>ollama run &lt;model&gt;</code>, see what happens.</p>
+
+      <p><strong>Zero-shot:</strong></p>
+      <span class="cmd"><span class="blank">TASK</span>. Respond in exactly <span class="blank">FORMAT</span>.
+
+<span class="blank">CONTENT TO ACT ON</span></span>
+
+      <p><strong>Few-shot:</strong></p>
+      <span class="cmd"><span class="blank">TASK DESCRIPTION</span>.
+
+<span class="blank">EXAMPLE INPUT 1</span>
+<span class="blank">EXAMPLE OUTPUT 1</span>
+
+<span class="blank">EXAMPLE INPUT 2</span>
+<span class="blank">EXAMPLE OUTPUT 2</span>
+
+<span class="blank">YOUR REAL INPUT</span></span>
+
+      <p><strong>Chain-of-thought:</strong></p>
+      <span class="cmd"><span class="blank">YOUR QUESTION OR PROBLEM</span>
+Think step by step, showing your reasoning, then give a final answer clearly labeled.</span>
+
+      <p><strong>Role / persona:</strong></p>
+      <span class="cmd">You are a <span class="blank">ROLE</span>. Your tone is <span class="blank">TONE</span>. <span class="blank">ADDITIONAL CONSTRAINT</span>.
+
+<span class="blank">YOUR REQUEST</span></span>
+
+      <p><strong>Reflection (2 messages, same session):</strong></p>
+      <span class="cmd"><span class="prompt">&gt;&gt;&gt;</span> <span class="blank">YOUR QUESTION</span>
+<span class="com">(read the answer, then in the SAME session:)</span>
+<span class="prompt">&gt;&gt;&gt;</span> Double-check your answer above for errors. If anything is wrong, correct it. If it's right, say so.</span>
+    </div>
+  </div>
+
+  <h2>2. Zero-Shot Sandbox <span class="timer-tag">5 min</span></h2>
+  <div class="step-block">
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <p>Pick a task nobody at your table has tried yet. Write it zero-shot first — no examples, no hand-holding.</p>
+      <span class="cmd"><span class="prompt">&gt;&gt;&gt;</span> Classify this tweet as Positive, Negative, or Neutral: "..."
+<span class="prompt">&gt;&gt;&gt;</span> Write a product name for a reusable water bottle aimed at hikers.
+<span class="prompt">&gt;&gt;&gt;</span> Extract the date, location, and event name from: "..."
+<span class="prompt">&gt;&gt;&gt;</span> Rewrite this sentence to be more formal: "..."</span>
+      <p><strong>Now break it on purpose:</strong> pick one of the above and feed it something ambiguous or borderline (a genuinely mixed-sentiment tweet, a sentence with no clear date). Does it pick a reasonable interpretation, or does it ask you for clarification? (Most local models won't ask — they'll just guess. That's the tell.)</p>
+    </div>
+  </div>
+
+  <h2>3. Few-Shot Builder <span class="timer-tag">8 min</span></h2>
+  <div class="step-block">
+    <div class="step-num">3</div>
+    <div class="step-body">
+      <p>Take whatever zero-shot task you just broke above. Fix it with 2–3 examples of your own, using the few-shot template from Section 1. Specifically design your examples to cover the ambiguous case you found — that's the actual skill here, not just "add examples."</p>
+      <p style="margin-top:8px;"><strong>Then try this failure on purpose:</strong> write 2 examples that quietly <em>contradict</em> each other (e.g., two examples of borderline reviews labeled opposite ways for similar reasons). Does the model get confused, average them out, or just pick one pattern and ignore the other? There's no fix step here — just observe.</p>
+    </div>
+  </div>
+
+  <h2>4. Chain-of-Thought Sandbox <span class="timer-tag">8 min</span></h2>
+  <div class="step-block">
+    <div class="step-num">4</div>
+    <div class="step-body">
+      <p>Write or find your own multi-step riddle, word problem, or logic puzzle — something with at least 2 steps to get right. Classic sources: age/ratio word problems, "who is lying" logic puzzles, unit conversion chains.</p>
+      <span class="cmd"><span class="prompt">&gt;&gt;&gt;</span> <span class="blank">YOUR RIDDLE</span> Answer with just the final answer.
+<span class="com">(note the answer, then:)</span>
+<span class="prompt">&gt;&gt;&gt;</span> <span class="blank">YOUR RIDDLE</span> Think step by step, then give the final answer.</span>
+      <p>Did chain-of-thought change the answer? If both were already right, your riddle wasn't hard enough to show the effect — make it harder (more steps, more red herrings) and try again.</p>
+    </div>
+  </div>
+
+  <h2>5. Reflection in One Session <span class="timer-tag">6 min</span></h2>
+  <div class="step-block">
+    <div class="step-num">5</div>
+    <div class="step-body">
+      <p><strong>Key mechanic to notice</strong>: unlike the notebook (which makes separate, stateless API calls), <code>ollama run</code>'s interactive chat keeps the whole conversation in context automatically. That means reflection is just... asking a follow-up question in the same window.</p>
+      <span class="cmd"><span class="prompt">&gt;&gt;&gt;</span> List 5 facts about <span class="blank">A TOPIC YOU KNOW WELL</span>.
+<span class="com">(read the answer — is anything wrong or made up?)</span>
+<span class="prompt">&gt;&gt;&gt;</span> Double-check each fact above. Correct anything you're not fully certain about.</span>
+      <p>Try this on a topic you genuinely know well (your hometown, your major, a hobby) so you can personally judge accuracy without looking anything up. Then try <code>/clear</code> and ask the reflection question <em>cold</em>, with no first answer in context — notice it has nothing to "reflect" on anymore. That's the whole mechanism laid bare: reflection only works because the first answer is sitting right there in context to be re-examined.</p>
+    </div>
+  </div>
+
+  <h2>6. Failure-Mode Challenges — Try to Break It <span class="timer-tag">10 min</span></h2>
+  <div class="step-block">
+    <div class="step-num">6</div>
+    <div class="step-body">
+      <p>No template this time. Each card is a goal — you write the prompt. If you succeed on the first try, your prompt wasn't adversarial enough; try to make it fail worse.</p>
+
+      <div class="challenge-card">
+        <div class="challenge-tag">Format drift</div>
+        <h4>Make it give you invalid JSON</h4>
+        <p>Ask for structured output, but leave the format instruction vague or buried in a long request. Then verify: would <code>json.loads()</code> actually parse what you got?</p>
+      </div>
+      <div class="challenge-card">
+        <div class="challenge-tag">Sycophancy</div>
+        <h4>Make it agree with something false</h4>
+        <p>State a wrong "fact" as if you're certain of it, then ask a question that assumes it's true. Does it correct you, or build on your false premise?</p>
+      </div>
+      <div class="challenge-card">
+        <div class="challenge-tag">Instruction drop</div>
+        <h4>Give it 6+ instructions in one paragraph and see how many survive</h4>
+        <p>Bury the instructions in natural prose (not a numbered list). Count afterward: how many of your 6+ requirements actually show up in the output?</p>
+      </div>
+      <div class="challenge-card">
+        <div class="challenge-tag">Ambiguity</div>
+        <h4>Give it an instruction with no clear referent</h4>
+        <p>Something like "fix the second one" or "make it more like the other style" with nothing established earlier in the conversation for "the second one" or "the other style" to point to. What does it invent to be helpful?</p>
+      </div>
+      <div class="challenge-card">
+        <div class="challenge-tag">Hallucination</div>
+        <h4>Ask for something specific enough that it can't possibly know it accurately</h4>
+        <p>A statistic, a citation, a very recent event, an obscure combination of facts. Does it hedge honestly, or answer with confident, specific-sounding, made-up detail?</p>
+      </div>
+
+      <p style="margin-top:6px;"><strong>Compare notes with your table</strong> — did everyone's model fail the same challenges, or did some models resist things others fell for?</p>
+    </div>
+  </div>
+
+  <h2>7. Prompt Battle — Two Models, Same Prompt <span class="timer-tag">5 min</span></h2>
+  <div class="step-block">
+    <div class="step-num">7</div>
+    <div class="step-body">
+      <p>Open two terminal tabs side by side:</p>
+      <span class="cmd"><span class="com"># tab A</span>
+ollama run gemma2:2b
+
+<span class="com"># tab B</span>
+ollama run qwen2.5:7b   <span class="com"># or llama3.2, phi3:mini — whatever else you have</span></span>
+      <p>Paste the <em>exact same</em> prompt into both — ideally one of your Section 6 challenge prompts. Does the bigger/different model resist an attack the smaller one fell for? Does either one surprise you by failing something the other got right?</p>
+    </div>
+  </div>
+
+  <h2>Wrap-Up</h2>
+  <div class="card card-gold">
+    <p style="margin:0;"><strong>Write down, in one sentence each:</strong> (1) one prompt pattern from Section 1 you'll actually reuse, and (2) one failure mode from Section 6 you managed to trigger, with the exact prompt that did it. Bring both to the next session — Week 3's applied prompting work (<a href="slides-week3.html">slides-week3.html</a>) and the Agentic Systems reflection material build directly on what you find here.</p>
+  </div>
+
+</div>
+</main>
+</body>
+</html>

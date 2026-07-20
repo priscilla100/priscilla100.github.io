@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Extraction Warm-Up — ComplianceGPT Lab REU 2026</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.step-block { display: flex; gap: 0; margin-bottom: 16px; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.step-num { flex-shrink: 0; width: 52px; background: var(--navy); color: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: 900; font-family: 'Segoe UI', system-ui, sans-serif; }
+.step-body { flex: 1; padding: 16px 20px; }
+.step-body h3 { color: var(--navy); margin-bottom: 6px; font-size: 1rem; }
+.step-body p, .step-body li { font-size: 0.9rem; line-height: 1.65; }
+.step-body ul, .step-body ol { padding-left: 18px; margin-top: 6px; }
+
+.cmd { display: block; background: #1e1e2e; color: #a6e3a1; border-radius: 5px; padding: 10px 16px; font-family: 'Courier New', Consolas, monospace; font-size: 0.85rem; margin: 8px 0; overflow-x: auto; white-space: pre-wrap; }
+.cmd .com  { color: #6c7086; font-style: italic; }
+.cmd .flag { color: #89dceb; }
+.cmd .str  { color: #f5c2e7; }
+.cmd .prompt { color: #fab387; }
+
+.timer-tag { display: inline-block; background: var(--gold); color: #000; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 0.72rem; font-weight: 800; letter-spacing: .05em; padding: 2px 9px; border-radius: 3px; margin-left: 8px; vertical-align: middle; }
+
+.scenario-box { background: #f8f9fa; border: 1px solid var(--border); border-left: 4px solid var(--navy); border-radius: 0 6px 6px 0; padding: 16px 20px; font-size: 0.88rem; line-height: 1.7; margin: 12px 0; }
+.reveal { border: 2px dashed var(--gold); border-radius: 6px; padding: 14px 18px; margin: 12px 0; background: #fffdf0; }
+.reveal summary { cursor: pointer; font-weight: 700; color: var(--navy); font-family: 'Segoe UI', system-ui, sans-serif; font-size: 0.9rem; }
+.reveal[open] summary { margin-bottom: 10px; }
+</style>
+</head>
+<body>
+<aside id="sidebar">
+  <div class="logo"><div class="lab-name">ComplianceGPT Lab</div><div class="lab-sub">AI Innovation &amp; Diffusion REU 2026<br>Stony Brook University</div></div>
+  <nav>
+    <div class="nav-section">Program</div>
+    <a href="index.html">Welcome</a><a href="schedule.html">Weekly Schedule</a><a href="slides-prompting-101.html">Prompting 101 (Start Here)</a><a href="prompting-playground.html">Prompting Playground</a><a href="ollama-playground.html">Ollama Playground</a><a href="extraction-warmup.html">Extraction Warm-Up</a><a href="compliance-qa-app.html">Compliance QA Playground</a><a href="slides-week1.html">Week 1 Slides</a><a href="slides-week2.html">Week 2 Slides</a><a href="slides-week3.html">Week 3 Slides</a><a href="slides-llm-foundations.html">LLM Foundations Slides</a><a href="slides-agentic-systems.html">Agentic Systems Slides</a><a href="slides-contextual-integrity.html">Contextual Integrity Slides</a><a href="slides-project-navigator.html">Project Navigator Slides</a>
+    <div class="nav-section">Foundations</div>
+    <a href="setup.html">Setup &amp; Tools</a><a href="python.html">Python Fundamentals</a><a href="foundations.html">AI Fundamentals</a><a href="foundations.html#regulations">Regulations</a>
+    <div class="nav-section">Curriculum</div>
+    <a href="week1.html">Week 1 — Intro to AI</a><a href="week2.html">Week 2 — Language &amp; Law</a><a href="week3.html">Week 3 — Prompt Eng.</a><a href="week4.html">Week 4 — RAG</a><a href="week5.html">Week 5 — ComplianceGPT</a><a href="week6.html">Week 6 — Communication</a>
+    <div class="nav-section">Research</div>
+    <a href="projects.html">Student Projects</a><a href="readings.html">Reading List</a><a href="assignments.html">Assignments</a>
+  </nav>
+</aside>
+<main id="main">
+<div class="page-header">
+  <div class="breadcrumb">Foundations</div>
+  <h1>Extraction Warm-Up</h1>
+  <p class="subtitle">"Step 0" before <a href="slides-project-navigator.html">Project Navigator</a> — do this before you run <code>batch_runner.py</code> for the first time, so the script isn't a black box</p>
+</div>
+<div class="content">
+
+  <p style="background:#fff5f5;border-left:4px solid var(--crimson);padding:12px 16px;border-radius:4px;font-size:0.92rem;">
+    <strong>Why this exists:</strong> it's easy to run a script, get a CSV back, and never actually see what happened in between. This page has you do <em>by hand, in the terminal</em> — with a real row from the real dataset — exactly what <code>batch_runner.py</code> automates for every row. Once you've done it manually once, the script stops being magic.
+  </p>
+
+  <h2>0. Setup <span class="timer-tag">1 min</span></h2>
+  <div class="step-block">
+    <div class="step-num">0</div>
+    <div class="step-body">
+      <p>Same as <a href="ollama-playground.html">Ollama Playground</a> — any small local model works:</p>
+      <span class="cmd">ollama run llama3.2</span>
+    </div>
+  </div>
+
+  <h2>1. A Real Row, As-Is <span class="timer-tag">2 min</span></h2>
+  <div class="step-block">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <p>This is <strong>row_id 1</strong> from <code>data/goldcoin_hhs_merged.csv</code> — a real HHS OCR enforcement case, word for word. No prompt engineering yet. Just paste this into your running <code>ollama run</code> session and see what comes back:</p>
+      <div class="scenario-box">
+        In the City of Plainfield, William H. Michelson, a concerned citizen, submitted a detailed request for access to government records. His request targeted the health insurance benefits available to city employees, officials, and their dependents over recent years. Michelson sought comprehensive details, including descriptions of health plans, costs, participant names, and claims experience, to scrutinize the city's handling of health insurance and possibly uncover inefficiencies or fraud. The City, tasked with managing employee health benefits and ensuring privacy, faced a dilemma. Sharing detailed health plan information, especially about individual claims experience and the identities of covered dependents, could infringe on the privacy of city employees and their families. Such disclosure risked violating the expectations of privacy guaranteed under state laws and potentially breaching federal regulations, which protect personal health information from unauthorized access. Despite Michelson's intention to promote transparency and accountability, the City had to navigate the complex interplay of public right to information and individual privacy rights. The City's response to Michelson, limiting the scope of disclosed information due to privacy concerns, sparked a legal challenge. Michelson argued for broader access under public records laws, while the City defended its stance by invoking privacy protections, setting the stage for a legal examination of the balance between public transparency and the safeguarding of personal health information.
+      </div>
+      <span class="cmd"><span class="prompt">&gt;&gt;&gt;</span> [paste the scenario above] Is this disclosure permitted under HIPAA?</span>
+      <p>Read what you get. Is it a clear PERMITTED/DENIED, or does it hedge? Does it cite anything specific, or just talk generally about "privacy concerns"?</p>
+    </div>
+  </div>
+
+  <h2>2. Now Ask It Like the Real Pipeline Does <span class="timer-tag">5 min</span></h2>
+  <div class="step-block">
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <p><code>batch_runner.py</code> doesn't ask "is this legal?" directly. It asks the model to first extract five specific fields — the CI 5-tuple you saw in the Contextual Integrity slides — <em>before</em> any verdict is decided. Try this, same scenario:</p>
+      <span class="cmd"><span class="prompt">&gt;&gt;&gt;</span> Extract the following fields from this HIPAA scenario as JSON:
+sender (who is disclosing), receiver (who receives it),
+subject (whose information it is), attribute (what type of
+information), purpose (why the disclosure would happen).
+Respond with ONLY the JSON object.
+
+[paste the same scenario from Step 1]</span>
+      <p>Compare this to Step 1's answer. Notice: extraction doesn't decide PERMITTED or DENIED at all — it just pulls out facts. The verdict comes <em>after</em>, from a completely separate, non-AI system (the Datalog verifier). This is the trust boundary from the Contextual Integrity slides, now something you triggered yourself.</p>
+    </div>
+  </div>
+
+  <h2>3. Check Yourself Against the Real System <span class="timer-tag">3 min</span></h2>
+  <div class="step-block">
+    <div class="step-num">3</div>
+    <div class="step-body">
+      <p>Before you look — write down (mentally or on paper) what you think <code>sender_role</code>, <code>receiver_role</code>, and <code>purpose</code> should be for this scenario. Then reveal:</p>
+      <details class="reveal">
+        <summary>Reveal the real extraction for row_id 1</summary>
+        <table style="margin-top:8px;">
+          <tr><td><strong>sender_role</strong></td><td><code>group-health-plan</code></td></tr>
+          <tr><td><strong>receiver_role</strong></td><td><code>individual</code></td></tr>
+          <tr><td><strong>subject</strong></td><td><code>city_employees</code></td></tr>
+          <tr><td><strong>attribute</strong></td><td><code>medical-record</code></td></tr>
+          <tr><td><strong>purpose</strong></td><td><code>law-enforcement</code></td></tr>
+          <tr><td><strong>ground truth verdict</strong></td><td><code>DENIED</code></td></tr>
+        </table>
+        <p style="margin-top:8px;font-size:0.85rem;color:var(--muted);">Notice <code>purpose = law-enforcement</code> — Michelson is a private citizen making a public-records request, not law enforcement. If your model (or you) picked something like "transparency" or "public interest" instead, that's a real, common extraction disagreement — the kind your project might actually be measuring.</p>
+      </details>
+    </div>
+  </div>
+
+  <h2>4. Your Turn — No Peeking First <span class="timer-tag">6 min</span></h2>
+  <div class="step-block">
+    <div class="step-num">4</div>
+    <div class="step-body">
+      <p>New scenario, <strong>row_id 66</strong>. Run it through Step 2's extraction prompt yourself before revealing anything:</p>
+      <div class="scenario-box">
+        In the midst of a contentious legal battle, Ross Cashen found himself charged with serious offenses stemming from a domestic dispute with Jane Doe. As part of his defense, Cashen planned to argue self-defense, necessitating a deep dive into Doe's past, specifically her mental health history. Cashen's legal team decided that understanding Doe's psychological background could be crucial to their case, revealing patterns of behavior or credibility issues that could sway the jury in Cashen's favor. To this end, Cashen hired a private investigator who successfully obtained Doe's mental health records from a hospital and a medical office. This action was taken without Doe's consent, sparking significant legal and ethical questions. The records uncovered detailed Doe's long history of mental health challenges, including diagnoses of posttraumatic stress disorder, anxiety, depression, and her experiences in therapy since a young age. Further, Doe's own deposition testimony, where she admitted to past abusive relationships and impulsive reactions, only added layers to the narrative Cashen hoped to construct for his defense. This pursuit of Doe's private health information without her consent, aimed at undermining her credibility and highlighting a propensity for violence, set the stage for a complex legal debate. It questioned the balance between a defendant's right to a thorough defense and a victim's right to privacy over her mental health records. The court was tasked with navigating this delicate balance, ensuring the legal proceedings respected both the letter and spirit of privacy laws while allowing for a fair and just trial.
+      </div>
+      <p>Run the Step 2 extraction prompt on this. Then guess the verdict yourself before revealing.</p>
+      <details class="reveal">
+        <summary>Reveal the real extraction + verdict for row_id 66</summary>
+        <table style="margin-top:8px;">
+          <tr><td><strong>sender_role</strong></td><td><code>hospital</code></td></tr>
+          <tr><td><strong>receiver_role</strong></td><td><code>individual</code></td> (the private investigator)</tr>
+          <tr><td><strong>attribute</strong></td><td><code>psychotherapy-notes</code></td></tr>
+          <tr><td><strong>purpose</strong></td><td><code>legal-defense</code></td></tr>
+          <tr><td><strong>ground truth verdict</strong></td><td><code>PERMITTED</code></td></tr>
+        </table>
+        <p style="margin-top:8px;font-size:0.85rem;color:var(--muted);"><strong>If that surprised you, good — say so out loud.</strong> Psychotherapy notes obtained without consent, by a private investigator, sounds like it should be DENIED. This is real HHS OCR case data, so the actual determination reflects facts and legal nuance (specific procedural history, how the request was actually made) that this short summary doesn't fully capture. Bring this exact case to your mentor if you want the real reasoning — it's a genuinely good example of why extraction from narrative text is hard, not a trick question.</p>
+      </details>
+    </div>
+  </div>
+
+  <h2>5. The Bridge to the Real Script</h2>
+  <div class="card card-navy">
+    <p style="margin:0;">What you just did by hand — paste scenario text, extract structured fields, compare to a verdict — is exactly the loop <code>batch_runner.py</code> runs automatically for every row in a CSV, at whatever scale you point it at. The only things it adds: it reads the scenario from a file instead of your clipboard, it uses the <em>real</em> 40-field extraction prompt (not the simplified 5-field one above), and it feeds the extracted facts into the actual Datalog verifier instead of you eyeballing the answer. Same idea, more fields, automated. You're ready for <a href="slides-project-navigator.html">Project Navigator</a>.</p>
+  </div>
+
+</div>
+</main>
+</body>
+</html>

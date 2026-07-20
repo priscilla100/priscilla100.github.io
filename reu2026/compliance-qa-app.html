@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compliance QA Playground — ComplianceGPT Lab REU 2026</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.code { display: block; background: #1e1e2e; color: #a6e3a1; border-radius: 5px; padding: 12px 16px; font-family: 'Courier New', Consolas, monospace; font-size: 0.82rem; margin: 10px 0; overflow-x: auto; white-space: pre; line-height: 1.55; }
+.code .com { color: #6c7086; font-style: italic; }
+.code .kw  { color: #89dceb; }
+.code .str { color: #f5c2e7; }
+
+.matrix { border-collapse: collapse; width: 100%; margin: 14px 0; }
+.matrix th, .matrix td { border: 1px solid var(--border); padding: 10px 12px; font-size: 0.85rem; text-align: left; vertical-align: top; }
+.matrix th { background: var(--navy); color: #fff; }
+.matrix td.corner { background: var(--light-bg); font-weight: 700; color: var(--navy); }
+
+.fw-block { border: 1px solid var(--border); border-radius: 8px; margin-bottom: 18px; overflow: hidden; }
+.fw-head { display: flex; align-items: center; gap: 12px; padding: 12px 18px; color: #fff; }
+.fw-num { font-size: 1.5rem; font-weight: 900; font-family: 'Segoe UI', system-ui, sans-serif; opacity: 0.85; }
+.fw-head h3 { margin: 0; color: #fff; font-size: 1.05rem; }
+.fw-body { padding: 16px 18px; }
+.fw-1 .fw-head { background: var(--muted); }
+.fw-2 .fw-head { background: var(--navy); }
+.fw-3 .fw-head { background: #5b21b6; }
+
+.step-block { display: flex; gap: 0; margin-bottom: 14px; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.step-num { flex-shrink: 0; width: 46px; background: var(--navy); color: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 900; font-family: 'Segoe UI', system-ui, sans-serif; }
+.step-body { flex: 1; padding: 14px 18px; }
+.step-body h4 { margin-top: 0; }
+
+.scenario-box { background: #f8f9fa; border: 1px solid var(--border); border-left: 4px solid var(--navy); border-radius: 0 6px 6px 0; padding: 14px 18px; font-size: 0.86rem; line-height: 1.65; margin: 10px 0; }
+</style>
+</head>
+<body>
+
+<aside id="sidebar">
+  <div class="logo">
+    <div class="lab-name">ComplianceGPT Lab</div>
+    <div class="lab-sub">AI Innovation &amp; Diffusion REU 2026<br>Stony Brook University</div>
+  </div>
+  <nav>
+    <div class="nav-section">Program</div>
+    <a href="index.html">Welcome</a>
+    <a href="schedule.html">Weekly Schedule</a>
+    <a href="slides-prompting-101.html">Prompting 101 (Start Here)</a><a href="prompting-playground.html">Prompting Playground</a><a href="ollama-playground.html">Ollama Playground</a><a href="extraction-warmup.html">Extraction Warm-Up</a><a href="compliance-qa-app.html" class="active">Compliance QA Playground</a><a href="slides-week1.html">Week 1 Slides</a>
+    <a href="slides-week2.html">Week 2 Slides</a><a href="slides-week3.html">Week 3 Slides</a><a href="slides-llm-foundations.html">LLM Foundations Slides</a><a href="slides-agentic-systems.html">Agentic Systems Slides</a><a href="slides-contextual-integrity.html">Contextual Integrity Slides</a><a href="slides-project-navigator.html">Project Navigator Slides</a>
+    <a href="slides-ai-progression.html">ML→LLM Progression Slides</a>
+    <a href="slides-nn-transformers-llm.html">NN → Transformers → LLM (Detailed)</a>
+    <div class="nav-section">Teaching</div>
+    <a href="instructor.html">Instructor Notebooks</a>
+    <a href="assignments.html">Assignments</a>
+    <a href="slurm.html">SLURM Connect</a>
+    <div class="nav-section">Foundations</div>
+    <a href="setup.html">Setup &amp; Tools</a>
+    <a href="python.html">Python Fundamentals</a>
+    <a href="foundations.html">AI Fundamentals</a>
+    <a href="foundations.html#origins">Origin Story</a>
+    <a href="foundations.html#regulations">Regulations</a>
+    <a href="cluster.html">Cluster Access</a>
+    <div class="nav-section">Curriculum</div>
+    <a href="week1.html">Week 1 — Intro to AI</a>
+    <a href="week2.html">Week 2 — AI Fundamentals</a>
+    <a href="week3.html">Week 3 — Prompt Eng.</a>
+    <a href="week4.html">Week 4 — RAG</a>
+    <a href="week5.html">Week 5 — ComplianceGPT</a>
+    <a href="week6.html">Week 6 — Communication</a>
+    <div class="nav-section">Research</div>
+    <a href="projects.html">Student Projects</a>
+    <a href="readings.html">Reading List</a>
+    <a href="assignments.html">Assignments</a>
+  </nav>
+</aside>
+
+<main id="main">
+
+<div class="page-header">
+  <div class="breadcrumb">Independent Project · While Priscilla is away</div>
+  <h1>Compliance QA Playground</h1>
+  <p class="subtitle">Build a Streamlit app that answers HIPAA compliance questions three different ways — and lets you watch them disagree</p>
+</div>
+
+<div class="content">
+
+  <div class="week-header">
+    <div class="week-num">IB</div>
+    <div class="week-info">
+      <h2>Independent Build</h2>
+      <p>No fixed calendar days for this one &nbsp;·&nbsp; Self-paced, suggested order below &nbsp;·&nbsp; Deliverable: a working Streamlit app + a short written comparison</p>
+    </div>
+  </div>
+
+  <h2>Why This Exists</h2>
+  <p>I'm going to be away for a few days. Rather than pausing, this is a chance to build something real, on your own, that pulls together everything you've learned so far: prompting strategies (Week 3), retrieval-augmented generation (Week 4), and agentic systems (Agentic Systems slides / <code>teach_07_agentic.ipynb</code>) — into one artifact you build end-to-end and fully own. Unlike the main ComplianceGPT pipeline, where the compliance-reasoning engine is a black box you call via API, <strong>everything in this project is yours</strong>: the interface, the retrieval, the agents, the prompts. Nothing here is off-limits to inspect or change.</p>
+  <p>It's also a genuinely useful research artifact. The main ComplianceGPT pipeline always pairs an LLM extraction layer with a symbolic verifier (Datalog/Soufflé) that makes the final call. This project deliberately removes that verifier and asks: <em>how far does an LLM get on its own</em> — with no augmentation, with retrieval, and with a team of specialized prompts — when it has to produce the verdict itself? Comparing your three frameworks side by side is a small, self-contained experiment in exactly the question this whole lab is built around.</p>
+
+  <h2>What You're Building, In One Paragraph</h2>
+  <p style="background:#fff5f5;border-left:4px solid var(--crimson);padding:14px 18px;border-radius:4px;">
+    A single Streamlit app where a user can ask a HIPAA compliance question (e.g. <em>"Can a hospital share psychotherapy notes with a private investigator without the patient's consent?"</em>) and choose <strong>which of three reasoning frameworks</strong> answers it — <strong>Baseline</strong> (raw LLM), <strong>RAG</strong> (LLM + retrieved HIPAA text), or <strong>Agentic</strong> (a small pipeline of specialized prompts) — and <strong>how</strong> they want to interact with it: a <strong>single one-shot Q&amp;A</strong> box, or a <strong>multi-turn chat</strong> like you'd use with a SOTA chatbot. Six usable combinations (3 frameworks × 2 modes) in one app.
+  </p>
+
+  <h2>The Core Design: 3 Frameworks × 2 Modes</h2>
+  <p>Think of this as a grid. Every cell should be reachable from the same app — most naturally as a framework selector (tabs or a sidebar radio) crossed with a mode toggle (single vs. chat).</p>
+  <table class="matrix">
+    <thead>
+      <tr><th></th><th>Single Q&amp;A</th><th>Chat</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="corner">Baseline</td><td>Ask once, get one verdict + explanation, no memory.</td><td>Same LLM, but conversation history is fed back in — user can ask "what about if it was a court order instead?" as a follow-up.</td></tr>
+      <tr><td class="corner">RAG</td><td>Question → retrieve top HIPAA sections → inject into prompt → one answer with citations.</td><td>Same retrieval step runs per turn (or per new topic); citations should still show up in a multi-turn conversation.</td></tr>
+      <tr><td class="corner">Agentic</td><td>Question flows through your agent pipeline once, final answer shown.</td><td><em>Hardest cell — optional stretch.</em> If you get everything else working first, try making the agent pipeline conversational.</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:0.88rem;color:var(--muted);">Priority order if you're short on time: get all three frameworks working in <strong>Single Q&amp;A</strong> mode first. Add <strong>Chat</strong> mode to Baseline and RAG next. Agentic + Chat together is the stretch cell — nice to have, not required.</p>
+
+  <h2>The Three Frameworks</h2>
+
+  <div class="fw-block fw-1">
+    <div class="fw-head"><span class="fw-num">1</span><h3>Baseline — Raw LLM Reasoning</h3></div>
+    <div class="fw-body">
+      <p>No retrieval, no tools, no extra scaffolding. The question goes straight to the local model with a system prompt establishing it's answering HIPAA compliance questions. This measures what the model already "knows" from pretraining — exactly what you did by hand in <a href="extraction-warmup.html">Extraction Warm-Up</a> Step 1, now wrapped in an app instead of a terminal.</p>
+      <p><strong>Why it matters as a baseline:</strong> every improvement RAG or Agentic makes should be measurable <em>against this</em>. If Baseline already gets a question right, that's not evidence RAG or Agentic "work" — you need cases where Baseline is wrong and the other frameworks fix it (or vice versa).</p>
+    </div>
+  </div>
+
+  <div class="fw-block fw-2">
+    <div class="fw-head"><span class="fw-num">2</span><h3>RAG — Retrieval-Augmented Generation</h3></div>
+    <div class="fw-body">
+      <p>Before answering, retrieve the most relevant sections of the actual HIPAA regulation text (Title 45 CFR Part 164) and inject them into the prompt as context — the "open book exam" version, same idea as Week 4. This is the framework where the <strong>eCFR data source</strong> (below) does the real work: your retrieval corpus needs to be built from real regulatory text, not the model's memory of it.</p>
+      <p>Minimum viable retrieval: BM25 or TF-IDF keyword search over your parsed HIPAA sections (<code>rank_bm25</code> or <code>sklearn.feature_extraction.text.TfidfVectorizer</code> — both are what the main pipeline already uses, see <a href="week4.html">Week 4</a>). Embedding-based semantic search is a nice upgrade if you have time, not a requirement.</p>
+      <p><strong>Show your citations.</strong> Whatever sections got retrieved for a given question should be visible in the UI (e.g., an expandable "Sources used" box under the answer, showing § numbers and the retrieved text). This is what makes RAG's answer auditable in a way Baseline's isn't.</p>
+    </div>
+  </div>
+
+  <div class="fw-block fw-3">
+    <div class="fw-head"><span class="fw-num">3</span><h3>Agentic — A Team of Specialized Prompts</h3></div>
+    <div class="fw-body">
+      <p>Instead of one prompt doing everything, break the task into steps, each handled by a differently-instructed call to the model (an "agent" here just means: a prompt with one narrow job, possibly using a different, more specialized system prompt than the others). This is the same idea as <code>teach_07_agentic.ipynb</code>, applied to this app instead of the main pipeline.</p>
+      <p>A reasonable default split, if you want a starting point rather than designing from scratch:</p>
+      <ul>
+        <li><strong>Extractor agent</strong> — reads the question and pulls out the Contextual Integrity fields (sender, receiver, subject, attribute, purpose) as structured JSON, same as the CI 5-tuple from <a href="slides-contextual-integrity.html">Contextual Integrity</a> and Step 2 of <a href="extraction-warmup.html">Extraction Warm-Up</a>.</li>
+        <li><strong>Retriever agent</strong> — takes the extracted fields (not the raw question) and searches your HIPAA corpus — this is a great place to reuse your RAG framework's retrieval code rather than rewriting it.</li>
+        <li><strong>Verdict agent</strong> — given the extracted fields <em>and</em> retrieved text, decides PERMITTED / DENIED and writes the explanation.</li>
+      </ul>
+      <p>You don't have to use exactly this split — a "classifier agent" that first routes the question to the right HIPAA subpart, or a "critic agent" that reviews the verdict agent's answer before it's shown, are both reasonable alternatives. The requirement is just that <strong>at least two agents with genuinely different responsibilities and different prompts</strong> are chained together — not one prompt wearing an "agent" label.</p>
+      <p>In the UI, consider showing the intermediate steps (what did the Extractor pull out? what did the Retriever find?) somewhere visible, even collapsed by default — it's the most interesting thing to look at when comparing this framework to the other two.</p>
+    </div>
+  </div>
+
+  <div class="card card-navy">
+    <h3>No Formal Verifier — On Purpose</h3>
+    <p>The main ComplianceGPT pipeline you've been learning about always ends with a symbolic reasoning engine (Datalog/Soufflé) that makes the actual PERMITTED/DENIED call from extracted facts — the LLM never decides the verdict itself, it only extracts structured facts that feed the verifier. <strong>This project has no formal component at all.</strong> In every framework here — Baseline, RAG, and Agentic — the LLM itself produces the final verdict and explanation, with nothing symbolic checking its work. That's intentional: it's a smaller, fully self-contained system you can build without needing the verifier's internals, and it doubles as a natural experiment in how much the formal layer is actually buying the main pipeline. Keep that framing in mind for your written comparison at the end.</p>
+  </div>
+
+  <h2>The Two Communication Modes</h2>
+  <div class="grid-2">
+    <div>
+      <h4>Single Q&amp;A</h4>
+      <p>One text input, one submit action, one answer. No memory between questions — each submission is independent. This is the simplest mode to build first and the easiest to evaluate against a fixed list of test questions.</p>
+      <div class="code">question = st.text_input(<span class="str">"Ask a HIPAA question"</span>)
+<span class="kw">if</span> st.button(<span class="str">"Ask"</span>) <span class="kw">and</span> question:
+    answer = run_framework(question, framework=selected)
+    st.write(answer)</div>
+    </div>
+    <div>
+      <h4>Chat</h4>
+      <p>A running conversation, like you'd use with a SOTA chatbot. Streamlit has native chat elements for exactly this — <code>st.chat_input</code> for the input box and <code>st.chat_message</code> to render each turn, with the history kept in <code>st.session_state</code> so it survives reruns.</p>
+      <div class="code">
+<span class="kw">if</span> <span class="str">"history"</span> <span class="kw">not in</span> st.session_state:
+    st.session_state.history = []
+
+<span class="kw">for</span> turn <span class="kw">in</span> st.session_state.history:
+    <span class="kw">with</span> st.chat_message(turn[<span class="str">"role"</span>]):
+        st.write(turn[<span class="str">"content"</span>])
+
+<span class="kw">if</span> prompt := st.chat_input(<span class="str">"Ask a follow-up..."</span>):
+    st.session_state.history.append({<span class="str">"role"</span>: <span class="str">"user"</span>, <span class="str">"content"</span>: prompt})
+    reply = run_framework(prompt, framework=selected, history=st.session_state.history)
+    st.session_state.history.append({<span class="str">"role"</span>: <span class="str">"assistant"</span>, <span class="str">"content"</span>: reply})</div>
+      <p style="font-size:0.85rem;color:var(--muted);">Whatever you pass as "history" into your prompt should include prior turns, so a follow-up like "what if it was a court order instead?" actually resolves against the earlier question.</p>
+    </div>
+  </div>
+
+  <h2>Scope: HIPAA Only, For Now</h2>
+  <p>Build this for HIPAA (Title 45 CFR Part 164) only. Do <strong>not</strong> try to wire up GDPR, CCPA, SOX, GLBA, or COPPA in this pass — that's explicitly out of scope right now. What <em>is</em> in scope: writing your code so a second regulation could be added later without a rewrite. In practice that mostly means: don't hardcode "HIPAA" or "164" into your retrieval/agent logic — pass a <code>regulation</code> config (a name, a data source, a system prompt fragment) through instead, even though today only one value exists for it.</p>
+  <div class="card card-gold">
+    <h3>A caution for when you do extend this later</h3>
+    <p>Not every regulation in the lab's scope lives in the eCFR the same way HIPAA does. <strong>HIPAA and GLBA</strong> are U.S. federal regulations and should be reachable through the same eCFR full-text API pattern (different title/part numbers). <strong>COPPA</strong> is FTC-enforced federal regulation, also in the eCFR (Title 16). But <strong>CCPA</strong> is California <em>state</em> law — it isn't in the federal eCFR at all — and <strong>GDPR</strong> is EU law, entirely outside U.S. federal sources. Those would need different official sources (California legislative text, EUR-Lex for GDPR) and a different fetcher than the one you're building now. This is exactly why the <code>regulation</code> config should carry a source <em>type</em>, not just assume "eCFR" works for everything.</p>
+  </div>
+
+  <h2>Data Source: the eCFR Full-Text API</h2>
+  <p>Yes — the XML endpoint you were given is a suitable RAG source. It's the authoritative, machine-readable full text of the regulation, maintained by the federal government, and it's exactly the same underlying text the main ComplianceGPT pipeline's own RAG strategy retrieves against (see <a href="week4.html">Week 4</a> and the note in <a href="foundations.html#regulations">Foundations → Regulations</a>). The one thing it needs before it's usable for retrieval is parsing — the raw XML has markup, nested cross-references, and citation footers mixed in with the actual rule text, so a cleaning step matters.</p>
+  <div class="scenario-box" style="border-left-color:var(--gold);">
+    <code>https://www.ecfr.gov/api/versioner/v1/full/2026-07-16/title-45.xml?part=164</code>
+  </div>
+  <p>I fetched this endpoint to check its shape before writing this page, so the structure below is verified, not guessed. Part 164 (Security &amp; Privacy) comes back as <strong>41 sections</strong>, nested like this:</p>
+  <div class="code">&lt;DIV5 N=<span class="str">"164"</span> TYPE=<span class="str">"PART"</span>&gt;                          <span class="com">&lt;!-- Part 164 --&gt;</span>
+  &lt;DIV6 N=<span class="str">"A"</span> TYPE=<span class="str">"SUBPART"</span>&gt;                  <span class="com">&lt;!-- Subpart A, B, C, D, E... --&gt;</span>
+    &lt;DIV8 N=<span class="str">"164.502"</span> TYPE=<span class="str">"SECTION"</span>&gt;       <span class="com">&lt;!-- one regulation section --&gt;</span>
+      &lt;HEAD&gt;&amp;#xA7; 164.502 Uses and disclosures...&lt;/HEAD&gt;
+      &lt;P&gt;(a) &lt;I&gt;Standard.&lt;/I&gt; A covered entity...&lt;/P&gt;
+      &lt;P&gt;(1) &lt;I&gt;Covered entities...&lt;/I&gt; ...&lt;/P&gt;
+      &lt;CITA TYPE=<span class="str">"N"</span>&gt;[65 FR 82802, Dec. 28, 2000]&lt;/CITA&gt;
+    &lt;/DIV8&gt;
+  &lt;/DIV6&gt;
+&lt;/DIV5&gt;</div>
+  <p>The <code>N</code> attribute on each <code>&lt;DIV8&gt;</code> is the section number (e.g. <code>"164.502"</code>) — that's your natural chunk key and citation. <code>&lt;HEAD&gt;</code> is the section title, and the sequence of <code>&lt;P&gt;</code> elements is the body text (they include nested <code>&lt;I&gt;</code> italics tags around defined terms — strip those, keep the text). One appendix (<code>DIV9</code>) also appears; you can skip it or include it, it's not operative rule text.</p>
+
+  <div class="step-block">
+    <div class="step-num">→</div>
+    <div class="step-body">
+      <h4>Build an <code>ecfr_caller.py</code> module</h4>
+      <p>This is the piece the assignment specifically asks for — a dedicated caller that handles the eCFR side, not something bolted into your Streamlit file. It should:</p>
+      <ol>
+        <li><strong>Fetch</strong> the XML from the endpoint above (Python <code>requests</code>).</li>
+        <li><strong>Cache</strong> it locally (e.g. <code>data/title45_part164.xml</code>) — don't re-fetch from the API every time the app starts. A simple "does the file exist?" check is enough; you don't need a real cache-invalidation policy for this.</li>
+        <li><strong>Parse</strong> it with <code>xml.etree.ElementTree</code>, walking every <code>&lt;DIV8 TYPE="SECTION"&gt;</code>, pulling out <code>N</code>, the <code>&lt;HEAD&gt;</code> text, and the joined <code>&lt;P&gt;</code> text (with tags stripped).</li>
+        <li><strong>Save</strong> the parsed result as a clean local corpus — a CSV or JSON with one row per section: <code>section, heading, text</code>. This file, not the raw XML, is what your RAG and Agentic retrieval actually load and search.</li>
+      </ol>
+    </div>
+  </div>
+
+  <h2>Suggested File Layout</h2>
+  <div class="code"><span class="com"># not required exactly like this — a reasonable starting point</span>
+compliance-qa-app/
+├── app.py                  <span class="com"># Streamlit entrypoint: framework + mode selectors, routing</span>
+├── llm_client.py            <span class="com"># wraps calls to your local Ollama model</span>
+├── ecfr_caller.py            <span class="com"># fetch + cache + parse the eCFR XML (above)</span>
+├── retrieval.py               <span class="com"># BM25/TF-IDF search over the parsed corpus</span>
+├── agents.py                   <span class="com"># agent prompts + the pipeline that chains them</span>
+├── frameworks.py                <span class="com"># run_baseline(), run_rag(), run_agentic()</span>
+└── data/
+    ├── title45_part164.xml         <span class="com"># cached raw eCFR response</span>
+    └── hipaa_sections.csv            <span class="com"># parsed corpus: section, heading, text</span></div>
+
+  <h2>Suggested Build Order</h2>
+  <p>No fixed dates on this one, but tackle it in roughly this order — each step produces something you can actually run, which makes it much easier to debug than writing everything then testing once at the end.</p>
+
+  <div class="day-block">
+    <div class="day-title">🧱 Step 1 — Skeleton + Baseline</div>
+    <div class="day-body">
+      <p>Get a bare Streamlit app running (<code>streamlit run app.py</code>) with a framework selector (even if only "Baseline" works) and Single Q&amp;A mode. Wire it to your local Ollama model with a HIPAA-focused system prompt. You should be able to ask a question and get an answer before doing anything else.</p>
+    </div>
+  </div>
+  <div class="day-block">
+    <div class="day-title">📥 Step 2 — <code>ecfr_caller.py</code> + Corpus</div>
+    <div class="day-body">
+      <p>Build and test the eCFR fetcher/parser in isolation — run it from a plain Python script or notebook first, <em>before</em> wiring it into Streamlit. Confirm you get 41 sections out, spot-check a few against the real regulation text (§164.502 is a good one to check against the snippet above).</p>
+    </div>
+  </div>
+  <div class="day-block">
+    <div class="day-title">🔍 Step 3 — RAG Framework</div>
+    <div class="day-body">
+      <p>Add BM25 or TF-IDF search over <code>hipaa_sections.csv</code>. Wire retrieval into a new prompt that injects the top-k sections before asking. Add a "Sources used" display under the answer. Compare a few questions against Baseline — do the citations actually look relevant?</p>
+    </div>
+  </div>
+  <div class="day-block">
+    <div class="day-title">🤖 Step 4 — Agentic Framework</div>
+    <div class="day-body">
+      <p>Chain at least two agents (suggested: Extractor → Retriever → Verdict, reusing Step 3's retrieval code). Show the intermediate output somewhere in the UI. This is usually the step that takes the longest — budget extra time here.</p>
+    </div>
+  </div>
+  <div class="day-block">
+    <div class="day-title">💬 Step 5 — Chat Mode</div>
+    <div class="day-body">
+      <p>Add <code>st.chat_input</code> / <code>st.chat_message</code> + <code>st.session_state</code> history to Baseline and RAG. Test that a genuine follow-up question ("what if it was a court order instead?") actually uses the earlier turn's context.</p>
+    </div>
+  </div>
+  <div class="day-block">
+    <div class="day-title">🧪 Step 6 — Test &amp; Compare</div>
+    <div class="day-body">
+      <p>Run the same set of test questions (below, or your own) through all three frameworks in Single Q&amp;A mode. Note where they agree, where they disagree, and your best guess at <em>why</em>.</p>
+    </div>
+  </div>
+
+  <h2>Test Questions to Try</h2>
+  <p>Two real cases from the lab's own data, already used in <a href="extraction-warmup.html">Extraction Warm-Up</a> — good for sanity-checking all three frameworks against a known answer:</p>
+  <div class="scenario-box">
+    <strong>Case A (ground truth: DENIED)</strong> — In the City of Plainfield, William H. Michelson, a concerned citizen, submitted a detailed request for access to government records. His request targeted the health insurance benefits available to city employees, officials, and their dependents — plan descriptions, costs, participant names, and claims experience — to scrutinize the city's handling of health insurance. Is this disclosure permitted under HIPAA?
+  </div>
+  <div class="scenario-box">
+    <strong>Case B (ground truth: PERMITTED)</strong> — Ross Cashen, charged with offenses stemming from a domestic dispute, planned an self-defense argument requiring his accuser's mental health history. His legal team hired a private investigator, who obtained the accuser's psychotherapy records from a hospital without her consent, for use in his legal defense. Is this disclosure permitted under HIPAA?
+  </div>
+  <p style="font-size:0.85rem;color:var(--muted);">Both of these are genuinely non-obvious (see the reveal boxes in Extraction Warm-Up for why) — good test cases precisely because a naive Baseline answer is likely to get at least one wrong.</p>
+
+  <h2>Deliverable Checklist</h2>
+  <div class="card card-crimson">
+    <h3>What "done" looks like</h3>
+    <p><strong>1. Working Streamlit app</strong> — runs via <code>streamlit run app.py</code> with no manual setup beyond installing requirements. Framework selector + mode toggle both functional.</p>
+    <p style="margin-top:10px;"><strong>2. All three frameworks working in Single Q&amp;A mode.</strong> Chat mode working for at least Baseline and RAG (Agentic + Chat is a stretch goal, not required).</p>
+    <p style="margin-top:10px;"><strong>3. <code>ecfr_caller.py</code></strong> — actually fetches and caches the real eCFR XML, and parses it into a clean local corpus file. Not a hand-written stand-in for the corpus.</p>
+    <p style="margin-top:10px;"><strong>4. RAG citations visible</strong> in the UI — retrieved sections shown, not just used silently.</p>
+    <p style="margin-top:10px;"><strong>5. Agentic pipeline with ≥2 distinct agents</strong> chained together, with intermediate output visible somewhere in the UI.</p>
+    <p style="margin-top:10px;"><strong>6. Short written comparison (½–1 page)</strong> — run the same 3–5 questions through all three frameworks. Where did they agree? Disagree? Which framework got closest to ground truth on your test cases, and why do you think that was? Tie this back to the "no formal verifier" framing above — what do you think the symbolic verifier in the main pipeline is actually buying, based on what you saw?</p>
+  </div>
+
+  <div class="card card-gold" style="margin-top:20px;">
+    <h3>Stretch Goal — Multi-Regulation, If Everything Else Is Solid</h3>
+    <p>Only attempt this after the checklist above is fully working. Add a second regulation (GLBA or COPPA are the easiest — both reachable via the same eCFR pattern, just a different title/part number). This mainly tests whether your <code>regulation</code> config abstraction from the "Scope" section actually held up, or whether HIPAA got hardcoded somewhere after all.</p>
+  </div>
+
+  <footer>ComplianceGPT Lab · AI Innovation &amp; Diffusion REU 2026 · Stony Brook University</footer>
+</div>
+</main>
+</body>
+</html>
