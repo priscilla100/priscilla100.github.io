@@ -114,6 +114,17 @@
   </table>
   <p style="font-size:0.88rem;color:var(--muted);">Priority order if you're short on time: get all three frameworks working in <strong>Single Q&amp;A</strong> mode first. Add <strong>Chat</strong> mode to Baseline and RAG next. Agentic + Chat together is the stretch cell — nice to have, not required.</p>
 
+  <div class="card card-crimson">
+    <h3>Output Contract — Applies to All Three Frameworks</h3>
+    <p>Every single answer your app produces — Baseline, RAG, or Agentic, Single Q&amp;A or Chat — must surface two things as distinct, clearly-labeled fields, not buried inside a paragraph of prose:</p>
+    <ol>
+      <li><strong>Verdict</strong> — <code>PERMITTED</code>, <code>DENIED</code>, or <code>UNKNOWN</code> if the question genuinely doesn't give you enough to decide. Guessing to avoid saying <code>UNKNOWN</code> is worse than saying it.</li>
+      <li><strong>Citation(s)</strong> — the specific HIPAA section number(s) the verdict rests on (e.g. <code>§ 164.502(a)(1)(vi)</code>), not just "HIPAA" or "the Privacy Rule." <strong>If more than one section is actually relevant to the answer, all of them must be listed</strong> — most real HIPAA determinations stack a general permission with one or more specific exceptions, and citing only the first one you find is exactly the kind of shortcut that produces a wrong-for-the-right-reasons answer.</li>
+    </ol>
+    <p style="margin-top:10px;">A reasonable UI treatment: a small results block under the free-text explanation, e.g. <code>Verdict: DENIED &nbsp;|&nbsp; Citations: § 164.502(a), § 164.512(f)</code>.</p>
+    <p style="margin-top:10px;"><strong>Watch for this specifically:</strong> Baseline has no retrieval step, so its citations can only come from whatever the model memorized during training — which means they're the most likely of the three to be confidently wrong (a real section number attached to the wrong rule, or a section number that doesn't exist at all). RAG's citations should trace directly to sections your retrieval step actually returned. Agentic's citations should trace to whichever agent did the retrieving. Checking whether each framework's citations are <em>real and correctly applicable</em> — not just present — is one of the more interesting things you'll find when you compare them.</p>
+  </div>
+
   <h2>The Three Frameworks</h2>
 
   <div class="fw-block fw-1">
@@ -232,7 +243,8 @@ compliance-qa-app/
 ├── frameworks.py                <span class="com"># run_baseline(), run_rag(), run_agentic()</span>
 └── data/
     ├── title45_part164.xml         <span class="com"># cached raw eCFR response</span>
-    └── hipaa_sections.csv            <span class="com"># parsed corpus: section, heading, text</span></div>
+    ├── hipaa_sections.csv            <span class="com"># parsed corpus: section, heading, text</span>
+    └── hipaa_faq_testset.csv          <span class="com"># your own test set, built from the HHS FAQ (below)</span></div>
 
   <h2>Suggested Build Order</h2>
   <p>No fixed dates on this one, but tackle it in roughly this order — each step produces something you can actually run, which makes it much easier to debug than writing everything then testing once at the end.</p>
@@ -247,6 +259,12 @@ compliance-qa-app/
     <div class="day-title">📥 Step 2 — <code>ecfr_caller.py</code> + Corpus</div>
     <div class="day-body">
       <p>Build and test the eCFR fetcher/parser in isolation — run it from a plain Python script or notebook first, <em>before</em> wiring it into Streamlit. Confirm you get 41 sections out, spot-check a few against the real regulation text (§164.502 is a good one to check against the snippet above).</p>
+    </div>
+  </div>
+  <div class="day-block">
+    <div class="day-title">📋 Step 2b — Build Your Test Set from the HIPAA FAQ</div>
+    <div class="day-body">
+      <p>Do this before Step 3, so you have real test cases ready as soon as RAG exists. See "Build Your Own Test Set" below for the full instructions.</p>
     </div>
   </div>
   <div class="day-block">
@@ -274,8 +292,8 @@ compliance-qa-app/
     </div>
   </div>
 
-  <h2>Test Questions to Try</h2>
-  <p>Two real cases from the lab's own data, already used in <a href="extraction-warmup.html">Extraction Warm-Up</a> — good for sanity-checking all three frameworks against a known answer:</p>
+  <h2>Quick Sanity Check</h2>
+  <p>Two real cases from the lab's own data, already used in <a href="extraction-warmup.html">Extraction Warm-Up</a> — use these first, before your FAQ test set exists, just to confirm all three frameworks are wired up and producing a verdict + citation at all:</p>
   <div class="scenario-box">
     <strong>Case A (ground truth: DENIED)</strong> — In the City of Plainfield, William H. Michelson, a concerned citizen, submitted a detailed request for access to government records. His request targeted the health insurance benefits available to city employees, officials, and their dependents — plan descriptions, costs, participant names, and claims experience — to scrutinize the city's handling of health insurance. Is this disclosure permitted under HIPAA?
   </div>
@@ -284,20 +302,39 @@ compliance-qa-app/
   </div>
   <p style="font-size:0.85rem;color:var(--muted);">Both of these are genuinely non-obvious (see the reveal boxes in Extraction Warm-Up for why) — good test cases precisely because a naive Baseline answer is likely to get at least one wrong.</p>
 
+  <h2>Build Your Own Test Set — from the HIPAA FAQ</h2>
+  <p>The two cases above are a smoke test, not a real evaluation — two examples can't tell you much about where each framework tends to succeed or fail. The actual test set you'll use for the written comparison is one <strong>you build yourself</strong> from HHS's official HIPAA FAQ.</p>
+  <div class="step-block">
+    <div class="step-num">→</div>
+    <div class="step-body">
+      <h4>Source: HHS Office for Civil Rights — HIPAA FAQ</h4>
+      <p>HHS maintains an official FAQ database at <code>hhs.gov/hipaa/for-professionals/faq/</code>, organized by topic (uses and disclosures, minimum necessary, right of access, and more). Many individual answers cite specific 45 CFR §164 sections directly — those are the ones you want. <span style="color:var(--muted);">(Note: hhs.gov blocks automated fetches, so you'll be browsing this by hand, not scraping it — that's fine, this is meant to be a small, manually curated set, not a scrape.)</span></p>
+      <ol>
+        <li>Browse the FAQ by topic. For each FAQ you use, find one whose answer names a specific section (e.g. "as permitted by § 164.512(f)...").</li>
+        <li>Turn it into a compliance question in the same style as the sanity-check cases above — a short scenario or direct question with a clear PERMITTED/DENIED/UNKNOWN answer.</li>
+        <li>Record the expected verdict and <strong>every</strong> section the FAQ's own answer cites — this is your ground truth for the Output Contract above.</li>
+        <li>Keep the source FAQ URL for each row, so anyone (including you, later) can check your ground truth against the original.</li>
+      </ol>
+      <p><strong>Target size:</strong> 15–20 questions is enough to see real patterns without becoming a huge manual effort. Save it as <code>data/hipaa_faq_testset.csv</code> with columns: <code>question, expected_verdict, expected_citations, source_faq_url</code>.</p>
+    </div>
+  </div>
+
   <h2>Deliverable Checklist</h2>
   <div class="card card-crimson">
     <h3>What "done" looks like</h3>
     <p><strong>1. Working Streamlit app</strong> — runs via <code>streamlit run app.py</code> with no manual setup beyond installing requirements. Framework selector + mode toggle both functional.</p>
     <p style="margin-top:10px;"><strong>2. All three frameworks working in Single Q&amp;A mode.</strong> Chat mode working for at least Baseline and RAG (Agentic + Chat is a stretch goal, not required).</p>
     <p style="margin-top:10px;"><strong>3. <code>ecfr_caller.py</code></strong> — actually fetches and caches the real eCFR XML, and parses it into a clean local corpus file. Not a hand-written stand-in for the corpus.</p>
-    <p style="margin-top:10px;"><strong>4. RAG citations visible</strong> in the UI — retrieved sections shown, not just used silently.</p>
+    <p style="margin-top:10px;"><strong>4. Output contract enforced everywhere</strong> — every answer, in all three frameworks, shows a distinct verdict field and a citation field listing <em>all</em> applicable sections, not prose-only answers and not just the first section found.</p>
     <p style="margin-top:10px;"><strong>5. Agentic pipeline with ≥2 distinct agents</strong> chained together, with intermediate output visible somewhere in the UI.</p>
-    <p style="margin-top:10px;"><strong>6. Short written comparison (½–1 page)</strong> — run the same 3–5 questions through all three frameworks. Where did they agree? Disagree? Which framework got closest to ground truth on your test cases, and why do you think that was? Tie this back to the "no formal verifier" framing above — what do you think the symbolic verifier in the main pipeline is actually buying, based on what you saw?</p>
+    <p style="margin-top:10px;"><strong>6. <code>data/hipaa_faq_testset.csv</code></strong> — 15–20 questions built from the real HHS HIPAA FAQ, each with expected verdict, expected citation(s), and source URL.</p>
+    <p style="margin-top:10px;"><strong>7. Short written comparison (½–1 page)</strong> — run your full FAQ test set through all three frameworks. Where did they agree? Disagree? Were citations correct and complete, or did any framework (especially Baseline) cite a wrong or invented section? Which framework got closest to your ground truth, and why do you think that was? Tie this back to the "no formal verifier" framing above — what do you think the symbolic verifier in the main pipeline is actually buying, based on what you saw?</p>
   </div>
 
   <div class="card card-gold" style="margin-top:20px;">
     <h3>Stretch Goal — Multi-Regulation, If Everything Else Is Solid</h3>
-    <p>Only attempt this after the checklist above is fully working. Add a second regulation (GLBA or COPPA are the easiest — both reachable via the same eCFR pattern, just a different title/part number). This mainly tests whether your <code>regulation</code> config abstraction from the "Scope" section actually held up, or whether HIPAA got hardcoded somewhere after all.</p>
+    <p>Only attempt this after the checklist above is fully working. Add a second regulation (GLBA or COPPA are the easiest — both reachable via the same eCFR pattern, just a different title/part number).</p>
+    <p style="margin-top:10px;"><strong>Parity requirement — no shortcuts:</strong> whatever depth you built for HIPAA, the second regulation needs the same depth, not a token version. That means: its own real caller/parser (not a hand-typed stub), its own full section corpus, the same verdict + full-citation output contract, and its own 15–20 question test set built from that regulation's own official FAQ or guidance (e.g. the FTC's COPPA FAQ). If HIPAA got a real dataset and the second regulation gets three made-up examples, this isn't done — it's testing whether your <code>regulation</code> config abstraction from the "Scope" section actually held up, and a shallow second regulation won't tell you that.</p>
   </div>
 
   <footer>ComplianceGPT Lab · AI Innovation &amp; Diffusion REU 2026 · Stony Brook University</footer>
