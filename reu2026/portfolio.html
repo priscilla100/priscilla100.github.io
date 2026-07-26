@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Build Your GitHub Portfolio — ComplianceGPT Lab REU 2026</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside id="sidebar">
+  <div class="logo"><div class="lab-name">ComplianceGPT Lab</div><div class="lab-sub">AI Innovation &amp; Diffusion REU 2026<br>Stony Brook University</div></div>
+  <nav>
+    <div class="nav-section">Program</div>
+    <a href="index.html">Welcome</a><a href="schedule.html">Weekly Schedule</a><a href="slides-prompting-101.html">Prompting 101 (Start Here)</a><a href="prompting-playground.html">Prompting Playground</a><a href="ollama-playground.html">Ollama Playground</a><a href="extraction-warmup.html">Extraction Warm-Up</a><a href="compliance-qa-app.html">Compliance QA Playground</a><a href="slides-week1.html">Week 1 Slides</a><a href="slides-week2.html">Week 2 Slides</a><a href="slides-week3.html">Week 3 Slides</a><a href="slides-llm-foundations.html">LLM Foundations Slides</a><a href="slides-agentic-systems.html">Agentic Systems Slides</a><a href="slides-contextual-integrity.html">Contextual Integrity Slides</a><a href="slides-project-navigator.html">Project Navigator Slides</a>
+    <div class="nav-section">Foundations</div>
+    <a href="setup.html">Setup &amp; Tools</a><a href="python.html">Python Fundamentals</a><a href="foundations.html">AI Fundamentals</a><a href="foundations.html#regulations">Regulations</a>
+    <div class="nav-section">Curriculum</div>
+    <a href="week1.html">Week 1 — Intro to AI</a><a href="week2.html">Week 2 — Language &amp; Law</a><a href="week3.html">Week 3 — Prompt Eng.</a><a href="week4.html">Week 4 — RAG</a><a href="week5.html">Week 5 — ComplianceGPT</a><a href="week6.html">Week 6 — Communication</a><a href="portfolio.html" class="active">Build Your GitHub Portfolio</a>
+    <div class="nav-section">Research</div>
+    <a href="projects.html">Student Projects</a><a href="readings.html">Reading List</a><a href="assignments.html">Assignments</a>
+  </nav>
+</aside>
+<main id="main">
+<div class="page-header">
+  <div class="breadcrumb">Curriculum · Wrap-Up</div>
+  <h1>Build Your GitHub Portfolio</h1>
+  <p class="subtitle">A from-scratch guide to publishing a free, professional site at <code style="background:rgba(255,255,255,0.15);color:#fff;border-color:transparent;">yourusername.github.io</code></p>
+</div>
+<div class="content">
+
+  <div class="card card-gold">
+    <h3>Why this matters</h3>
+    <p style="margin:0;">By the end of this program you'll have real, concrete things to show: an REU research project, experiments you ran, a poster, maybe a paper. A portfolio site is where that lives permanently — something you can put on a resume, a LinkedIn profile, or a grad school application, that stays online long after this Slack channel goes quiet. It costs nothing and takes about an hour to get live for the first time.</p>
+  </div>
+
+  <h2 id="accounts" class="section-anchor">Step 1 — Your GitHub account</h2>
+  <p>Some of you already have a GitHub account from this program (you needed one to look at the ComplianceGPT code). If you don't yet, go to <strong>github.com/join</strong> and create one now — it's free.</p>
+  <div class="card card-crimson">
+    <h3>Pick your username carefully</h3>
+    <p>Your GitHub <strong>username becomes part of your portfolio's public URL forever</strong>: <code>https://&lt;username&gt;.github.io</code>. Before you commit to one:</p>
+    <ul style="margin-bottom:0;">
+      <li>Use something professional — a version of your real name if it's available (<code>jsmith</code>, <code>jane-smith</code>), not a gamer tag from 2015.</li>
+      <li>Shorter is better. It's what you'll say out loud when someone asks "where can I see your work?"</li>
+      <li>You <em>can</em> rename a GitHub account later (Settings → Account), but old links and clones can break, so it's worth 30 seconds of thought now.</li>
+      <li>If you already have an account with a username you're not thrilled with but have history on (stars, contributions, this program's repos) — it's usually fine to keep it. Consistency has value too.</li>
+    </ul>
+  </div>
+
+  <h2 id="rule" class="section-anchor">Step 2 — The one rule that makes GitHub Pages work</h2>
+  <p>GitHub will host a website for free directly from a repository, but there's a special naming rule you need to know before you pick a template:</p>
+  <table>
+    <tr><th>Repo name</th><th>What you get</th><th>URL</th></tr>
+    <tr><td><code>&lt;username&gt;.github.io</code></td><td>Your <strong>main personal site</strong> — one per account</td><td><code>https://&lt;username&gt;.github.io</code></td></tr>
+    <tr><td>Anything else, e.g. <code>my-project</code></td><td>A <strong>project page</strong> — as many as you want</td><td><code>https://&lt;username&gt;.github.io/my-project</code></td></tr>
+  </table>
+  <p>For your main portfolio, the repository name <strong>must</strong> match your GitHub username exactly (case doesn't matter, but the spelling does), and the repo must be <strong>public</strong>. If you mistype it — even one character off — GitHub will not turn it into your <code>username.github.io</code> site. It'll just be a regular repo that happens to be named that.</p>
+  <div class="card card-navy">
+    <p style="margin:0;"><strong>This site you're reading right now</strong> is exactly this: it lives in a repo called <code>priscilladanso.github.io</code>, which is why it loads at <code>priscilladanso.github.io</code>. This <code>reu2026</code> page is a project folder inside that same repo, which is why its URL is <code>priscilladanso.github.io/reu2026/</code>.</p>
+  </div>
+
+  <h2 id="template" class="section-anchor">Step 3 — Pick a Jekyll template</h2>
+  <p>GitHub Pages runs on a static-site generator called <strong>Jekyll</strong>. You don't need to build a site from nothing — start from a template repo, then make it yours. Here are three solid, actively-maintained options depending on what you want:</p>
+
+  <div class="grid-2">
+    <div class="project-card">
+      <div class="proj-title">al-folio <span class="badge badge-crimson">Recommended for research</span></div>
+      <div class="proj-meta">github.com/alshedivat/al-folio</div>
+      <p>Built specifically for academic/research portfolios — has ready-made sections for Projects, Publications, CV, News, and a blog. If you want to show off your REU project the way a grad student or professor would, start here.</p>
+    </div>
+    <div class="project-card">
+      <div class="proj-title">Minimal Mistakes</div>
+      <div class="proj-meta">github.com/mmistakes/minimal-mistakes</div>
+      <p>General-purpose, very popular, huge amount of documentation and Stack Overflow answers if you get stuck. Great if you want a simpler personal site / blog rather than an academic CV layout.</p>
+    </div>
+    <div class="project-card">
+      <div class="proj-title">academicpages</div>
+      <div class="proj-meta">github.com/academicpages/academicpages.github.io</div>
+      <p>Similar goal to al-folio (academic CV site), forked from Minimal Mistakes. Good alternative if al-folio's structure doesn't click for you.</p>
+    </div>
+    <div class="project-card">
+      <div class="proj-title">Just the Docs</div>
+      <div class="proj-meta">github.com/just-the-docs/just-the-docs</div>
+      <p>Really a documentation-site theme, but works well if your "portfolio" is closer to a technical write-up / project wiki than a CV.</p>
+    </div>
+  </div>
+  <p>Not sure? Pick <strong>al-folio</strong>. It's the one most REU/research students end up with, and its README walks through the exact steps below.</p>
+
+  <h2 id="fork" class="section-anchor">Step 4 — Get the template into your own account</h2>
+  <div class="day-block">
+    <div class="day-title">🍴 Copying the template</div>
+    <div class="day-body">
+      <ol>
+        <li>Go to the template's GitHub page (e.g. <code>github.com/alshedivat/al-folio</code>).</li>
+        <li>Click the green <strong>"Use this template"</strong> button (top right) — if the repo doesn't have that button, click <strong>"Fork"</strong> instead. Either way you end up with your own copy under your account.</li>
+        <li>When prompted for a repository name, type <strong>exactly</strong> <code>&lt;your-username&gt;.github.io</code> — not the template's original name. If you already created the repo with a different name, you can rename it later in <strong>Settings → Repository name</strong>.</li>
+        <li>Make sure the visibility is set to <strong>Public</strong>.</li>
+        <li>Click Create.</li>
+      </ol>
+    </div>
+  </div>
+
+  <h2 id="enable" class="section-anchor">Step 5 — Turn on GitHub Pages</h2>
+  <div class="day-block">
+    <div class="day-title">⚙️ Settings → Pages</div>
+    <div class="day-body">
+      <ol>
+        <li>In your new repo, click the <strong>Settings</strong> tab, then <strong>Pages</strong> in the left menu.</li>
+        <li>Under "Build and deployment," check the <strong>Source</strong> dropdown:
+          <ul>
+            <li>If the template ships a GitHub Actions workflow (al-folio does — check for a <code>.github/workflows/deploy.yml</code> file), leave Source set to <strong>"GitHub Actions"</strong>. The site builds automatically on every push.</li>
+            <li>If there's no workflow file, set Source to <strong>"Deploy from a branch"</strong>, pick branch <code>main</code> (or <code>master</code>), folder <code>/ (root)</code>, and Save.</li>
+          </ul>
+        </li>
+        <li>Go to the <strong>Actions</strong> tab and watch the build run (a few minutes the first time). A green checkmark means it worked.</li>
+        <li>Visit <code>https://&lt;your-username&gt;.github.io</code>. It may take an extra minute or two to go live the very first time — refresh if it 404s immediately.</li>
+      </ol>
+    </div>
+  </div>
+
+  <h2 id="local" class="section-anchor">Step 6 — Set up local editing (recommended)</h2>
+  <p>You can technically edit files directly on github.com, but for anything beyond a typo, you want to preview changes on your own machine before pushing them live.</p>
+  <pre># Clone your new site to your computer
+git clone https://github.com/&lt;your-username&gt;/&lt;your-username&gt;.github.io.git
+cd &lt;your-username&gt;.github.io
+
+# Install Ruby (macOS, via Homebrew) if you don't already have it
+brew install ruby
+
+# Install Jekyll + the project's exact gem versions
+gem install bundler
+bundle install
+
+# Serve the site locally with live rebuilds
+bundle exec jekyll serve
+
+# Now open http://localhost:4000 in your browser</pre>
+  <p>Every template's README has slightly different local-setup instructions (some, like al-folio, offer a Docker option too) — if the commands above don't match, follow the template's own README first.</p>
+
+  <h2 id="customize" class="section-anchor">Step 7 — Make it yours</h2>
+  <p>Almost every Jekyll template is configured from one file: <code>_config.yml</code>, at the repo root. Open it and change at minimum:</p>
+  <ul>
+    <li><strong>name / title</strong> — your name</li>
+    <li><strong>description / bio</strong> — one or two sentences about you</li>
+    <li><strong>email, GitHub, LinkedIn, etc.</strong> — your real links (delete any social links you don't use)</li>
+    <li><strong>avatar / profile picture</strong> — swap the placeholder image in <code>/assets/img/</code></li>
+  </ul>
+  <div class="card card-gold">
+    <h3>Add your REU project</h3>
+    <p style="margin:0;">Most academic templates have a <code>_projects/</code> folder (al-folio) or a <code>_portfolio/</code> folder (Minimal Mistakes) where each file is one project entry. Add one for your REU work this summer: what question you investigated, what you built, your result (e.g. "compared prompting strategies for LLM-based HIPAA compliance extraction across 137 real court cases"), and a link to your code or poster if you have one.</p>
+  </div>
+
+  <h2 id="workflow" class="section-anchor">Step 8 — The commit/push loop (how you update it, forever)</h2>
+  <p>This is the one workflow you'll repeat every time you want to change anything about your site — today, and years from now:</p>
+  <pre># 1. Make your edits in a text editor / VS Code, save the files
+
+# 2. See what changed
+git status
+
+# 3. Stage the files you want to commit
+git add .
+
+# 4. Commit with a short message describing the change
+git commit -m "Add REU research project to portfolio"
+
+# 5. Push to GitHub
+git push</pre>
+  <p>That's it. Pushing to <code>main</code> automatically re-triggers the build (check the <strong>Actions</strong> tab for progress), and your live site updates within a minute or two. No separate "deploy" step.</p>
+  <div class="grid-2">
+    <div class="card card-navy">
+      <h3>If <code>git push</code> asks for a password</h3>
+      <p>GitHub no longer accepts your account password over the command line. Either connect via SSH (<code>git@github.com:...</code> remote + an SSH key in your account settings) or use a Personal Access Token as the password when prompted. GitHub's own docs walk through generating one under Settings → Developer settings → Personal access tokens.</p>
+    </div>
+    <div class="card card-navy">
+      <h3>If the build fails (red X in Actions)</h3>
+      <p>Click into the failed run and read the error — it's almost always a YAML formatting mistake in <code>_config.yml</code> (indentation matters) or a broken link in a Markdown file's front matter. Fix it locally, re-run <code>bundle exec jekyll serve</code> to confirm it builds clean, then commit and push again.</p>
+    </div>
+  </div>
+
+  <h2 id="checklist" class="section-anchor">Final Checklist</h2>
+  <div class="card card-gold">
+    <ul>
+      <li>GitHub account exists, username is one you're comfortable with long-term</li>
+      <li>Repo is named exactly <code>&lt;username&gt;.github.io</code> and is public</li>
+      <li>GitHub Pages is enabled (Settings → Pages) and the Actions tab shows a green build</li>
+      <li><code>https://&lt;username&gt;.github.io</code> loads in a browser</li>
+      <li><code>_config.yml</code> updated with your real name, bio, and links</li>
+      <li>Your REU project added as a project/portfolio entry</li>
+      <li>You've done the edit → <code>git add</code> → <code>git commit</code> → <code>git push</code> loop at least once successfully</li>
+      <li>Link added to your resume / LinkedIn / grad school applications</li>
+    </ul>
+  </div>
+
+  <div class="card" style="margin-top:24px;text-align:center;padding:32px;">
+    <h3 style="font-size:1.3rem;margin-bottom:8px;">This site doesn't have to end when the program does.</h3>
+    <p style="color:var(--muted);">Keep adding to it — every project, internship, and paper from here on out. It's the one piece of this summer that's entirely yours to keep building.</p>
+  </div>
+
+  <footer>ComplianceGPT Lab · AI Innovation &amp; Diffusion REU 2026 · Stony Brook University</footer>
+</div>
+</main>
+</body>
+</html>
