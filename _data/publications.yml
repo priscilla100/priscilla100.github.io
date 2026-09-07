@@ -1,4 +1,26 @@
 main:
+  - title: "ATHENA: Answering Regulatory Permissibility Questions through Iterative Fact Finding"
+    authors: <strong>Priscilla Kyei Danso</strong>, et al.
+    conference_short: PoPETs
+    conference: Proceedings on Privacy Enhancing Technologies (PoPETs), 2027
+    notes: Under Review, Issue 2
+    image: /assets/img/overview.png
+
+  - title: "Syntax Is Easy, Semantics Is Hard: Evaluating LLMs for LTL Translation"
+    authors: <strong>Priscilla Kyei Danso</strong>, et al.
+    conference_short: SecDev '26
+    conference: Proceedings of the 2026 ACM Secure Development Conference (SecDev '26), Montreal, QC, Canada
+    pdf: https://dl.acm.org/doi/10.1145/3805773.3806005
+    image: /assets/img/llm.png
+
+  - title: "LLM-based Anomaly Detection for Digital Substation Cybersecurity"
+    authors: <strong>Priscilla Kyei Danso</strong>, et al.
+    conference_short: HONET
+    conference: IEEE Smart Communities (HONET), 2025
+    notes: To appear December 2025
+    pdf: https://github.com/priscilla100/all_publications_pdf/blob/main/LLMbasedAnomalyDetectionforDigitalSubstationCybersecurity.pdf
+    image: /assets/img/llm.png
+
   - title: "Transferability of Machine Learning Algorithm for IoT Device Profiling and Identification"
     authors: <strong>Priscilla Kyei Danso</strong>, Sajjad Dadkhah, Euclides Carlos Pinto Neto, Alireza Zohourian, Heather Molyneaux, Rongxing Lu
     conference_short: IOTJ 
@@ -42,7 +64,7 @@ main:
   - title: "IoT Zigbee device security: A comprehensive review"
     authors: 	Alireza Zohourian, Sajjad Dadkhah, Euclides Carlos Pinto Neto, Hassan Mahdikhani, <strong>Priscilla Kyei Danso</strong>, Heather Molyneaux, Ali A. Ghorbani
     conference_short: IoTJ
-    conference: Elsevier Internet of Things <strong>(ICLR)</strong>, 2023.
+    conference: Elsevier Internet of Things Journal, 2023.
     pdf: https://drive.google.com/file/d/1y5s-g6vXDQRM4PfAkoSiAiN2dFkRmKY2/view
     # code: https://github.com/wufeim/DST3D
     # page: https://ccvl.jhu.edu/3D-DST/

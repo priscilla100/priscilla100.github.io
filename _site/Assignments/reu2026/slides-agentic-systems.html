@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agentic Systems · ComplianceGPT Lab REU 2026</title>
+<style>
+:root { --crimson:#990000; --navy:#003366; --gold:#f0a500; --green:#1f7a3c; --border:#dee2e6; --muted:#6c757d; }
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:Georgia,'Times New Roman',serif; background:#1a1a2e; color:#fff; }
+
+.slide-controls { position:fixed; bottom:24px; right:28px; z-index:999; display:flex; gap:8px; }
+.slide-controls button { background:rgba(255,255,255,0.15); color:#fff; border:1px solid rgba(255,255,255,0.25); padding:8px 18px; border-radius:6px; cursor:pointer; font-size:0.9rem; font-family:'Segoe UI',system-ui,sans-serif; backdrop-filter:blur(4px); }
+.slide-controls button:hover { background:rgba(255,255,255,0.3); }
+.slide-controls.on-light button { background:rgba(0,51,102,0.1); color:#003366; border:1px solid rgba(0,51,102,0.25); }
+#slide-counter { position:fixed; bottom:30px; left:28px; z-index:999; font-family:'Segoe UI',system-ui,sans-serif; font-size:0.8rem; color:rgba(255,255,255,0.45); }
+#slide-counter.on-light { color:rgba(0,0,0,0.3); }
+#progress-bar { position:fixed; top:0; left:0; height:3px; background:var(--gold); transition:width 0.3s; z-index:999; }
+
+.slide { display:none; min-height:100vh; padding:52px 72px; position:relative; flex-direction:column; justify-content:center; }
+.slide.active { display:flex; }
+
+.slide-dark    { background:#0d1b3e; }
+.slide-crimson { background:linear-gradient(135deg,#6b0000 0%,#990000 100%); }
+.slide-navy    { background:linear-gradient(135deg,#001f4d 0%,#003366 100%); }
+.slide-teal    { background:linear-gradient(135deg,#003333 0%,#005f5f 100%); }
+.slide-white   { background:#fff; color:#212529; }
+.slide-light   { background:#f8f9fa; color:#212529; }
+.slide-green   { background:linear-gradient(135deg,#0a3d1f 0%,#1f7a3c 100%); }
+.slide-purple  { background:linear-gradient(135deg,#1a0a3d 0%,#3d1a7a 100%); }
+.slide-amber   { background:linear-gradient(135deg,#3d2a00 0%,#7a5200 100%); }
+
+.slide-label { font-family:'Segoe UI',system-ui,sans-serif; font-size:0.7rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--gold); margin-bottom:10px; }
+.slide-white .slide-label,.slide-light .slide-label { color:var(--crimson); }
+.slide-green .slide-label { color:#a8f0c8; }
+.slide-purple .slide-label { color:#c8a8ff; }
+.slide-amber .slide-label { color:#f0c870; }
+
+.slide h1 { font-size:2.85rem; line-height:1.15; font-weight:700; margin-bottom:18px; }
+.slide h2 { font-size:1.9rem; line-height:1.2; font-weight:700; margin-bottom:14px; }
+.slide h3 { font-size:1.15rem; font-weight:700; margin-bottom:8px; }
+.slide p  { font-size:1.02rem; line-height:1.65; margin-bottom:10px; }
+.slide li { font-size:0.95rem; line-height:1.6; margin-bottom:6px; }
+.slide ul { padding-left:20px; }
+.slide-white h2,.slide-white h3 { color:var(--navy); }
+.slide-light h2,.slide-light h3 { color:var(--navy); }
+.subtitle { font-size:1.1rem; color:rgba(255,255,255,0.65); font-style:italic; }
+.subtitle-dark { color:var(--muted); font-style:italic; font-size:0.98rem; }
+
+.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:16px; }
+.grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-top:16px; }
+.grid-4 { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:14px; margin-top:16px; }
+
+.card { border-radius:8px; padding:16px 20px; font-family:'Segoe UI',system-ui,sans-serif; }
+.card-glass { background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); }
+.card-white { background:#fff; color:#212529; box-shadow:0 2px 8px rgba(0,0,0,0.12); }
+.card-gold  { background:#fffdf5; border-left:4px solid var(--gold); color:#212529; }
+.card-crimson { background:#fff5f5; border-left:4px solid var(--crimson); color:#212529; }
+.card-green { background:#f0fff4; border-left:4px solid var(--green); color:#212529; }
+.card h3 { font-size:0.9rem; margin-bottom:7px; }
+.card p,.card li { font-size:0.84rem; line-height:1.55; }
+.card ul { padding-left:16px; }
+
+.code-block { background:#1e1e2e; color:#cdd6f4; border-radius:6px; padding:14px 18px; font-family:'Courier New',Consolas,monospace; font-size:0.8rem; line-height:1.55; margin:10px 0; overflow-x:auto; }
+.code-block .kw  { color:#cba6f7; }
+.code-block .str { color:#a6e3a1; }
+.code-block .num { color:#fab387; }
+.code-block .com { color:#6c7086; font-style:italic; }
+.code-block .out { color:#f5c2e7; font-style:italic; }
+
+.highlight      { background:var(--gold);    color:#000; padding:2px 8px; border-radius:4px; font-weight:700; }
+.highlight-red  { background:var(--crimson); color:#fff; padding:2px 8px; border-radius:4px; font-weight:700; }
+.highlight-green{ background:var(--green);   color:#fff; padding:2px 8px; border-radius:4px; font-weight:700; }
+
+.tag { display:inline-block; padding:2px 9px; border-radius:3px; font-size:0.7rem; font-weight:700; font-family:'Segoe UI',system-ui,sans-serif; margin:2px; }
+.tag-gold   { background:var(--gold);    color:#000; }
+.tag-red    { background:var(--crimson); color:#fff; }
+.tag-green  { background:var(--green);   color:#fff; }
+.tag-navy   { background:var(--navy);    color:#fff; }
+.tag-purple { background:#5b21b6;        color:#fff; }
+.tag-teal   { background:#0f766e;        color:#fff; }
+
+.flow { display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin:14px 0; font-family:'Segoe UI',system-ui,sans-serif; }
+.flow-box { border-radius:6px; padding:9px 14px; text-align:center; min-width:90px; font-size:0.83rem; }
+.flow-arrow { font-size:1.3rem; color:var(--gold); flex-shrink:0; }
+
+.section-divider { position:absolute; top:20px; left:72px; font-family:'Segoe UI',system-ui,sans-serif; font-size:0.7rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; opacity:0.4; }
+.slide-num { position:absolute; top:20px; right:28px; font-family:'Segoe UI',system-ui,sans-serif; font-size:0.75rem; color:rgba(255,255,255,0.2); }
+.slide-white .slide-num,.slide-light .slide-num { color:rgba(0,0,0,0.15); }
+
+.section-banner { display:inline-block; background:var(--gold); color:#000; font-family:'Segoe UI',system-ui,sans-serif; font-size:0.73rem; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; padding:4px 14px; border-radius:4px; margin-bottom:14px; }
+
+table.data-table { width:100%; border-collapse:collapse; font-family:'Segoe UI',system-ui,sans-serif; font-size:0.82rem; }
+table.data-table th { text-align:left; padding:7px 10px; background:rgba(255,255,255,0.08); font-weight:700; }
+table.data-table td { padding:6px 10px; }
+.slide-light table.data-table th, .slide-white table.data-table th { background:var(--navy); color:#fff; }
+.slide-light table.data-table tr:nth-child(even) td, .slide-white table.data-table tr:nth-child(even) td { background:#f8f9fa; }
+.mono { font-family:'Courier New',Consolas,monospace; }
+.verified { display:inline-block; font-size:0.62rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:1px 7px; border-radius:3px; background:rgba(31,122,60,0.25); color:#a8f0c8; border:1px solid rgba(168,240,200,0.35); margin-left:6px; }
+.slide-light .verified, .slide-white .verified { background:#f0fff4; color:#1f7a3c; border-color:#c3e6cb; }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div id="slide-counter">1 / 19</div>
+<div class="slide-controls">
+  <button onclick="prevSlide()">← Prev</button>
+  <button onclick="nextSlide()">Next →</button>
+</div>
+
+<!-- 1 TITLE -->
+<div class="slide slide-purple active">
+  <span class="slide-num">1</span>
+  <div class="slide-label">ComplianceGPT Lab · AI Innovation &amp; Diffusion REU 2026</div>
+  <h1>Agentic Systems</h1>
+  <p class="subtitle">When one prompt isn't enough — reflection, tool use, and multi-agent pipelines, illustrated with our own production code</p>
+  <div style="margin-top:32px;font-family:'Segoe UI',system-ui,sans-serif;">
+    <div class="flow">
+      <div class="flow-box" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);">
+        <div style="font-weight:700;">Week 3</div>
+        <div style="font-size:0.72rem;color:rgba(255,255,255,0.5);margin-top:2px;">One prompt, one call</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="background:var(--gold);color:#000;font-weight:700;">
+        <div>Today</div>
+        <div style="font-size:0.72rem;margin-top:2px;">Reflection · tools · pipelines</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);">
+        <div style="font-weight:700;">Week 4</div>
+        <div style="font-size:0.72rem;color:rgba(255,255,255,0.5);margin-top:2px;">Retrieval as a component</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2 LEARNING ARC -->
+<div class="slide slide-light">
+  <span class="slide-num">2</span>
+  <h2>Learning Arc</h2>
+  <div class="grid-2" style="margin-top:14px;">
+    <div class="card card-gold">
+      <h3>By the end of today you can</h3>
+      <ul>
+        <li>Place any LLM system on the spectrum: single-shot → reflective → tool-calling agent → multi-agent pipeline</li>
+        <li>Explain exactly what <span class="mono">extract_with_reflection()</span> does, pass by pass</li>
+        <li>State why our pipeline is fixed-topology, not a free-roaming agent — and why that's a deliberate choice for a compliance system</li>
+      </ul>
+    </div>
+    <div class="card card-green">
+      <h3>Today's notebook</h3>
+      <p><span class="mono">notebooks/teach_07_agentic.ipynb</span> — build a minimal one-step reflective wrapper around a real GoldCoin extraction call and measure whether reflection fixes a known failure case.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 3 THE SPECTRUM -->
+<div class="slide slide-navy">
+  <span class="slide-num">3</span>
+  <div class="section-divider">Part 1 — What Makes a System "Agentic"?</div>
+  <h2>A Spectrum, Not a Binary</h2>
+  <p style="color:rgba(255,255,255,0.7);">"Agentic" gets used loosely. It's more useful as a spectrum of how much autonomy the system has over its own next step.</p>
+  <div class="grid-4" style="margin-top:18px;">
+    <div class="card card-glass">
+      <div class="tag tag-navy">Level 0</div>
+      <h3 style="color:var(--gold);margin-top:6px;">Single-shot</h3>
+      <p>One prompt in, one answer out. No self-checking.</p>
+    </div>
+    <div class="card card-glass">
+      <div class="tag tag-teal">Level 1</div>
+      <h3 style="color:var(--gold);margin-top:6px;">Reflection</h3>
+      <p>The model re-examines its own prior output via another prompt. No external tool calls.</p>
+    </div>
+    <div class="card card-glass">
+      <div class="tag tag-purple">Level 2</div>
+      <h3 style="color:var(--gold);margin-top:6px;">Tool-calling (ReAct)</h3>
+      <p>The model itself decides when to call an external function and reads the result before continuing.</p>
+    </div>
+    <div class="card card-glass">
+      <div class="tag tag-red">Level 3</div>
+      <h3 style="color:var(--gold);margin-top:6px;">Multi-agent pipeline</h3>
+      <p>Several specialized components (LLM or not) hand off to each other in a designed sequence.</p>
+    </div>
+  </div>
+  <p style="margin-top:16px;font-size:0.88rem;color:rgba(255,255,255,0.55);">Spoiler: ComplianceGPT sits at Level 1 internally (reflection) inside a Level 3 pipeline (extractor → verifier → explainer). It is <em>not</em> a Level 2 ReAct agent — and that's on purpose, coming up.</p>
+</div>
+
+<!-- 4 CASE STUDY INTRO -->
+<div class="slide slide-crimson">
+  <span class="slide-num">4</span>
+  <div class="section-divider">Part 2 — Case Study: Our Own Pipeline</div>
+  <h2>Three Real Methods, Three Levels of Sophistication</h2>
+  <p style="color:rgba(255,255,255,0.85);">All three live in <span class="mono">connector/llm1_extractor.py</span>, and you can call any of them from <span class="mono">app/batch_runner.py</span> with a flag.</p>
+  <table class="data-table" style="margin-top:14px;">
+    <tr><th>Method</th><th>Flag</th><th>What it does</th></tr>
+    <tr><td class="mono">extract()</td><td>(default)</td><td>One LLM call. Scenario in, JSON facts out.</td></tr>
+    <tr><td class="mono">extract_with_rag()</td><td class="mono">--use-rag</td><td>BM25-retrieves relevant predicate vocabulary before the one extraction call.</td></tr>
+    <tr><td class="mono">extract_with_reflection()</td><td class="mono">--reflect</td><td>RAG extraction, then <strong>3 more LLM passes</strong> that re-examine the first pass's own output.</td></tr>
+  </table>
+</div>
+
+<!-- 5 FOUR PASSES -->
+<div class="slide slide-dark">
+  <span class="slide-num">5</span>
+  <div class="section-divider">Part 2 — Case Study: Our Own Pipeline</div>
+  <h2>Inside <span class="mono" style="font-size:1.5rem;">extract_with_reflection()</span> <span class="verified">verified — connector/llm1_extractor.py:1185</span></h2>
+  <div class="flow" style="margin-top:10px;">
+    <div class="flow-box" style="background:rgba(255,255,255,0.1);min-width:130px;">
+      <div style="font-weight:700;color:var(--gold);">Pass 1</div>
+      <div style="font-size:0.72rem;">RAG extraction — all fields, first draft</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="background:rgba(255,255,255,0.1);min-width:130px;">
+      <div style="font-weight:700;color:var(--gold);">Pass 1.5</div>
+      <div style="font-size:0.72rem;">CI-tuple check — re-examines sender/receiver/purpose direction</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="background:rgba(255,255,255,0.1);min-width:130px;">
+      <div style="font-weight:700;color:var(--gold);">Pass 2</div>
+      <div style="font-size:0.72rem;">Oracle check — re-examines 7 highest-impact boolean predicates</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="background:rgba(255,255,255,0.1);min-width:130px;">
+      <div style="font-weight:700;color:var(--gold);">Pass 3</div>
+      <div style="font-size:0.72rem;">Judicial check — only fires for §164.512(e)/(f) scenarios</div>
+    </div>
+  </div>
+  <p style="margin-top:18px;font-size:0.9rem;color:rgba(255,255,255,0.6);">Every pass is a fresh LLM call. Pass 2's prompt literally includes the words <span class="mono">"already verified for roles/attribute/purpose"</span> — each pass hands the next one its improved facts, in text.</p>
+</div>
+
+<!-- 6 REFLECTION NOT TOOL USE -->
+<div class="slide slide-teal">
+  <span class="slide-num">6</span>
+  <div class="section-divider">Part 2 — Case Study: Our Own Pipeline</div>
+  <h2>Important Distinction: This Is Reflection, Not Tool-Calling</h2>
+  <div class="grid-2" style="margin-top:14px;">
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">What it is</h3>
+      <ul>
+        <li>Every pass is still just <em>text in, text out</em></li>
+        <li>The model never calls the Souffle Datalog verifier mid-extraction</li>
+        <li>"Verification" here means: another LLM prompt re-reads the facts and second-guesses them</li>
+      </ul>
+    </div>
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">What it would take to be Level 2 (ReAct)</h3>
+      <ul>
+        <li>The model would decide, itself, "I should check this against the verifier now"</li>
+        <li>It would call a real function, get back real verifier output, and read it before answering</li>
+        <li>Our pipeline never does this — the sequence of passes is fixed by the engineer, not chosen by the model</li>
+      </ul>
+    </div>
+  </div>
+  <p style="margin-top:16px;font-size:0.9rem;color:rgba(255,255,255,0.65);">Terminology check: some people call any multi-step LLM process "agentic." We'll be precise — reflection and tool-calling are genuinely different mechanisms with different failure modes.</p>
+</div>
+
+<!-- 7 THE REAL NUMBERS: QWEN -->
+<div class="slide slide-white">
+  <span class="slide-num">7</span>
+  <div class="section-divider">Part 2 — Case Study: Our Own Pipeline</div>
+  <h2>Does Reflection Actually Help? Depends on the Model. <span class="verified">verified — RQ2 ablation</span></h2>
+  <p class="subtitle-dark">n=137, GoldCoin-HHS, same scenarios, same three configurations.</p>
+  <table class="data-table" style="margin-top:12px;">
+    <tr><th>Configuration</th><th>Qwen2.5:72B</th><th>Gemma3:4B</th></tr>
+    <tr><td>Single-pass (no RAG)</td><td>92.7%</td><td>54.0%</td></tr>
+    <tr><td>+ BM25 RAG (no reflect)</td><td style="color:var(--crimson);font-weight:700;">84.7% (−8.0pp)</td><td>63.5% (+9.5pp)</td></tr>
+    <tr><td>+ Four-pass reflection</td><td>92.7% (+8.0pp)</td><td style="color:var(--green);font-weight:700;">94.2% (+30.7pp)</td></tr>
+    <tr><td><em>Oracle ceiling</em></td><td><em>100%</em></td><td><em>100%</em></td></tr>
+  </table>
+  <p style="margin-top:14px;font-size:0.9rem;color:var(--muted);">For the small model, the full pipeline is the whole story — a +30.7pp gain. For the large model, raw retrieval <em>hurts</em> and reflection's real job is <strong>undoing that damage</strong>, not adding new capability.</p>
+</div>
+
+<!-- 8 WHY THE REGRESSION HAPPENS -->
+<div class="slide slide-amber">
+  <span class="slide-num">8</span>
+  <div class="section-divider">Part 2 — Case Study: Our Own Pipeline</div>
+  <h2>Why Would Retrieval Ever Make Things Worse?</h2>
+  <p style="color:rgba(255,255,255,0.8);">A large, well-instruction-tuned model already extracts facts fairly reliably on its own (92.7%). BM25 then injects retrieved predicate candidates into the same single-shot call, with no chance to reconcile them.</p>
+  <div class="card card-glass" style="margin-top:14px;">
+    <h3 style="color:var(--gold);">The mechanism</h3>
+    <p>Noisy or partially-matching retrieved vocabulary competes with the model's own read of the scenario in the same forward pass. For a model that didn't need the help, this is pure noise some of the time — accuracy drops to 84.7%.</p>
+  </div>
+  <p style="margin-top:14px;font-size:0.92rem;">The reflective passes then re-examine those same facts against the oracle criteria and recover the loss — accuracy lands back at 92.7%, exactly where single-pass started. <strong>Reflection's role, for a strong model, is damage control on a component (RAG) that helps weaker models but can mislead stronger ones.</strong></p>
+</div>
+
+<!-- 9 REACT INTRO -->
+<div class="slide slide-navy">
+  <span class="slide-num">9</span>
+  <div class="section-divider">Part 3 — True Tool-Calling Agents</div>
+  <h2>ReAct: Reason + Act, in a Loop</h2>
+  <p style="color:rgba(255,255,255,0.7);">The most common "real" agent pattern. The model alternates between reasoning in text and calling a tool, observing the tool's real output before deciding what to do next.</p>
+  <div class="flow" style="margin-top:16px;">
+    <div class="flow-box" style="background:rgba(255,255,255,0.1);">Thought</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="background:rgba(255,255,255,0.1);">Action (call a tool)</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="background:rgba(255,255,255,0.1);">Observation (real result)</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="background:var(--gold);color:#000;">Thought again...</div>
+  </div>
+  <div class="code-block" style="margin-top:16px;">
+Thought: I need to know if this disclosure requires authorization.
+Action: query_verifier(facts)
+Observation: <span class="out">missing predicate: obtained_authorization_164_508</span>
+Thought: I should ask a follow-up extraction pass specifically for that field.
+Action: reextract_field(<span class="str">"obtained_authorization_164_508"</span>)
+Observation: <span class="out">false</span>
+Thought: Facts are now complete. Final verdict: DENIED.
+  </div>
+</div>
+
+<!-- 10 WHAT WOULD A REAL AGENT VERSION LOOK LIKE -->
+<div class="slide slide-light">
+  <span class="slide-num">10</span>
+  <div class="section-divider">Part 3 — True Tool-Calling Agents</div>
+  <h2>What Would an Agentic ComplianceGPT Look Like?</h2>
+  <div class="grid-2" style="margin-top:14px;">
+    <div class="card card-crimson">
+      <h3 style="color:var(--crimson);">Our current design (fixed pipeline)</h3>
+      <ul>
+        <li>Always exactly 4 passes, same order, every scenario</li>
+        <li>Engineer chose the checks in advance (CI-tuple, oracle, judicial)</li>
+        <li>The Souffle verifier only runs once, after extraction is finished</li>
+      </ul>
+    </div>
+    <div class="card card-gold">
+      <h3>A hypothetical ReAct version</h3>
+      <ul>
+        <li>Model decides after each fact whether to query the verifier</li>
+        <li>Model decides which specific predicate to re-extract, if any</li>
+        <li>Number of LLM calls varies scenario to scenario</li>
+      </ul>
+    </div>
+  </div>
+  <p style="margin-top:16px;font-size:0.92rem;color:var(--muted);">This is a real design decision, not an oversight — next slide.</p>
+</div>
+
+<!-- 11 WHY WE DIDN'T BUILD A REACT AGENT -->
+<div class="slide slide-crimson">
+  <span class="slide-num">11</span>
+  <div class="section-divider">Part 3 — True Tool-Calling Agents</div>
+  <h2>Why a Compliance System Should Distrust Autonomy</h2>
+  <p style="color:rgba(255,255,255,0.85);">Flexibility and predictability trade off directly. For a legal-compliance verifier, predictability usually wins.</p>
+  <div class="grid-2" style="margin-top:14px;">
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">Cost of letting the model decide</h3>
+      <ul>
+        <li>Two runs of the same scenario could take different paths</li>
+        <li>Harder to audit: "why did it call the verifier 3 times here and 0 times there?"</li>
+        <li>New failure mode: the model can also get the <em>decision to call a tool</em> wrong</li>
+      </ul>
+    </div>
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">Benefit of the fixed pipeline</h3>
+      <ul>
+        <li>Every scenario gets the identical, reviewable sequence of checks</li>
+        <li>The paper's "proof tree" claim — a faithful audit trail — depends on this determinism</li>
+        <li>Easier to reason about in a security/compliance threat model</li>
+      </ul>
+    </div>
+  </div>
+  <p style="margin-top:14px;font-size:0.9rem;color:rgba(255,255,255,0.65);">General lesson: more autonomy is not automatically better engineering. Match the level of agency to how much you need to audit and reproduce the result.</p>
+</div>
+
+<!-- 12 MULTI-AGENT PIPELINE -->
+<div class="slide slide-teal">
+  <span class="slide-num">12</span>
+  <div class="section-divider">Part 4 — Multi-Agent Pipelines</div>
+  <h2>The Whole System Is a 3-Agent Pipeline — and One of Them Isn't an LLM</h2>
+  <div class="flow" style="margin-top:18px;">
+    <div class="flow-box" style="background:rgba(255,255,255,0.1);min-width:150px;">
+      <div style="font-weight:700;color:var(--gold);">LLM1</div>
+      <div style="font-size:0.75rem;">Extractor — narrative → formal facts</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="background:var(--gold);color:#000;min-width:150px;">
+      <div style="font-weight:700;">Souffle Datalog</div>
+      <div style="font-size:0.75rem;">Symbolic verifier — deterministic, not an LLM</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="background:rgba(255,255,255,0.1);min-width:150px;">
+      <div style="font-weight:700;color:var(--gold);">LLM2</div>
+      <div style="font-size:0.75rem;">Explainer — proof tree → plain-English rationale</div>
+    </div>
+  </div>
+  <p style="margin-top:18px;font-size:0.95rem;color:rgba(255,255,255,0.7);">Most "multi-agent" tutorials chain several LLMs together. We deliberately put a <strong>non-LLM, 100%-deterministic formal-methods engine</strong> in the middle. That's the actual reason the system's verdicts are auditable at all — the part that decides PERMIT/DENY never hallucinates, because it isn't a language model.</p>
+</div>
+
+<!-- 13 TAKEAWAY TABLE -->
+<div class="slide slide-white">
+  <span class="slide-num">13</span>
+  <h2>Where Everything We Covered Sits on the Spectrum</h2>
+  <table class="data-table" style="margin-top:12px;">
+    <tr><th>System</th><th>Level</th><th>Autonomy over next step?</th></tr>
+    <tr><td><span class="mono">extract()</span></td><td>0 — Single-shot</td><td>N/A</td></tr>
+    <tr><td><span class="mono">extract_with_rag()</span></td><td>0 — Single-shot + retrieval</td><td>No</td></tr>
+    <tr><td><span class="mono">extract_with_reflection()</span></td><td>1 — Reflection</td><td>No — passes are fixed in advance</td></tr>
+    <tr><td>Hypothetical ReAct extractor</td><td>2 — Tool-calling</td><td>Yes — model chooses when/what to query</td></tr>
+    <tr><td>Full ComplianceGPT pipeline</td><td>3 — Multi-agent</td><td>No, by design — fixed topology, one non-LLM component</td></tr>
+  </table>
+</div>
+
+<!-- 14 NOTEBOOK PREVIEW -->
+<div class="slide slide-green">
+  <span class="slide-num">14</span>
+  <h2>Today's Notebook — <span class="mono" style="font-size:1.5rem;">teach_07_agentic.ipynb</span></h2>
+  <ol style="padding-left:22px;font-size:1.02rem;line-height:1.9;">
+    <li>Load one known-wrong GoldCoin scenario from your Week 2 batch results</li>
+    <li>Run it through <span class="mono">extract()</span> — confirm the wrong verdict, print the raw facts</li>
+    <li>Wrap it in a one-step reflection: re-prompt the model with its own facts plus <em>"double check this against the oracle criteria"</em></li>
+    <li>Run the Souffle verifier on both fact sets — before and after reflection</li>
+    <li>Compare: did the one reflection pass change the verdict? Was it the right change?</li>
+  </ol>
+</div>
+
+<!-- 15 ASSIGNMENT -->
+<div class="slide slide-crimson">
+  <span class="slide-num">15</span>
+  <h2>Assignment — Reflective Wrapper Mini-Lab</h2>
+  <div class="card card-glass" style="margin-top:10px;">
+    <h3 style="color:var(--gold);">Task</h3>
+    <p style="font-size:0.95rem;">Take 15 scenarios from GoldCoin-HHS (your choice, but include the wrong prediction you used in Week 3's prompting exercise). Run each through:</p>
+    <ol style="padding-left:20px;font-size:0.92rem;line-height:1.7;">
+      <li>Baseline: <span class="mono">extract()</span>, single pass</li>
+      <li>Your own one-step reflection wrapper (built in today's notebook)</li>
+    </ol>
+    <p style="font-size:0.95rem;margin-top:8px;">Report: accuracy before vs. after, and for every case that <em>flipped</em> (right→wrong or wrong→right), one sentence on why.</p>
+  </div>
+  <p style="margin-top:14px;font-size:0.9rem;color:rgba(255,255,255,0.7);">This previews the kind of experiment several Week 3 project options (Prompt Engineering Study, Error Taxonomy) will scale up to 137 rows.</p>
+</div>
+
+<!-- 16 CONNECTING TO WEEK 4 -->
+<div class="slide slide-navy">
+  <span class="slide-num">16</span>
+  <h2>Where This Goes Next — Week 4: RAG</h2>
+  <p style="color:rgba(255,255,255,0.75);">You've now seen retrieval (BM25) purely as a source of noise-or-signal inside a fixed pipeline. Week 4 asks the deeper question: what actually goes into the retrieval index, and how do you make it a reliable component rather than a coin flip?</p>
+  <div class="flow" style="margin-top:16px;">
+    <div class="flow-box" style="background:rgba(255,255,255,0.1);">Reflection (today)</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="background:var(--gold);color:#000;">Retrieval quality (Week 4)</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="background:rgba(255,255,255,0.1);">Your project (Week 4–5)</div>
+  </div>
+</div>
+
+<!-- 17 QUESTIONS TO SIT WITH -->
+<div class="slide slide-dark">
+  <span class="slide-num">17</span>
+  <h2>Questions to Sit With</h2>
+  <ul style="font-size:1.05rem;line-height:2.1;">
+    <li>If reflection mostly undoes RAG's own damage on Qwen, would skipping RAG entirely and keeping only reflection do just as well? How would you test that with the CSVs you already have?</li>
+    <li>What's one place in your own project where a ReAct-style "let the model decide" design would be actively dangerous?</li>
+    <li>Is there a 4th level beyond multi-agent pipelines? What would it look like?</li>
+  </ul>
+</div>
+
+<!-- 18 RECAP -->
+<div class="slide slide-green">
+  <span class="slide-num">18</span>
+  <h2>Recap</h2>
+  <ol style="padding-left:22px;font-size:1.05rem;line-height:2;">
+    <li>"Agentic" is a spectrum: single-shot → reflection → tool-calling → multi-agent</li>
+    <li>Our 4-pass extractor is reflection, not tool-calling — no live verifier call mid-loop</li>
+    <li>Reflection's benefit is model-dependent: capability gain for small models, damage control for large ones</li>
+    <li>Our full pipeline is a 3-agent, fixed-topology system with a deliberately non-LLM verifier at its center</li>
+    <li>Autonomy and auditability trade off — compliance systems should default to less autonomy, not more</li>
+  </ol>
+</div>
+
+<!-- 19 CLOSING -->
+<div class="slide slide-purple">
+  <span class="slide-num">19</span>
+  <h1 style="font-size:2.2rem;">One Prompt Was Never the Whole Story</h1>
+  <p class="subtitle">Reflection, retrieval, and a deterministic verifier — three components, one designed pipeline, and now you've read the code that proves it.</p>
+</div>
+
+<script>
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+const counter = document.getElementById('slide-counter');
+const bar = document.getElementById('progress-bar');
+const controls = document.querySelector('.slide-controls');
+
+function showSlide(n) {
+  slides[current].classList.remove('active');
+  current = (n + slides.length) % slides.length;
+  slides[current].classList.add('active');
+  counter.textContent = (current + 1) + ' / ' + slides.length;
+  bar.style.width = ((current + 1) / slides.length * 100) + '%';
+  const light = slides[current].classList.contains('slide-white') ||
+                slides[current].classList.contains('slide-light');
+  controls.classList.toggle('on-light', light);
+  counter.classList.toggle('on-light', light);
+}
+function nextSlide() { showSlide(current + 1); }
+function prevSlide() { showSlide(current - 1); }
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+  if (e.key === 'ArrowLeft') prevSlide();
+});
+</script>
+</body>
+</html>

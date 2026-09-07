@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompting 101 · ComplianceGPT Lab REU 2026</title>
+<style>
+:root { --crimson:#990000; --navy:#003366; --gold:#f0a500; --green:#1f7a3c; --border:#dee2e6; --muted:#6c757d; }
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:Georgia,'Times New Roman',serif; background:#1a1a2e; color:#fff; }
+
+.slide-controls { position:fixed; bottom:24px; right:28px; z-index:999; display:flex; gap:8px; }
+.slide-controls button { background:rgba(255,255,255,0.15); color:#fff; border:1px solid rgba(255,255,255,0.25); padding:8px 18px; border-radius:6px; cursor:pointer; font-size:0.9rem; font-family:'Segoe UI',system-ui,sans-serif; backdrop-filter:blur(4px); }
+.slide-controls button:hover { background:rgba(255,255,255,0.3); }
+.slide-controls.on-light button { background:rgba(0,51,102,0.1); color:#003366; border:1px solid rgba(0,51,102,0.25); }
+#slide-counter { position:fixed; bottom:30px; left:28px; z-index:999; font-family:'Segoe UI',system-ui,sans-serif; font-size:0.8rem; color:rgba(255,255,255,0.45); }
+#slide-counter.on-light { color:rgba(0,0,0,0.3); }
+#progress-bar { position:fixed; top:0; left:0; height:3px; background:var(--gold); transition:width 0.3s; z-index:999; }
+
+.slide { display:none; min-height:100vh; padding:52px 72px; position:relative; flex-direction:column; justify-content:center; }
+.slide.active { display:flex; }
+
+.slide-dark    { background:#0d1b3e; }
+.slide-crimson { background:linear-gradient(135deg,#6b0000 0%,#990000 100%); }
+.slide-navy    { background:linear-gradient(135deg,#001f4d 0%,#003366 100%); }
+.slide-teal    { background:linear-gradient(135deg,#003333 0%,#005f5f 100%); }
+.slide-white   { background:#fff; color:#212529; }
+.slide-light   { background:#f8f9fa; color:#212529; }
+.slide-green   { background:linear-gradient(135deg,#0a3d1f 0%,#1f7a3c 100%); }
+.slide-purple  { background:linear-gradient(135deg,#1a0a3d 0%,#3d1a7a 100%); }
+.slide-amber   { background:linear-gradient(135deg,#3d2a00 0%,#7a5200 100%); }
+
+.slide-label { font-family:'Segoe UI',system-ui,sans-serif; font-size:0.7rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--gold); margin-bottom:10px; }
+.slide-white .slide-label,.slide-light .slide-label { color:var(--crimson); }
+.slide-green .slide-label { color:#a8f0c8; }
+.slide-purple .slide-label { color:#c8a8ff; }
+.slide-amber .slide-label { color:#f0c870; }
+
+.slide h1 { font-size:2.85rem; line-height:1.15; font-weight:700; margin-bottom:18px; }
+.slide h2 { font-size:1.9rem; line-height:1.2; font-weight:700; margin-bottom:14px; }
+.slide h3 { font-size:1.15rem; font-weight:700; margin-bottom:8px; }
+.slide p  { font-size:1.02rem; line-height:1.65; margin-bottom:10px; }
+.slide li { font-size:0.95rem; line-height:1.6; margin-bottom:6px; }
+.slide ul { padding-left:20px; }
+.slide-white h2,.slide-white h3 { color:var(--navy); }
+.slide-light h2,.slide-light h3 { color:var(--navy); }
+.subtitle { font-size:1.1rem; color:rgba(255,255,255,0.65); font-style:italic; }
+.subtitle-dark { color:var(--muted); font-style:italic; font-size:0.98rem; }
+
+.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:16px; }
+.grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-top:16px; }
+.grid-4 { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:14px; margin-top:16px; }
+
+.card { border-radius:8px; padding:16px 20px; font-family:'Segoe UI',system-ui,sans-serif; }
+.card-glass { background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); }
+.card-white { background:#fff; color:#212529; box-shadow:0 2px 8px rgba(0,0,0,0.12); }
+.card-gold  { background:#fffdf5; border-left:4px solid var(--gold); color:#212529; }
+.card-crimson { background:#fff5f5; border-left:4px solid var(--crimson); color:#212529; }
+.card-green { background:#f0fff4; border-left:4px solid var(--green); color:#212529; }
+.card h3 { font-size:0.9rem; margin-bottom:7px; }
+.card p,.card li { font-size:0.84rem; line-height:1.55; }
+.card ul { padding-left:16px; }
+
+.code-block { background:#1e1e2e; color:#cdd6f4; border-radius:6px; padding:14px 18px; font-family:'Courier New',Consolas,monospace; font-size:0.8rem; line-height:1.55; margin:10px 0; overflow-x:auto; }
+.code-block .kw  { color:#cba6f7; }
+.code-block .str { color:#a6e3a1; }
+.code-block .num { color:#fab387; }
+.code-block .com { color:#6c7086; font-style:italic; }
+.code-block .out { color:#f5c2e7; font-style:italic; }
+
+.highlight      { background:var(--gold);    color:#000; padding:2px 8px; border-radius:4px; font-weight:700; }
+.highlight-red  { background:var(--crimson); color:#fff; padding:2px 8px; border-radius:4px; font-weight:700; }
+.highlight-green{ background:var(--green);   color:#fff; padding:2px 8px; border-radius:4px; font-weight:700; }
+
+.tag { display:inline-block; padding:2px 9px; border-radius:3px; font-size:0.7rem; font-weight:700; font-family:'Segoe UI',system-ui,sans-serif; margin:2px; }
+.tag-gold   { background:var(--gold);    color:#000; }
+.tag-red    { background:var(--crimson); color:#fff; }
+.tag-green  { background:var(--green);   color:#fff; }
+.tag-navy   { background:var(--navy);    color:#fff; }
+.tag-purple { background:#5b21b6;        color:#fff; }
+.tag-teal   { background:#0f766e;        color:#fff; }
+
+.flow { display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin:14px 0; font-family:'Segoe UI',system-ui,sans-serif; }
+.flow-box { border-radius:6px; padding:9px 14px; text-align:center; min-width:90px; font-size:0.83rem; }
+.flow-arrow { font-size:1.3rem; color:var(--gold); flex-shrink:0; }
+
+.section-divider { position:absolute; top:20px; left:72px; font-family:'Segoe UI',system-ui,sans-serif; font-size:0.7rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; opacity:0.4; }
+.slide-num { position:absolute; top:20px; right:28px; font-family:'Segoe UI',system-ui,sans-serif; font-size:0.75rem; color:rgba(255,255,255,0.2); }
+.slide-white .slide-num,.slide-light .slide-num { color:rgba(0,0,0,0.15); }
+
+.section-banner { display:inline-block; background:var(--gold); color:#000; font-family:'Segoe UI',system-ui,sans-serif; font-size:0.73rem; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; padding:4px 14px; border-radius:4px; margin-bottom:14px; }
+
+table.data-table { width:100%; border-collapse:collapse; font-family:'Segoe UI',system-ui,sans-serif; font-size:0.82rem; }
+table.data-table th { text-align:left; padding:7px 10px; background:rgba(255,255,255,0.08); font-weight:700; }
+table.data-table td { padding:6px 10px; }
+.slide-light table.data-table th, .slide-white table.data-table th { background:var(--navy); color:#fff; }
+.slide-light table.data-table tr:nth-child(even) td, .slide-white table.data-table tr:nth-child(even) td { background:#f8f9fa; }
+.mono { font-family:'Courier New',Consolas,monospace; }
+.verified { display:inline-block; font-size:0.62rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:1px 7px; border-radius:3px; background:rgba(31,122,60,0.25); color:#a8f0c8; border:1px solid rgba(168,240,200,0.35); margin-left:6px; }
+.slide-light .verified, .slide-white .verified { background:#f0fff4; color:#1f7a3c; border-color:#c3e6cb; }
+.badge-new { display:inline-block; font-size:0.62rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:1px 7px; border-radius:3px; background:rgba(240,165,0,0.25); color:#f0c870; border:1px solid rgba(240,200,120,0.4); margin-left:6px; }
+.slide-light .badge-new, .slide-white .badge-new { background:#fffdf0; color:#7a5200; border-color:#f0d080; }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div id="slide-counter">1 / 22</div>
+<div class="slide-controls">
+  <button onclick="prevSlide()">← Prev</button>
+  <button onclick="nextSlide()">Next →</button>
+</div>
+
+<!-- 1 TITLE -->
+<div class="slide slide-navy active">
+  <span class="slide-num">1</span>
+  <div class="slide-label">ComplianceGPT Lab · AI Innovation &amp; Diffusion REU 2026</div>
+  <h1>Prompting 101</h1>
+  <p class="subtitle">How to actually talk to a large language model — no prior AI background assumed, no ComplianceGPT code required</p>
+  <div class="card card-glass" style="margin-top:28px;max-width:640px;">
+    <p style="font-size:0.95rem;margin:0;"><strong>Start here if:</strong> you've used ChatGPT/Claude/Gemini casually, but have never thought carefully about <em>why</em> a prompt works or fails. Everything in this deck uses a free chat interface — no repo, no API key, no cluster.</p>
+  </div>
+</div>
+
+<!-- 2 WHY THIS EXISTS -->
+<div class="slide slide-light">
+  <span class="slide-num">2</span>
+  <h2>Why This Deck Exists</h2>
+  <p class="subtitle-dark">The rest of this program's slides teach prompting <em>through</em> a real research pipeline (HIPAA extraction, GoldCoin scenarios). That's great for relevance, but it quietly assumes you already know what a prompt is, why it fails, and how to fix one.</p>
+  <div class="grid-2" style="margin-top:16px;">
+    <div class="card card-crimson">
+      <h3 style="color:var(--crimson);">What the other decks give you</h3>
+      <p>Applied, project-specific prompting: how to extract structured facts from legal text, inside a real pipeline you're inheriting.</p>
+    </div>
+    <div class="card card-gold">
+      <h3 style="color:#7a5200;">What this deck gives you</h3>
+      <p>The generic, transferable skill underneath that: how prompting works for <em>any</em> task, with <em>any</em> model, before you ever open a line of code.</p>
+    </div>
+  </div>
+  <p style="margin-top:16px;font-size:0.9rem;color:var(--muted);">Read this first. Then Week 3's prompting slides and the LLM Foundations / Agentic Systems decks will make much more sense.</p>
+</div>
+
+<!-- 3 WHAT IS AN LLM -->
+<div class="slide slide-teal">
+  <span class="slide-num">3</span>
+  <div class="section-divider">Part 1 — The Mental Model</div>
+  <h2>What an LLM Actually Is</h2>
+  <p style="color:rgba(255,255,255,0.8);font-size:1.1rem;">A large language model is a very sophisticated <strong>autocomplete</strong>. Given some text, it predicts what text is most likely to come next — one small chunk ("token") at a time — based on patterns learned from enormous amounts of text.</p>
+  <div class="card card-glass" style="margin-top:18px;">
+    <h3 style="color:var(--gold);">It is not</h3>
+    <ul>
+      <li>A database that looks up facts</li>
+      <li>A reasoning engine that "thinks" the way you do</li>
+      <li>Something that "knows" whether it's right — it only knows what's <em>likely</em> to come next</li>
+    </ul>
+  </div>
+  <p style="margin-top:14px;font-size:0.92rem;color:rgba(255,255,255,0.6);">Everything else in this deck follows from taking that seriously.</p>
+</div>
+
+<!-- 4 WHAT IS A PROMPT -->
+<div class="slide slide-white">
+  <span class="slide-num">4</span>
+  <div class="section-divider">Part 1 — The Mental Model</div>
+  <h2>What a Prompt Is</h2>
+  <p class="subtitle-dark">The prompt is the <em>entire</em> input the model sees. There is no other channel. It cannot ask you a clarifying question unless you explicitly told it to. It cannot see anything you didn't type (or upload).</p>
+  <div class="grid-2" style="margin-top:16px;">
+    <div class="card card-crimson">
+      <h3 style="color:var(--crimson);">What the model has access to</h3>
+      <ul>
+        <li>The text you typed, this message and any prior ones in the conversation</li>
+        <li>Anything you pasted or uploaded</li>
+        <li>Whatever "system instructions" the app set up in the background</li>
+      </ul>
+    </div>
+    <div class="card card-green">
+      <h3>What the model does NOT have</h3>
+      <ul>
+        <li>Your intent, if you didn't write it down</li>
+        <li>Memory of a different conversation</li>
+        <li>Any way to say "I need more information" unless prompted to</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- 5 ANATOMY OF A GOOD PROMPT -->
+<div class="slide slide-navy">
+  <span class="slide-num">5</span>
+  <div class="section-divider">Part 2 — Building a Prompt</div>
+  <h2>Four Ingredients of a Good Prompt</h2>
+  <div class="grid-4" style="margin-top:18px;">
+    <div class="card card-glass">
+      <div class="tag tag-gold">1</div>
+      <h3 style="color:var(--gold);margin-top:6px;">Task</h3>
+      <p>What, exactly, should the model produce? A summary? A list? A decision?</p>
+    </div>
+    <div class="card card-glass">
+      <div class="tag tag-teal">2</div>
+      <h3 style="color:var(--gold);margin-top:6px;">Context</h3>
+      <p>What background does the model need that it can't guess — audience, purpose, source material?</p>
+    </div>
+    <div class="card card-glass">
+      <div class="tag tag-purple">3</div>
+      <h3 style="color:var(--gold);margin-top:6px;">Format</h3>
+      <p>How should the answer be shaped — a paragraph, a table, JSON, exactly 3 bullets?</p>
+    </div>
+    <div class="card card-glass">
+      <div class="tag tag-red">4</div>
+      <h3 style="color:var(--gold);margin-top:6px;">Constraints</h3>
+      <p>What should it avoid — length limits, tone, things not to invent?</p>
+    </div>
+  </div>
+  <p style="margin-top:18px;font-size:0.92rem;color:rgba(255,255,255,0.6);">Most disappointing outputs trace back to one of these four being left implicit instead of stated.</p>
+</div>
+
+<!-- 6 BAD VS GOOD -->
+<div class="slide slide-light">
+  <span class="slide-num">6</span>
+  <div class="section-divider">Part 2 — Building a Prompt</div>
+  <h2>Same Request, Two Prompts</h2>
+  <div class="grid-2" style="margin-top:12px;">
+    <div class="card card-crimson">
+      <h3 style="color:var(--crimson);">Vague</h3>
+      <div class="code-block" style="background:#2b1414;">
+"Write something about climate change."
+      </div>
+      <p style="font-size:0.85rem;">Missing: audience, length, angle, format. You'll get 500 generic words and probably rewrite the prompt anyway.</p>
+    </div>
+    <div class="card card-green">
+      <h3>Specific</h3>
+      <div class="code-block" style="background:#0f2818;">
+"Write a 150-word explainer on climate change for
+a high-school audience. Focus on the greenhouse
+effect specifically. Plain language, no jargon.
+End with one sentence on what an individual can do."
+      </div>
+      <p style="font-size:0.85rem;">All four ingredients present: task, audience/context, length/format, constraint (no jargon).</p>
+    </div>
+  </div>
+</div>
+
+<!-- 7 ZERO SHOT -->
+<div class="slide slide-crimson">
+  <span class="slide-num">7</span>
+  <div class="section-divider">Part 3 — Core Techniques</div>
+  <h2>Zero-Shot Prompting</h2>
+  <p style="color:rgba(255,255,255,0.85);">Give instructions only — no worked examples. Fastest to write, and works well when the task is common and unambiguous.</p>
+  <div class="code-block" style="margin-top:14px;">
+Classify the sentiment of this review as
+Positive, Negative, or Neutral. Respond with
+one word only.
+
+Review: "The battery life is incredible but the
+camera is a huge letdown."
+  </div>
+  <p style="font-size:0.9rem;color:rgba(255,255,255,0.7);">Zero-shot struggles when: the task is unusual, the desired format is specific/uncommon, or "correct" depends on judgment calls you haven't defined (as in the review above — is mixed sentiment "Neutral" or something else? You'd need to say).</p>
+</div>
+
+<!-- 8 FEW SHOT -->
+<div class="slide slide-teal">
+  <span class="slide-num">8</span>
+  <div class="section-divider">Part 3 — Core Techniques</div>
+  <h2>Few-Shot Prompting</h2>
+  <p style="color:rgba(255,255,255,0.8);">Show 2–5 worked examples before the real question. This is usually the single biggest lever for consistent, well-formatted output — the model pattern-matches your examples instead of guessing your intent.</p>
+  <div class="code-block" style="margin-top:14px;">
+Classify each support ticket's urgency as Low, Medium, or High.
+
+Ticket: "App crashes when I open settings."
+Urgency: High
+
+Ticket: "Would love a dark mode option someday."
+Urgency: Low
+
+Ticket: "Payment went through twice, need a refund."
+Urgency: <span class="out">← the model now knows exactly what "High" vs "Low" looks like for YOUR use case</span>
+  </div>
+</div>
+
+<!-- 9 CHAIN OF THOUGHT -->
+<div class="slide slide-white">
+  <span class="slide-num">9</span>
+  <div class="section-divider">Part 3 — Core Techniques</div>
+  <h2>Chain-of-Thought Prompting</h2>
+  <p class="subtitle-dark">Ask the model to reason step-by-step before giving a final answer. Costs more words and time, but catches errors that come from jumping straight to a conclusion.</p>
+  <div class="grid-2" style="margin-top:14px;">
+    <div class="card card-crimson">
+      <h3 style="color:var(--crimson);">Straight to the answer</h3>
+      <div class="code-block" style="background:#2b1414;">
+Q: A juggler has 16 balls. Half are golf balls,
+and half of the golf balls are blue. How many
+blue golf balls?
+
+A: 4
+      </div>
+    </div>
+    <div class="card card-green">
+      <h3>With chain-of-thought</h3>
+      <div class="code-block" style="background:#0f2818;">
+Q: [same question] Think step by step.
+
+A: Half of 16 is 8 golf balls.
+Half of 8 is 4 blue golf balls.
+Answer: 4
+      </div>
+    </div>
+  </div>
+  <p style="margin-top:12px;font-size:0.9rem;color:var(--muted);">Same answer here — but on harder, multi-step problems, forcing the intermediate steps into the open is often the difference between right and wrong.</p>
+</div>
+
+<!-- 10 ROLE / PERSONA -->
+<div class="slide slide-navy">
+  <span class="slide-num">10</span>
+  <div class="section-divider">Part 3 — Core Techniques</div>
+  <h2>Role / Persona Prompting</h2>
+  <p style="color:rgba(255,255,255,0.8);">Telling the model "you are ___" shifts its style, vocabulary, and priorities toward that role's typical way of writing — because that's the pattern it learned from millions of examples of people in that role writing.</p>
+  <div class="code-block" style="margin-top:14px;">
+You are a patient, encouraging math tutor for a
+7th grader who is anxious about algebra. Explain
+what a variable is, using an everyday analogy.
+Keep it under 100 words. Avoid saying "just" or
+"simply" — it can feel dismissive.
+  </div>
+  <p style="font-size:0.9rem;color:rgba(255,255,255,0.65);">Note this is still just Task + Context + Format + Constraints — "role" is a compact way to bundle several of those at once.</p>
+</div>
+
+<!-- 11 OUTPUT FORMAT CONTROL -->
+<div class="slide slide-light">
+  <span class="slide-num">11</span>
+  <div class="section-divider">Part 3 — Core Techniques</div>
+  <h2>Controlling Output Format</h2>
+  <p class="subtitle-dark">If you need the output to be machine-readable (a table, JSON, a fixed number of items), say so explicitly and show the exact shape. Models default to prose unless told otherwise.</p>
+  <div class="code-block" style="margin-top:10px;">
+List 3 pros and 3 cons of remote work.
+Respond ONLY as JSON, no other text, in this exact shape:
+{"pros": ["...", "...", "..."], "cons": ["...", "...", "..."]}
+  </div>
+  <div class="card card-gold" style="margin-top:14px;">
+    <p style="font-size:0.9rem;margin:0;"><strong>Why this matters for research:</strong> any time you plan to feed a model's output into more code (a script, a spreadsheet, another program), format control is not optional polish — it's the difference between a pipeline that runs and one that crashes on line 1.</p>
+  </div>
+</div>
+
+<!-- 12 ITERATION MINDSET -->
+<div class="slide slide-teal">
+  <span class="slide-num">12</span>
+  <div class="section-divider">Part 4 — Working With the Model</div>
+  <h2>Treat the First Answer as a Draft</h2>
+  <p style="color:rgba(255,255,255,0.8);">Prompting is a conversation, not a vending machine. If the first response is close but not right, don't start over — tell the model exactly what to change.</p>
+  <div class="flow" style="margin-top:16px;">
+    <div class="flow-box" style="background:rgba(255,255,255,0.1);">Your prompt</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="background:rgba(255,255,255,0.1);">Imperfect answer</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="background:var(--gold);color:#000;">"Make it shorter and cut the second paragraph"</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="background:rgba(255,255,255,0.1);">Better answer</div>
+  </div>
+  <p style="margin-top:16px;font-size:0.9rem;color:rgba(255,255,255,0.6);">This single habit — iterate instead of restart — improves output quality more than almost any clever prompting trick.</p>
+</div>
+
+<!-- 13 HALLUCINATION -->
+<div class="slide slide-amber">
+  <span class="slide-num">13</span>
+  <div class="section-divider">Part 5 — Failure Modes</div>
+  <h2>Hallucination: Confidently Wrong</h2>
+  <p style="color:rgba(255,255,255,0.8);">Remember the mental model from Slide 3: the model predicts likely-sounding text, not verified-true text. It will invent a citation, a statistic, or a fact with exactly the same fluent confidence it uses for something true.</p>
+  <div class="card card-glass" style="margin-top:14px;">
+    <h3 style="color:var(--gold);">Practical rule</h3>
+    <p>Never trust a specific fact, number, quote, or citation from an LLM without checking it — especially the more specific and "impressive" it sounds (exact dates, page numbers, case names). Specificity is not evidence of accuracy.</p>
+  </div>
+</div>
+
+<!-- 14 OTHER FAILURE MODES -->
+<div class="slide slide-white">
+  <span class="slide-num">14</span>
+  <div class="section-divider">Part 5 — Failure Modes</div>
+  <h2>Four More Ways Prompts Go Wrong</h2>
+  <table class="data-table" style="margin-top:10px;">
+    <tr><th>Failure</th><th>What it looks like</th><th>Usual fix</th></tr>
+    <tr><td>Format drift</td><td>Asked for JSON, got a paragraph with JSON somewhere inside it</td><td>Repeat the format instruction; show an example of the exact shape</td></tr>
+    <tr><td>Sycophancy</td><td>Model agrees with a wrong claim you stated confidently</td><td>Ask it to double-check independently, not just confirm your framing</td></tr>
+    <tr><td>Instruction drop</td><td>Long prompt, model follows only some of the instructions</td><td>Shorten, or number the instructions explicitly</td></tr>
+    <tr><td>Ambiguity</td><td>Model picks a reasonable-but-wrong interpretation of a vague ask</td><td>Add the one clarifying detail you assumed was obvious</td></tr>
+  </table>
+</div>
+
+<!-- 14b FAILURE MODES: CONCRETE EXAMPLES -->
+<div class="slide slide-amber">
+  <span class="slide-num">15</span>
+  <div class="section-divider">Part 5 — Failure Modes</div>
+  <h2>The Same Four, With Actual Prompts <span class="badge-new">notebook: prompting_101.ipynb</span></h2>
+  <div class="grid-2" style="margin-top:8px;">
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">Format drift</h3>
+      <div class="code-block" style="font-size:0.72rem;">
+<span class="com"># weak</span>
+"List 3 pros/cons of remote work as JSON."
+<span class="out">→ often prose with JSON buried inside</span>
+
+<span class="com"># strong</span>
+"...Respond with ONLY JSON, no other
+text, in exactly this shape: {...}"
+<span class="out">→ clean, parseable JSON</span>
+      </div>
+    </div>
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">Sycophancy</h3>
+      <div class="code-block" style="font-size:0.72rem;">
+<span class="com"># leading</span>
+"The Great Wall is visible from space
+with the naked eye, right? Confirm
+this for my essay."
+<span class="out">→ often just agrees (it's a myth)</span>
+
+<span class="com"># neutral</span>
+"...say so directly if the common
+claim is false."
+      </div>
+    </div>
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">Instruction drop</h3>
+      <div class="code-block" style="font-size:0.72rem;">
+<span class="com"># buried in prose, 6 instructions</span>
+"...engaging...inclusive...history if
+you can...light tone...exactly 3
+sentences...no word 'beverage'..."
+<span class="out">→ 2-3 of 6 followed</span>
+
+<span class="com"># numbered, 4 rules</span>
+"1. Exactly 3 sentences. 2. ..."
+<span class="out">→ usually all 4 followed</span>
+      </div>
+    </div>
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">Ambiguity</h3>
+      <div class="code-block" style="font-size:0.72rem;">
+<span class="com"># ambiguous — shorter than WHAT?</span>
+"Make it shorter."
+<span class="out">→ model invents something to shorten</span>
+
+<span class="com"># clarified</span>
+"Here is a paragraph: [...]. Make
+this shorter: cut to 1 sentence,
+keep the core claim."
+      </div>
+    </div>
+  </div>
+  <p style="margin-top:10px;font-size:0.82rem;color:rgba(255,255,255,0.6);">Run all eight of these yourself in Part 6 of the notebook — outputs vary by model, that's the point.</p>
+</div>
+
+<!-- 15 DEBUGGING CHECKLIST -->
+<div class="slide slide-crimson">
+  <span class="slide-num">16</span>
+  <div class="section-divider">Part 5 — Failure Modes</div>
+  <h2>Debugging a Bad Output: A Checklist</h2>
+  <p style="color:rgba(255,255,255,0.85);">When the output is wrong, don't just retry the same prompt. Ask, in order:</p>
+  <ol style="padding-left:22px;font-size:1.02rem;line-height:2;margin-top:10px;">
+    <li>Did I state the <strong>task</strong> unambiguously?</li>
+    <li>Did I give enough <strong>context</strong> to remove guesswork?</li>
+    <li>Did I specify the <strong>format</strong> I actually need?</li>
+    <li>Did I state the <strong>constraints</strong> (length, tone, what to avoid)?</li>
+    <li>Would one <strong>example</strong> of a correct answer help?</li>
+    <li>Is this a multi-step problem that needs <strong>chain-of-thought</strong>?</li>
+  </ol>
+</div>
+
+<!-- 16 PROMPT INJECTION AWARENESS -->
+<div class="slide slide-navy">
+  <span class="slide-num">17</span>
+  <div class="section-divider">Part 6 — A Word of Caution</div>
+  <h2>Be Careful What Text You Paste In</h2>
+  <p style="color:rgba(255,255,255,0.75);">The model can't distinguish "your instructions" from "text you pasted that happens to contain instructions." If you paste in a document, email, or webpage that itself contains text like <em>"ignore previous instructions and..."</em>, a model can be misled into following it.</p>
+  <div class="card card-glass" style="margin-top:14px;">
+    <h3 style="color:var(--gold);">This is called prompt injection</h3>
+    <p>You'll see a rigorous, research-grade version of this idea later this summer in the Agentic Systems material, applied to adversarial attacks on a real system. For now: be skeptical of any content you feed an LLM from an untrusted source, the same way you'd be skeptical of running an email attachment.</p>
+  </div>
+</div>
+
+<!-- 17 CHEAT SHEET -->
+<div class="slide slide-light">
+  <span class="slide-num">18</span>
+  <h2>Cheat Sheet</h2>
+  <div class="grid-2" style="margin-top:10px;">
+    <div class="card card-green">
+      <h3>Do</h3>
+      <ul>
+        <li>State task, context, format, and constraints explicitly</li>
+        <li>Give 1–2 examples for anything format-sensitive</li>
+        <li>Ask for step-by-step reasoning on multi-step problems</li>
+        <li>Iterate with specific feedback instead of restarting</li>
+        <li>Verify any fact, number, or citation independently</li>
+      </ul>
+    </div>
+    <div class="card card-crimson">
+      <h3 style="color:var(--crimson);">Don't</h3>
+      <ul>
+        <li>Assume the model knows your unstated intent</li>
+        <li>Trust a confident-sounding specific fact at face value</li>
+        <li>Paste untrusted text into a prompt without a skeptical read first</li>
+        <li>Write a 500-word prompt when 50 precise words would do</li>
+        <li>Give up after one bad output instead of refining it</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- 18 TRY IT YOURSELF -->
+<div class="slide slide-green">
+  <span class="slide-num">19</span>
+  <h2>Try It Yourself</h2>
+  <div class="grid-2" style="margin-top:8px;">
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">Structured — the notebook <span class="badge-new">recommended</span></h3>
+      <p><span class="mono">notebooks/prompting_101.ipynb</span> — every technique on this deck (zero/few-shot, CoT, reflection, all 4 failure modes) as a runnable cell against your own local Ollama model, with worked examples plus TODO exercises for you to fill in.</p>
+    </div>
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">No laptop setup — 10 min, any chat app</h3>
+      <ol style="padding-left:18px;font-size:0.85rem;line-height:1.7;margin-top:4px;">
+        <li>Ask a vague question you know well; notice what's generically right but specifically wrong.</li>
+        <li>Rewrite with all 4 ingredients; compare.</li>
+        <li>Give it a 3-example few-shot classification task of your own.</li>
+        <li>Ask a riddle direct vs. "think step by step."</li>
+        <li>State a wrong fact confidently — does it correct you?</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- 19 WHAT'S NEXT -->
+<div class="slide slide-purple">
+  <span class="slide-num">20</span>
+  <h2>You Now Have the Foundation. Here's Where It's Used.</h2>
+  <div class="grid-3" style="margin-top:16px;">
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">LLM Foundations Slides</h3>
+      <p>Decoding, instruction-tuning, scale, and limits — the mechanics behind everything in this deck.</p>
+    </div>
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">Week 3 — Prompt Engineering</h3>
+      <p>These exact techniques (zero/few-shot, CoT) applied to a real, messy legal-text extraction task.</p>
+    </div>
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">Agentic Systems Slides</h3>
+      <p>What happens when one prompt isn't enough — reflection loops and multi-step pipelines.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 20 KEY TAKEAWAY -->
+<div class="slide slide-dark">
+  <span class="slide-num">21</span>
+  <h2>The One Idea to Keep</h2>
+  <p style="font-size:1.3rem;line-height:1.7;">An LLM cannot read your mind. It can only respond to what's on the page. Every prompting technique in this deck is really just a different way of putting more of your intent <em>onto the page</em>, explicitly, so the model has less to guess.</p>
+</div>
+
+<!-- 21 CLOSING -->
+<div class="slide slide-navy">
+  <span class="slide-num">22</span>
+  <h1 style="font-size:2.2rem;">Now Go Build Something Harder</h1>
+  <p class="subtitle">You didn't need any of ComplianceGPT's code to learn this — and now everything that <em>does</em> use that code will make a lot more sense.</p>
+</div>
+
+<script>
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+const counter = document.getElementById('slide-counter');
+const bar = document.getElementById('progress-bar');
+const controls = document.querySelector('.slide-controls');
+
+function showSlide(n) {
+  slides[current].classList.remove('active');
+  current = (n + slides.length) % slides.length;
+  slides[current].classList.add('active');
+  counter.textContent = (current + 1) + ' / ' + slides.length;
+  bar.style.width = ((current + 1) / slides.length * 100) + '%';
+  const light = slides[current].classList.contains('slide-white') ||
+                slides[current].classList.contains('slide-light');
+  controls.classList.toggle('on-light', light);
+  counter.classList.toggle('on-light', light);
+}
+function nextSlide() { showSlide(current + 1); }
+function prevSlide() { showSlide(current - 1); }
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+  if (e.key === 'ArrowLeft') prevSlide();
+});
+</script>
+</body>
+</html>

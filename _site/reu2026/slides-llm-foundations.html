@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LLM Foundations in Practice · ComplianceGPT Lab REU 2026</title>
+<style>
+:root { --crimson:#990000; --navy:#003366; --gold:#f0a500; --green:#1f7a3c; --border:#dee2e6; --muted:#6c757d; }
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:Georgia,'Times New Roman',serif; background:#1a1a2e; color:#fff; }
+
+.slide-controls { position:fixed; bottom:24px; right:28px; z-index:999; display:flex; gap:8px; }
+.slide-controls button { background:rgba(255,255,255,0.15); color:#fff; border:1px solid rgba(255,255,255,0.25); padding:8px 18px; border-radius:6px; cursor:pointer; font-size:0.9rem; font-family:'Segoe UI',system-ui,sans-serif; backdrop-filter:blur(4px); }
+.slide-controls button:hover { background:rgba(255,255,255,0.3); }
+.slide-controls.on-light button { background:rgba(0,51,102,0.1); color:#003366; border:1px solid rgba(0,51,102,0.25); }
+#slide-counter { position:fixed; bottom:30px; left:28px; z-index:999; font-family:'Segoe UI',system-ui,sans-serif; font-size:0.8rem; color:rgba(255,255,255,0.45); }
+#slide-counter.on-light { color:rgba(0,0,0,0.3); }
+#progress-bar { position:fixed; top:0; left:0; height:3px; background:var(--gold); transition:width 0.3s; z-index:999; }
+
+.slide { display:none; min-height:100vh; padding:52px 72px; position:relative; flex-direction:column; justify-content:center; }
+.slide.active { display:flex; }
+
+.slide-dark    { background:#0d1b3e; }
+.slide-crimson { background:linear-gradient(135deg,#6b0000 0%,#990000 100%); }
+.slide-navy    { background:linear-gradient(135deg,#001f4d 0%,#003366 100%); }
+.slide-teal    { background:linear-gradient(135deg,#003333 0%,#005f5f 100%); }
+.slide-white   { background:#fff; color:#212529; }
+.slide-light   { background:#f8f9fa; color:#212529; }
+.slide-green   { background:linear-gradient(135deg,#0a3d1f 0%,#1f7a3c 100%); }
+.slide-purple  { background:linear-gradient(135deg,#1a0a3d 0%,#3d1a7a 100%); }
+.slide-amber   { background:linear-gradient(135deg,#3d2a00 0%,#7a5200 100%); }
+
+.slide-label { font-family:'Segoe UI',system-ui,sans-serif; font-size:0.7rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--gold); margin-bottom:10px; }
+.slide-white .slide-label,.slide-light .slide-label { color:var(--crimson); }
+.slide-green .slide-label { color:#a8f0c8; }
+.slide-purple .slide-label { color:#c8a8ff; }
+.slide-amber .slide-label { color:#f0c870; }
+
+.slide h1 { font-size:2.85rem; line-height:1.15; font-weight:700; margin-bottom:18px; }
+.slide h2 { font-size:1.9rem; line-height:1.2; font-weight:700; margin-bottom:14px; }
+.slide h3 { font-size:1.15rem; font-weight:700; margin-bottom:8px; }
+.slide p  { font-size:1.02rem; line-height:1.65; margin-bottom:10px; }
+.slide li { font-size:0.95rem; line-height:1.6; margin-bottom:6px; }
+.slide ul { padding-left:20px; }
+.slide-white h2,.slide-white h3 { color:var(--navy); }
+.slide-light h2,.slide-light h3 { color:var(--navy); }
+.subtitle { font-size:1.1rem; color:rgba(255,255,255,0.65); font-style:italic; }
+.subtitle-dark { color:var(--muted); font-style:italic; font-size:0.98rem; }
+
+.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:16px; }
+.grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-top:16px; }
+
+.card { border-radius:8px; padding:16px 20px; font-family:'Segoe UI',system-ui,sans-serif; }
+.card-glass { background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); }
+.card-white { background:#fff; color:#212529; box-shadow:0 2px 8px rgba(0,0,0,0.12); }
+.card-gold  { background:#fffdf5; border-left:4px solid var(--gold); color:#212529; }
+.card-crimson { background:#fff5f5; border-left:4px solid var(--crimson); color:#212529; }
+.card-green { background:#f0fff4; border-left:4px solid var(--green); color:#212529; }
+.card h3 { font-size:0.9rem; margin-bottom:7px; }
+.card p,.card li { font-size:0.84rem; line-height:1.55; }
+.card ul { padding-left:16px; }
+
+.code-block { background:#1e1e2e; color:#cdd6f4; border-radius:6px; padding:14px 18px; font-family:'Courier New',Consolas,monospace; font-size:0.8rem; line-height:1.55; margin:10px 0; overflow-x:auto; }
+.code-block .kw  { color:#cba6f7; }
+.code-block .str { color:#a6e3a1; }
+.code-block .num { color:#fab387; }
+.code-block .com { color:#6c7086; font-style:italic; }
+.code-block .out { color:#f5c2e7; font-style:italic; }
+
+.highlight      { background:var(--gold);    color:#000; padding:2px 8px; border-radius:4px; font-weight:700; }
+.highlight-red  { background:var(--crimson); color:#fff; padding:2px 8px; border-radius:4px; font-weight:700; }
+.highlight-green{ background:var(--green);   color:#fff; padding:2px 8px; border-radius:4px; font-weight:700; }
+
+.tag { display:inline-block; padding:2px 9px; border-radius:3px; font-size:0.7rem; font-weight:700; font-family:'Segoe UI',system-ui,sans-serif; margin:2px; }
+.tag-gold   { background:var(--gold);    color:#000; }
+.tag-red    { background:var(--crimson); color:#fff; }
+.tag-green  { background:var(--green);   color:#fff; }
+.tag-navy   { background:var(--navy);    color:#fff; }
+.tag-purple { background:#5b21b6;        color:#fff; }
+.tag-teal   { background:#0f766e;        color:#fff; }
+
+.flow { display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin:14px 0; font-family:'Segoe UI',system-ui,sans-serif; }
+.flow-box { border-radius:6px; padding:9px 14px; text-align:center; min-width:90px; font-size:0.83rem; }
+.flow-arrow { font-size:1.3rem; color:var(--gold); flex-shrink:0; }
+
+.section-divider { position:absolute; top:20px; left:72px; font-family:'Segoe UI',system-ui,sans-serif; font-size:0.7rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; opacity:0.4; }
+.slide-num { position:absolute; top:20px; right:28px; font-family:'Segoe UI',system-ui,sans-serif; font-size:0.75rem; color:rgba(255,255,255,0.2); }
+.slide-white .slide-num,.slide-light .slide-num { color:rgba(0,0,0,0.15); }
+
+.section-banner { display:inline-block; background:var(--gold); color:#000; font-family:'Segoe UI',system-ui,sans-serif; font-size:0.73rem; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; padding:4px 14px; border-radius:4px; margin-bottom:14px; }
+
+table.data-table { width:100%; border-collapse:collapse; font-family:'Segoe UI',system-ui,sans-serif; font-size:0.82rem; }
+table.data-table th { text-align:left; padding:7px 10px; background:rgba(255,255,255,0.08); font-weight:700; }
+table.data-table td { padding:6px 10px; }
+.slide-light table.data-table th, .slide-white table.data-table th { background:var(--navy); color:#fff; }
+.slide-light table.data-table tr:nth-child(even) td, .slide-white table.data-table tr:nth-child(even) td { background:#f8f9fa; }
+.mono { font-family:'Courier New',Consolas,monospace; }
+.verified { display:inline-block; font-size:0.62rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:1px 7px; border-radius:3px; background:rgba(31,122,60,0.25); color:#a8f0c8; border:1px solid rgba(168,240,200,0.35); margin-left:6px; }
+.slide-light .verified, .slide-white .verified { background:#f0fff4; color:#1f7a3c; border-color:#c3e6cb; }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div id="slide-counter">1 / 18</div>
+<div class="slide-controls">
+  <button onclick="prevSlide()">← Prev</button>
+  <button onclick="nextSlide()">Next →</button>
+</div>
+
+<!-- 1 TITLE -->
+<div class="slide slide-navy active">
+  <span class="slide-num">1</span>
+  <div class="slide-label">ComplianceGPT Lab · AI Innovation &amp; Diffusion REU 2026</div>
+  <h1>LLM Foundations in Practice</h1>
+  <p class="subtitle">From next-token predictor to research instrument — the bridge between Week 2's transformer math and Week 3's prompting work</p>
+  <div style="margin-top:32px;font-family:'Segoe UI',system-ui,sans-serif;">
+    <div class="flow">
+      <div class="flow-box" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);">
+        <div style="font-weight:700;">Week 2</div>
+        <div style="font-size:0.72rem;color:rgba(255,255,255,0.5);margin-top:2px;">Attention, tokenization, forward pass</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="background:var(--gold);color:#000;font-weight:700;">
+        <div>Today</div>
+        <div style="font-size:0.72rem;margin-top:2px;">Decoding · tuning · scale · limits</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);">
+        <div style="font-weight:700;">Week 3</div>
+        <div style="font-size:0.72rem;color:rgba(255,255,255,0.5);margin-top:2px;">Prompting strategies</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);">
+        <div style="font-weight:700;">Later</div>
+        <div style="font-size:0.72rem;color:rgba(255,255,255,0.5);margin-top:2px;">Agentic pipelines · RAG</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2 WHERE WE LEFT OFF -->
+<div class="slide slide-light">
+  <span class="slide-num">2</span>
+  <h2>Where We Left Off, Where We're Going</h2>
+  <p class="subtitle-dark">You already know how a transformer computes one forward pass. Today is about what happens around that forward pass to turn it into something you can talk to.</p>
+  <div class="grid-2" style="margin-top:14px;">
+    <div class="card card-crimson">
+      <h3 style="color:var(--crimson);">You already know (Week 2)</h3>
+      <ul>
+        <li>Tokenization — text → integers</li>
+        <li>Self-attention — every token attends to every token</li>
+        <li>Positional encoding, Q/K/V, the full forward pass</li>
+        <li>Gemma3-4B's real architecture &amp; parameter count</li>
+      </ul>
+    </div>
+    <div class="card card-gold">
+      <h3 style="color:#7a5200;">Today adds</h3>
+      <ul>
+        <li>How raw next-token probabilities become one chosen word (decoding)</li>
+        <li>How a base model becomes an assistant that follows instructions</li>
+        <li>What "context window" really limits, and why prompts are long</li>
+        <li>Why bigger models cost more and fail differently, not just "less"</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- 3 SECTION: PRETRAIN -> INSTRUCT -> RLHF -->
+<div class="slide slide-navy">
+  <span class="slide-num">3</span>
+  <div class="section-divider">Part 1 — From Predictor to Assistant</div>
+  <h2>Three Training Stages, One Set of Weights</h2>
+  <p style="color:rgba(255,255,255,0.7);">The forward pass you studied in Week 2 never changes. What changes across these stages is <em>what the model was trained to predict</em>.</p>
+  <div class="grid-3" style="margin-top:18px;">
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">1. Pretraining</h3>
+      <p>Predict the next token over trillions of words of raw internet/book/code text. No notion of "question" or "answer" — just completion.</p>
+      <p class="mono" style="font-size:0.78rem;color:rgba(255,255,255,0.6);">"The capital of France is" → "Paris"</p>
+    </div>
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">2. Instruction Tuning</h3>
+      <p>Fine-tune on (instruction, good response) pairs so the model completes <em>instructions</em>, not just text, and adopts a chat format.</p>
+      <p class="mono" style="font-size:0.78rem;color:rgba(255,255,255,0.6);">"Summarize this." → does it, not "Summarize what?"</p>
+    </div>
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">3. RLHF / Preference Tuning</h3>
+      <p>Humans (or a reward model) rank multiple candidate responses; the model is nudged toward the ranked-higher style — helpful, harmless, on-format.</p>
+      <p class="mono" style="font-size:0.78rem;color:rgba(255,255,255,0.6);">Same facts, safer / more useful phrasing</p>
+    </div>
+  </div>
+  <p style="margin-top:16px;font-size:0.9rem;color:rgba(255,255,255,0.55);">Every model we benchmark — Gemma, Llama, Qwen, GPT-OSS, Claude — has been through some version of stages 2 and 3. That is <em>why</em> you can prompt them in plain English at all.</p>
+</div>
+
+<!-- 4 CHAT TEMPLATE -->
+<div class="slide slide-dark">
+  <span class="slide-num">4</span>
+  <div class="section-divider">Part 1 — From Predictor to Assistant</div>
+  <h2>The Chat Template — What's Really Under the Hood <span class="verified">grounded in our code</span></h2>
+  <p style="color:rgba(255,255,255,0.7);">There is no "system / user / assistant" data structure inside the model. It's still one flat token sequence — with special marker tokens the instruction-tuned model was trained to respect.</p>
+  <div class="code-block">
+<span class="com">## what you write in connector/llm1_extractor.py</span>
+system_prompt = <span class="str">"You are a HIPAA disclosure extraction engine..."</span>
+user_msg      = <span class="str">f"Scenario: {question}"</span>
+
+<span class="com">## what actually gets tokenized and fed to the forward pass</span>
+&lt;start_of_turn&gt;system
+You are a HIPAA disclosure extraction engine...&lt;end_of_turn&gt;
+&lt;start_of_turn&gt;user
+Scenario: Dr. Smith faxes records to...&lt;end_of_turn&gt;
+&lt;start_of_turn&gt;model
+  </div>
+  <p style="font-size:0.9rem;color:rgba(255,255,255,0.6);">The model then does exactly the next-token prediction from Week 2 — it just happens to have been trained so that the highest-probability continuation after <span class="mono">&lt;start_of_turn&gt;model</span> looks like a helpful reply instead of more internet text.</p>
+</div>
+
+<!-- 5 DECODING SECTION HEADER + GREEDY VS SAMPLING -->
+<div class="slide slide-teal">
+  <span class="slide-num">5</span>
+  <div class="section-divider">Part 2 — Decoding</div>
+  <h2>The Forward Pass Ends in a Probability Distribution. Then What?</h2>
+  <p style="color:rgba(255,255,255,0.7);">Every step, the model outputs one probability over the entire vocabulary (~150k tokens for Gemma/Qwen). <em>Decoding</em> is the separate algorithm that turns that distribution into an actual chosen token.</p>
+  <div class="grid-2" style="margin-top:16px;">
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">Greedy decoding</h3>
+      <p>Always pick the single highest-probability token. Deterministic — same input, same output, every time.</p>
+      <p style="font-size:0.85rem;">Used for: extraction, classification, anything you need to reproduce and audit.</p>
+    </div>
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">Sampling</h3>
+      <p>Draw randomly from the distribution instead of always taking the max. Same prompt can give different answers on different runs.</p>
+      <p style="font-size:0.85rem;">Used for: creative writing, brainstorming, chat — anywhere variety beats reproducibility.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 6 TEMPERATURE / TOP-K / TOP-P -->
+<div class="slide slide-white">
+  <span class="slide-num">6</span>
+  <div class="section-divider">Part 2 — Decoding</div>
+  <h2>Temperature, Top-k, Top-p — the Knobs on Sampling</h2>
+  <table class="data-table" style="margin-top:10px;">
+    <tr><th>Parameter</th><th>What it does</th><th>Effect at extremes</th></tr>
+    <tr><td class="mono">temperature</td><td>Rescales the distribution before sampling. Divides logits by T before softmax.</td><td>T→0: greedy. T→∞: uniform random token.</td></tr>
+    <tr><td class="mono">top_k</td><td>Only sample from the k highest-probability tokens.</td><td>k=1: greedy. k=vocab size: no restriction.</td></tr>
+    <tr><td class="mono">top_p</td><td>Sample from the smallest set of tokens whose probabilities sum to p ("nucleus").</td><td>p=1.0: no restriction. p small: very conservative.</td></tr>
+  </table>
+  <div class="card card-crimson" style="margin-top:18px;">
+    <h3 style="color:var(--crimson);">Why every extraction call in our pipeline uses temperature 0</h3>
+    <p>We need the same scenario to produce the same extracted facts every time we re-run an experiment — otherwise "accuracy" isn't measurable and a bug fix can't be verified. Reproducibility is a research requirement, not a preference. This is exactly what <span class="mono">week3_prompting.ipynb</span> asks you to confirm empirically on Wednesday.</p>
+  </div>
+</div>
+
+<!-- 7 CONTEXT WINDOW -->
+<div class="slide slide-navy">
+  <span class="slide-num">7</span>
+  <div class="section-divider">Part 3 — Context, Memory, Scale</div>
+  <h2>The Context Window Is the Only Memory the Model Has</h2>
+  <p style="color:rgba(255,255,255,0.7);">Between API calls, the model remembers nothing. Every fact it uses — your system prompt, the scenario, few-shot examples, prior turns — must physically fit inside one token sequence, every single call.</p>
+  <div class="grid-2" style="margin-top:16px;">
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">What consumes context</h3>
+      <ul>
+        <li>System prompt (ours: 150+ lines of extraction rules)</li>
+        <li>Few-shot examples, if you add them</li>
+        <li>The scenario text itself</li>
+        <li>Retrieved passages, if using RAG</li>
+        <li>The model's own output, as it's generated</li>
+      </ul>
+    </div>
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">What happens near the limit</h3>
+      <ul>
+        <li>Hard cutoff: oldest content silently dropped or the call errors</li>
+        <li>"Lost in the middle": models attend less reliably to content buried in a long context, even before the hard limit</li>
+        <li>Cost and latency scale with context length — longer prompts are not free</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- 8 IN CONTEXT LEARNING -->
+<div class="slide slide-light">
+  <span class="slide-num">8</span>
+  <div class="section-divider">Part 3 — Context, Memory, Scale</div>
+  <h2>In-Context Learning: "Training" Without Updating a Single Weight</h2>
+  <p class="subtitle-dark">When you show the model 2 worked examples before your real question (few-shot), nothing in the network's parameters changes. The model is pattern-matching the shape of the prompt itself, at inference time.</p>
+  <div class="code-block" style="margin-top:14px;">
+Example 1:
+Scenario: A nurse tells a coworker about a patient's diagnosis for treatment purposes.
+JSON: {<span class="str">"purpose"</span>: <span class="str">"treatment"</span>, <span class="str">"phi_involved"</span>: <span class="kw">true</span>}
+
+Example 2:
+Scenario: A hospital sells patient records to a marketing firm.
+JSON: {<span class="str">"purpose"</span>: <span class="str">"marketing"</span>, <span class="str">"phi_involved"</span>: <span class="kw">true</span>}
+
+Now extract:
+Scenario: {question}   <span class="com">// the model infers the JSON "shape" from the 2 examples above</span>
+  </div>
+  <p style="font-size:0.9rem;">This is the mechanism behind everything you'll do in Wednesday's few-shot exercises — you are not teaching the model new facts, you are teaching it the <em>format</em> and <em>granularity</em> of a good answer.</p>
+</div>
+
+<!-- 9 SCALE -->
+<div class="slide slide-crimson">
+  <span class="slide-num">9</span>
+  <div class="section-divider">Part 3 — Context, Memory, Scale</div>
+  <h2>Does Bigger Actually Mean Better? <span class="verified">verified — RQ5</span></h2>
+  <p style="color:rgba(255,255,255,0.85);">Real accuracy on our 137-row GoldCoin-HHS benchmark, same prompt/strategy, five models spanning two orders of magnitude in parameter count.</p>
+  <table class="data-table" style="margin-top:12px;">
+    <tr><th>Model</th><th>Params</th><th>Accuracy</th><th>Macro-F1</th><th>Rank</th></tr>
+    <tr><td>Gemma2:2B</td><td>2B</td><td>78.2%</td><td>0.778</td><td>5th</td></tr>
+    <tr><td>Llama3.1:8B</td><td>8B</td><td>84.7%</td><td>0.839</td><td>4th</td></tr>
+    <tr><td>GPT-OSS:20B</td><td>20B</td><td>90.0%</td><td>0.897</td><td>3rd</td></tr>
+    <tr><td>Qwen2.5:72B</td><td>72B</td><td>92.7%</td><td>0.919</td><td>2nd</td></tr>
+    <tr><td>Claude-Sonnet-4.6</td><td>~200B*</td><td><strong>94.2%</strong></td><td><strong>0.938</strong></td><td><strong>1st</strong></td></tr>
+  </table>
+  <p style="font-size:0.85rem;margin-top:10px;color:rgba(255,255,255,0.6);">Roughly monotonic here — but notice the curve is <em>flattening</em>: 2B→8B gained 6.5pp, 20B→72B gained only 2.7pp. *Proprietary size estimated. This is exactly the kind of data your own project could extend or complicate.</p>
+</div>
+
+<!-- 10 COST/LATENCY TRADEOFF -->
+<div class="slide slide-white">
+  <span class="slide-num">10</span>
+  <div class="section-divider">Part 3 — Context, Memory, Scale</div>
+  <h2>Scale Is Not Free — Why We Rent GPUs for Qwen</h2>
+  <div class="grid-2">
+    <div class="card card-gold">
+      <h3>Small models (Gemma2:2B)</h3>
+      <ul>
+        <li>Run locally, on a laptop CPU or small GPU</li>
+        <li>Fast — seconds per scenario</li>
+        <li>Weakest raw accuracy of the five</li>
+      </ul>
+    </div>
+    <div class="card card-crimson">
+      <h3>Large models (Qwen2.5:72B)</h3>
+      <ul>
+        <li>Needs an 80GB-class GPU — we rent one on vast.ai per experiment</li>
+        <li>Mean latency ~67 seconds per scenario (vs. ~1–5s for small models)</li>
+        <li>Strongest open-weight accuracy of the five, but ~13× the wait</li>
+      </ul>
+    </div>
+  </div>
+  <p style="margin-top:16px;font-size:0.92rem;color:var(--muted);">This is a real engineering decision every project makes: your Week 4–5 experiment plan has to budget for the fact that a 137-row run on Qwen takes roughly <span class="highlight-red">2.5 hours</span> of wall-clock GPU time, not seconds.</p>
+</div>
+
+<!-- 11 HALLUCINATION -->
+<div class="slide slide-amber">
+  <span class="slide-num">11</span>
+  <div class="section-divider">Part 4 — Where Models Fail</div>
+  <h2>Hallucination Isn't a Bug in the Usual Sense</h2>
+  <p style="color:rgba(255,255,255,0.8);">The model was trained to always produce <em>a</em> fluent next token. It has no built-in "I don't know" state — it will complete a JSON field even when the scenario never mentions it.</p>
+  <div class="grid-2" style="margin-top:16px;">
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">What this looks like in extraction</h3>
+      <ul>
+        <li>Inventing a <span class="mono">purpose</span> the scenario never states</li>
+        <li>Filling <span class="mono">extra_facts</span> with plausible-sounding but unsupported predicates</li>
+        <li>Confidently citing the wrong subsection of §164</li>
+      </ul>
+    </div>
+    <div class="card card-glass">
+      <h3 style="color:var(--gold);">Why confidence ≠ correctness</h3>
+      <p>Week 2's analysis already showed this on our own data: the model's stated confidence does not reliably predict whether the verdict is right. A wrong answer can be delivered exactly as fluently as a right one.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 12 CLOSED VS OPEN -->
+<div class="slide slide-navy">
+  <span class="slide-num">12</span>
+  <div class="section-divider">Part 4 — Where Models Fail</div>
+  <h2>Open-Weight vs. Proprietary — Why It Matters for Research</h2>
+  <table class="data-table" style="margin-top:10px;">
+    <tr><th></th><th>Open-weight (Gemma, Llama, Qwen, GPT-OSS)</th><th>Proprietary API (Claude)</th></tr>
+    <tr><td>Where it runs</td><td>Your GPU / rented GPU, via Ollama</td><td>Someone else's servers</td></tr>
+    <tr><td>Reproducibility</td><td>Full — same weights forever</td><td>Provider can silently update the model</td></tr>
+    <tr><td>Cost model</td><td>Compute time (rent a GPU)</td><td>Per-token API billing</td></tr>
+    <tr><td>Inspectability</td><td>Can quantize, fine-tune, inspect activations</td><td>Black box — text in, text out</td></tr>
+  </table>
+  <p style="margin-top:14px;font-size:0.9rem;color:rgba(255,255,255,0.65);">We evaluate both for a reason: open-weight models are what a compliance officer could actually self-host and audit; the proprietary model is our accuracy ceiling reference point.</p>
+</div>
+
+<!-- 13 RECAP -->
+<div class="slide slide-green">
+  <span class="slide-num">13</span>
+  <h2>Recap — Five Ideas to Carry Into Wednesday</h2>
+  <ol style="padding-left:22px;font-size:1.05rem;line-height:2;">
+    <li>Instruction-tuning + RLHF is <em>why</em> plain-English prompts work at all</li>
+    <li>Decoding parameters (temperature, top-k/p) control determinism — extraction wants temperature 0</li>
+    <li>The context window is the model's <em>entire</em> memory — few-shot examples compete for that space</li>
+    <li>Scale correlates with accuracy but with diminishing returns and real dollar/time cost</li>
+    <li>Hallucination is the model doing exactly what it was trained to do: keep talking fluently</li>
+  </ol>
+</div>
+
+<!-- 14 BRIDGE TO PROMPTING -->
+<div class="slide slide-teal">
+  <span class="slide-num">14</span>
+  <h2>This Is Why Prompting Is an Engineering Discipline</h2>
+  <p style="color:rgba(255,255,255,0.8);">You cannot open the model up and fix a wrong weight. The prompt — system instructions, examples, formatting constraints, reasoning scaffolding — is the only lever you have to shape behavior from outside the black box.</p>
+  <div class="flow" style="margin-top:18px;">
+    <div class="flow-box" style="background:rgba(255,255,255,0.1);">Zero-shot</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="background:rgba(255,255,255,0.1);">Few-shot</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="background:rgba(255,255,255,0.1);">Chain-of-thought</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="background:var(--gold);color:#000;font-weight:700;">Wednesday's session</div>
+  </div>
+</div>
+
+<!-- 15 WHAT'S NEXT: AGENTIC PREVIEW -->
+<div class="slide slide-purple">
+  <span class="slide-num">15</span>
+  <h2>Looking Further Ahead — When One Prompt Isn't Enough</h2>
+  <p style="color:rgba(255,255,255,0.75);">Every technique today assumed <em>one</em> call to the model. Our actual production pipeline calls the LLM up to four times per scenario, checking its own work in between.</p>
+  <div class="card card-glass" style="margin-top:16px;">
+    <h3 style="color:var(--gold);">Coming later: Agentic Systems</h3>
+    <p>How <span class="mono">connector/llm1_extractor.py</span>'s <span class="mono">extract_with_reflection()</span> turns a single extraction call into a four-pass self-checking loop — and why that loop helps a small model enormously but can backfire on a large one if you're not careful with retrieval.</p>
+  </div>
+</div>
+
+<!-- 16 TODAY'S NOTEBOOK -->
+<div class="slide slide-light">
+  <span class="slide-num">16</span>
+  <h2>Today — Read, Don't Code Yet</h2>
+  <p class="subtitle-dark">No notebook exercise today. Instead:</p>
+  <div class="grid-2" style="margin-top:14px;">
+    <div class="card card-gold">
+      <h3>Before Wednesday</h3>
+      <ul>
+        <li>Skim <span class="mono">connector/llm1_extractor.py</span> lines 1–90 (system prompt setup)</li>
+        <li>Pick 1 wrong prediction from your Week 2 batch results to bring Wednesday</li>
+      </ul>
+    </div>
+    <div class="card card-green">
+      <h3>Wednesday's live notebook</h3>
+      <p><span class="mono">notebooks/week3_prompting.ipynb</span> — you'll write zero-shot, few-shot, and chain-of-thought prompts against that exact failure case.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 17 QUESTIONS TO SIT WITH -->
+<div class="slide slide-dark">
+  <span class="slide-num">17</span>
+  <h2>Questions to Sit With</h2>
+  <ul style="font-size:1.05rem;line-height:2.1;">
+    <li>If temperature 0 is more reproducible, why would anyone ever use sampling in a research pipeline?</li>
+    <li>Your Week 2 error analysis found 8–10 residual errors even on the strongest models. Is that a decoding problem, a context problem, or something else?</li>
+    <li>If bigger models have diminishing accuracy returns, when is it <em>not</em> worth renting the 80GB GPU?</li>
+  </ul>
+</div>
+
+<!-- 18 CLOSING -->
+<div class="slide slide-navy">
+  <span class="slide-num">18</span>
+  <h1 style="font-size:2.2rem;">You Now Know the Whole Machine</h1>
+  <p class="subtitle">Architecture (Week 2) + generation mechanics (today) = everything that happens before a single prompting choice you make on Wednesday even matters.</p>
+</div>
+
+<script>
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+const counter = document.getElementById('slide-counter');
+const bar = document.getElementById('progress-bar');
+const controls = document.querySelector('.slide-controls');
+
+function showSlide(n) {
+  slides[current].classList.remove('active');
+  current = (n + slides.length) % slides.length;
+  slides[current].classList.add('active');
+  counter.textContent = (current + 1) + ' / ' + slides.length;
+  bar.style.width = ((current + 1) / slides.length * 100) + '%';
+  const light = slides[current].classList.contains('slide-white') ||
+                slides[current].classList.contains('slide-light');
+  controls.classList.toggle('on-light', light);
+  counter.classList.toggle('on-light', light);
+}
+function nextSlide() { showSlide(current + 1); }
+function prevSlide() { showSlide(current - 1); }
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+  if (e.key === 'ArrowLeft') prevSlide();
+});
+</script>
+</body>
+</html>

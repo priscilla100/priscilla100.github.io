@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ollama Playground — ComplianceGPT Lab REU 2026</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.step-block { display: flex; gap: 0; margin-bottom: 16px; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.step-num { flex-shrink: 0; width: 52px; background: var(--navy); color: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: 900; font-family: 'Segoe UI', system-ui, sans-serif; }
+.step-body { flex: 1; padding: 16px 20px; }
+.step-body h3 { color: var(--navy); margin-bottom: 6px; font-size: 1rem; }
+.step-body p, .step-body li { font-size: 0.9rem; line-height: 1.65; }
+.step-body ul, .step-body ol { padding-left: 18px; margin-top: 6px; }
+
+.cmd { display: block; background: #1e1e2e; color: #a6e3a1; border-radius: 5px; padding: 10px 16px; font-family: 'Courier New', Consolas, monospace; font-size: 0.87rem; margin: 8px 0; overflow-x: auto; white-space: pre-wrap; }
+.cmd .com  { color: #6c7086; font-style: italic; }
+.cmd .flag { color: #89dceb; }
+.cmd .str  { color: #f5c2e7; }
+.cmd .prompt { color: #fab387; }
+
+.timer-tag { display: inline-block; background: var(--gold); color: #000; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 0.72rem; font-weight: 800; letter-spacing: .05em; padding: 2px 9px; border-radius: 3px; margin-left: 8px; vertical-align: middle; }
+</style>
+</head>
+<body>
+<aside id="sidebar">
+  <div class="logo"><div class="lab-name">ComplianceGPT Lab</div><div class="lab-sub">AI Innovation &amp; Diffusion REU 2026<br>Stony Brook University</div></div>
+  <nav>
+    <div class="nav-section">Program</div>
+    <a href="index.html">Welcome</a><a href="schedule.html">Weekly Schedule</a><a href="slides-prompting-101.html">Prompting 101 (Start Here)</a><a href="ollama-playground.html">Ollama Playground</a><a href="extraction-warmup.html">Extraction Warm-Up</a><a href="compliance-qa-app.html">Compliance QA Playground</a><a href="slides-week1.html">Week 1 Slides</a><a href="slides-week2.html">Week 2 Slides</a><a href="slides-week3.html">Week 3 Slides</a><a href="slides-llm-foundations.html">LLM Foundations Slides</a><a href="slides-agentic-systems.html">Agentic Systems Slides</a><a href="slides-contextual-integrity.html">Contextual Integrity Slides</a><a href="slides-project-navigator.html">Project Navigator Slides</a>
+    <div class="nav-section">Foundations</div>
+    <a href="setup.html">Setup &amp; Tools</a><a href="python.html">Python Fundamentals</a><a href="foundations.html">AI Fundamentals</a><a href="foundations.html#regulations">Regulations</a>
+    <div class="nav-section">Curriculum</div>
+    <a href="week1.html">Week 1 — Intro to AI</a><a href="week2.html">Week 2 — Language &amp; Law</a><a href="week3.html">Week 3 — Prompt Eng.</a><a href="week4.html">Week 4 — RAG</a><a href="week5.html">Week 5 — ComplianceGPT</a><a href="week6.html">Week 6 — Communication</a><a href="portfolio.html">Build Your GitHub Portfolio</a>
+    <div class="nav-section">Research</div>
+    <a href="projects.html">Student Projects</a><a href="readings.html">Reading List</a><a href="assignments.html">Assignments</a>
+  </nav>
+</aside>
+<main id="main">
+<div class="page-header">
+  <div class="breadcrumb">Foundations</div>
+  <h1>Ollama Playground</h1>
+  <p class="subtitle">Live, in-terminal exercises — see how powerful (and how limited) a local model is, with your own hands, in the next 30 minutes</p>
+</div>
+<div class="content">
+
+  <p style="background:#fff5f5;border-left:4px solid var(--crimson);padding:12px 16px;border-radius:4px;font-size:0.92rem;">
+    <strong>No notebook, no Python needed for this one.</strong> Everything below runs directly in your terminal. If you haven't installed Ollama yet, see <a href="setup.html">Setup &amp; Tools</a> first (<code>brew install ollama</code> on Mac, or <a href="https://ollama.com/download" target="_blank" rel="noopener">ollama.com/download</a> otherwise) — then come back here.
+  </p>
+
+  <h2>0. Check It's Running <span class="timer-tag">1 min</span></h2>
+  <div class="step-block">
+    <div class="step-num">0</div>
+    <div class="step-body">
+      <p>Start the background server (skip if it's already running — most installs auto-start it):</p>
+      <span class="cmd">ollama serve <span class="com"># leave this running in its own terminal tab, or skip if already running</span></span>
+      <p>In a <strong>new</strong> terminal tab, confirm it's alive:</p>
+      <span class="cmd">ollama list <span class="com"># shows models you already have downloaded — probably empty right now</span></span>
+    </div>
+  </div>
+
+  <h2>1. Your First Model <span class="timer-tag">3 min</span></h2>
+  <div class="step-block">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <p>Pull and run a small, fast model. This downloads once (a few GB) then drops you into an interactive chat right in the terminal:</p>
+      <span class="cmd">ollama run gemma2:2b</span>
+      <p>Try asking it things, one line at a time:</p>
+      <span class="cmd"><span class="prompt">&gt;&gt;&gt;</span> What is the capital of France?
+<span class="prompt">&gt;&gt;&gt;</span> Write a haiku about debugging code.
+<span class="prompt">&gt;&gt;&gt;</span> Explain what a REU is to a 10 year old.
+<span class="prompt">&gt;&gt;&gt;</span> What's 17 * 24?
+<span class="prompt">&gt;&gt;&gt;</span> Who won the most recent Super Bowl?</span>
+      <p>That last one is deliberate — watch what happens. A local 2B model has a <strong>knowledge cutoff</strong> baked in at training time. It doesn't know today's date and doesn't know anything that happened after it was trained — it will either say so, or (more interestingly) confidently guess wrong. Note which one it did.</p>
+      <p>Type <code>/bye</code> to exit back to your normal terminal.</p>
+    </div>
+  </div>
+
+  <h2>2. Where a 2B Model Struggles <span class="timer-tag">5 min</span></h2>
+  <div class="step-block">
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <p>Still in <span class="mono" style="font-family:'Courier New',monospace;">gemma2:2b</span> (or restart with <code>ollama run gemma2:2b</code>), try these — this is where "small and local" starts showing its limits:</p>
+      <span class="cmd"><span class="prompt">&gt;&gt;&gt;</span> A farmer has 17 sheep. All but 9 die. How many are left?
+<span class="prompt">&gt;&gt;&gt;</span> If it takes 5 machines 5 minutes to make 5 widgets, how long does it take 100 machines to make 100 widgets?
+<span class="prompt">&gt;&gt;&gt;</span> Write a Python function to check if a number is prime, then explain the time complexity.
+<span class="prompt">&gt;&gt;&gt;</span> List the last 5 winners of the Nobel Prize in Physics with the year and their discovery.</span>
+      <p>Watch for: wrong arithmetic on the "trick" riddles (the sheep one is a classic — answer is 9, many small models say 8), confidently wrong Nobel Prize facts (this is <strong>hallucination</strong> — fluent, specific, and false), and whether the code answer actually runs.</p>
+    </div>
+  </div>
+
+  <h2>3. Swap Models — Same Questions, Bigger Brain <span class="timer-tag">8 min</span></h2>
+  <div class="step-block">
+    <div class="step-num">3</div>
+    <div class="step-body">
+      <p>Pull one or two bigger (but still laptop-sized) models and re-run the <em>exact same</em> prompts from Step 2:</p>
+      <span class="cmd">ollama run llama3.2       <span class="com"># ~3B params, Meta</span>
+ollama run phi3:mini      <span class="com"># ~3.8B params, Microsoft, tuned for reasoning</span>
+ollama run qwen2.5:7b     <span class="com"># ~7B params — if your laptop has 16GB+ RAM</span></span>
+      <p>Ask each one the sheep riddle and the widgets riddle again. Does a bigger model get them right where the 2B one didn't? Do all of them still hallucinate on the Nobel Prize question?</p>
+      <div class="card card-gold" style="margin-top:10px;">
+        <p style="margin:0;font-size:0.88rem;"><strong>What to notice:</strong> reasoning (the riddles) tends to improve clearly with size. Factual recall of obscure/recent things stays unreliable at <em>every</em> size you can run on a laptop — bigger local models are not automatically "more truthful," they're often just more fluently wrong.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2>4. Compare Against SOTA <span class="timer-tag">5 min</span></h2>
+  <div class="step-block">
+    <div class="step-num">4</div>
+    <div class="step-body">
+      <p>Open <a href="https://claude.ai" target="_blank" rel="noopener">claude.ai</a> or <a href="https://chatgpt.com" target="_blank" rel="noopener">chatgpt.com</a> in a browser tab next to your terminal. Ask the <strong>exact same</strong> sheep riddle, widgets riddle, and Nobel Prize question there.</p>
+      <table style="margin-top:10px;">
+        <thead><tr><th>Question</th><th>gemma2:2b (local)</th><th>Claude / ChatGPT (SOTA)</th></tr></thead>
+        <tbody>
+          <tr><td>Sheep riddle</td><td>often wrong</td><td>usually right</td></tr>
+          <tr><td>Widgets riddle</td><td>often wrong</td><td>usually right</td></tr>
+          <tr><td>Nobel Prize (recent)</td><td>hallucinates or refuses</td><td>usually correct, or honestly says it's unsure of the very latest</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:10px;">This is the real headline: <strong>SOTA models are trained on vastly more data with vastly more compute</strong>, so reasoning and factual recall both improve — but they run on someone else's server, cost money per token, and you can't inspect or modify them. That trade-off (capability vs. control/cost) is exactly why this lab's research pipeline uses <em>both</em>: small local models via Ollama for fast iteration, and a rented GPU running Qwen2.5:72B (still open-weight, still self-hostable — just too big for a laptop) for the strongest results that need to be reproducible.</p>
+    </div>
+  </div>
+
+  <h2>5. Useful In-Chat Commands <span class="timer-tag">2 min</span></h2>
+  <div class="step-block">
+    <div class="step-num">5</div>
+    <div class="step-body">
+      <p>While inside <code>ollama run &lt;model&gt;</code>, these work at the <span class="prompt">&gt;&gt;&gt;</span> prompt:</p>
+      <span class="cmd"><span class="flag">/bye</span>              <span class="com"># exit</span>
+<span class="flag">/clear</span>            <span class="com"># wipe conversation history, start fresh (still same model loaded)</span>
+<span class="flag">/set system</span> <span class="str">"You are a pirate. Answer everything in pirate speak."</span>
+<span class="flag">/set parameter temperature</span> <span class="num">0</span>    <span class="com"># 0 = deterministic, same question -> same answer every time</span>
+<span class="flag">/set parameter temperature</span> <span class="num">1.2</span>  <span class="com"># high = more random/creative, less consistent</span>
+<span class="flag">/show</span> info          <span class="com"># model details: size, quantization, context length</span></span>
+      <p>Try <code>/set system</code> with a persona, then re-ask one of your earlier questions — this is <strong>role/persona prompting</strong> from the Prompting 101 deck, live.</p>
+    </div>
+  </div>
+
+  <h2>6. One-Shot Terminal Calls (No Interactive Chat) <span class="timer-tag">2 min</span></h2>
+  <div class="step-block">
+    <div class="step-num">6</div>
+    <div class="step-body">
+      <p>You don't have to enter the chat mode — <code>ollama run</code> also accepts a prompt directly as an argument, useful for scripting later:</p>
+      <span class="cmd">ollama run gemma2:2b <span class="str">"Summarize the plot of Romeo and Juliet in exactly 2 sentences."</span></span>
+      <p>Pipe a file in as context:</p>
+      <span class="cmd">cat some_notes.txt | ollama run gemma2:2b <span class="str">"Summarize the following notes in 3 bullet points:"</span></span>
+    </div>
+  </div>
+
+  <h2>Model Size Cheat Sheet</h2>
+  <table>
+    <thead><tr><th>Model</th><th>Params</th><th>Good for laptop?</th><th>Character</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">gemma2:2b</td><td>2B</td><td>Yes — fastest</td><td>Fast, weakest reasoning, most hallucination-prone</td></tr>
+      <tr><td class="mono">llama3.2</td><td>~3B</td><td>Yes</td><td>Balanced, good general default</td></tr>
+      <tr><td class="mono">phi3:mini</td><td>~3.8B</td><td>Yes</td><td>Tuned to punch above its size on reasoning/math</td></tr>
+      <tr><td class="mono">qwen2.5:7b</td><td>7B</td><td>Usually (16GB+ RAM)</td><td>Noticeably stronger reasoning, slower</td></tr>
+      <tr><td class="mono">gemma3:4b</td><td>4B</td><td>Yes</td><td>The model used in this lab's early experiments</td></tr>
+      <tr><td class="mono">qwen2.5:72b</td><td>72B</td><td><strong>No — needs an 80GB-class GPU</strong></td><td>What this lab rents a GPU for; see <a href="cluster.html">Cluster Access</a></td></tr>
+    </tbody>
+  </table>
+
+  <h2>Wrap-Up Question to Discuss</h2>
+  <div class="card card-crimson">
+    <p style="margin:0;">If a 2B model hallucinates confidently and a 72B/SOTA model mostly doesn't, but the 72B model needs a rented GPU and costs real money per experiment — <strong>when is "good enough and fast" the right research choice, and when do you actually need the expensive model?</strong> This is the exact trade-off Week 3's <a href="slides-llm-foundations.html">LLM Foundations</a> slides cover with real accuracy numbers from this lab's own experiments.</p>
+  </div>
+
+</div>
+</main>
+</body>
+</html>
