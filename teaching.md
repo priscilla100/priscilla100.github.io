@@ -9,7 +9,8 @@ permalink: /teaching/
 <h2 style="margin: 60px 0px -15px;">Teaching</h2>
 <br>
 
-- Spring 2025: [Concepts of Machine Learning](https://courses.illinois.edu/schedule/2025/spring/IS/327) (IS327)
+- Spring 2024: ISE331 Fundamentals of Computer Security, Stony Brook University
+- Fall 2023: CSE331 Computer Security Fundamentals, Stony Brook University
 
 <h2 style="margin: 60px 0px -15px;">Mentorship</h2>
 <br>

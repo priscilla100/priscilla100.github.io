@@ -2,34 +2,26 @@
 layout: homepage
 ---
 
-## About Me
+<h2 style="margin: 60px 0px 10px;">About Me</h2>
 
-I am a **third-year PhD candidate** in Computer Science at [Stony Brook University](https://www.cs.stonybrook.edu/), advised by [Dr. Omar Chowdhury](https://www3.cs.stonybrook.edu/~omar/). My research bridges **formal methods** and **large language models** to build trustworthy AI systems for security-critical applications.
+I am a **fourth-year PhD candidate** in Computer Science at [Stony Brook University](https://www.cs.stonybrook.edu/), advised by [Dr. Omar Chowdhury](https://www3.cs.stonybrook.edu/~omar/). My research bridges **formal methods** and **large language models** to build trustworthy AI systems for security-critical applications — evaluating how reliably LLMs translate natural language into Linear Temporal Logic (LTL), and building a verifier-controlled system that checks natural-language HIPAA compliance questions against a machine-checked Datalog formalization of the law.
 
-I work on two interconnected problems:
-
-1. **Evaluation**: How reliable are LLMs for generating formal specifications? My systematic evaluation framework assesses LLM-generated temporal logic across syntactic correctness, semantic equivalence, and trace-based behavior.
-
-2. **Systems**: Can we combine LLM flexibility with formal verification guarantees? I am developing **agentic systems for automated regulatory compliance verification** that translate natural language queries into **formal logic (LTL, FOTL, FOL)** and verify policy adherence across regulations such as **HIPAA, GDPR, SOX, and GLBA**.
-
-This dual-focus rigorous evaluation and practical systems enables AI that is both powerful and provably correct, addressing the fundamental challenge of deploying AI in regulated industries.
-
-Prior to Stony Brook, I completed my M.Sc. at the University of New Brunswick under [Dr. Ali Ghorbani](https://www.unb.ca/faculty-staff/directory/computer-science/ghorbani-ali.html), where my work on IoT device profiling has been **cited over 220 times** and is widely used in the security research community.
+Prior to Stony Brook, I completed my M.Sc. at the University of New Brunswick under [Dr. Ali Ghorbani](https://www.unb.ca/faculty-staff/directory/computer-science/ghorbani-ali.html), where my work on IoT device profiling has been **cited over 220 times**.
 
 ## Research Interests
 
-- **Formal Verification & Specification Synthesis:** Linear Temporal Logic (LTL), First-Order Logic (FOL), First-Order Temporal Logic (FOTL)
+- **Formal Verification & Specification Synthesis:** Natural-language-to-Linear-Temporal-Logic (LTL) translation
 - **LLM Safety & Evaluation:** Systematic evaluation of LLM-generated formal specifications
 - **Neural-Symbolic AI:** Combining neural networks with symbolic reasoning for trustworthy systems
-- **Regulatory Compliance:** Automated verification for HIPAA, GDPR, SOX, GLBA
+- **Regulatory Compliance:** Verifier-controlled compliance checking against a Datalog formalization of HIPAA; multi-regulatory extensions (e.g., GDPR) are an early-stage direction I'm exploring next
 - **Agentic AI Systems:** Autonomous reasoning with self-correction and explainability
 
 <div class="call-to-action">
   <h2 style="color: #e74d3c; font-weight: 600; margin-bottom: 10px;">
-    🔍 Seeking Summer 2026 Research Internship Opportunities
+    🔍 Seeking Summer 2027 Research Internship Opportunities
   </h2>
   <p style="font-size: 16px; color: #555; margin-bottom: 20px;">
-    I am actively seeking <strong>Research Scientist Internship</strong> positions for <strong>Summer 2026</strong> in:
+    I am actively seeking <strong>Research Scientist Internship</strong> positions for <strong>Summer 2027</strong> in:
     <strong>AI Safety</strong> • <strong>Formal Verification</strong> • <strong>Privacy Compliance</strong> • <strong>Trustworthy AI</strong>
   </p>
   <p style="font-size: 14px; color: #666; margin-bottom: 20px;">
@@ -51,73 +43,29 @@ Prior to Stony Brook, I completed my M.Sc. at the University of New Brunswick un
 
 ## Featured Research
 
-### 🤖 Agentic Policy Compliance System
-**[GitHub →](https://github.com/priscilla100/policy-checker/) | [Demo Playground →](https://appapppy-zvavaeg3z7ohc4wp8prnhq.streamlit.app/)**
+### ⚖️ ATHENA: Verifier-Controlled HIPAA Compliance
 
-An autonomous AI agent that translates natural language policy queries into formal logic and verifies compliance across multiple regulatory frameworks (HIPAA, GDPR, SOX, GLBA).
+ATHENA answers a regulatory permissibility question — *"is this disclosure of protected health information permitted under HIPAA?"* — by keeping a symbolic verifier in control of what evidence gets collected, instead of asking an LLM to extract everything upfront and trusting the extraction. The verifier is a machine-checked **Datalog encoding of the HIPAA Privacy Rule** (run in [Souffl&eacute;](https://souffle-lang.github.io/), using stratified negation to capture the Rule's permit/deny structure); it evaluates the current fact state and decides which fact its proof still depends on, and an LLM oracle answers exactly that one question — `TRUE`, `FALSE`, or `UNKNOWN`. A genuine `UNKNOWN` is preserved as `UNRESOLVED` rather than silently treated as `FALSE`.
 
-<img src="assets/img/agentic.png" class="teaser img-fluid z-depth-1" style="width:100%;height:auto;max-width:800px;border-radius:8px;margin:20px 0;">
+Currently scoped to HIPAA; a next step I'm still working out — not yet built — is extending this to overlapping multi-regulatory scenarios, e.g. an EU citizen receiving care at a US hospital, where GDPR applies alongside HIPAA.
 
-**Key Innovation**: Combines the flexibility of LLMs (natural language understanding) with the precision of formal verification (mathematical proofs), demonstrating practical neural-symbolic AI for security-critical applications.
-
-**Core Capabilities**:
-- **Neural-Symbolic Integration**: LLM-based translation to formal logic (LTL/FOL) with OCaml verification
-- **Autonomous Planning**: Multi-step execution plans adapted to query complexity
-- **Self-Correction**: Automatic error recovery and graceful degradation
-- **Confidence-Based Reasoning**: Agent knows when to ask for clarification
-- **Explainable Results**: Natural language explanations of formal proofs
-- **Multi-Regulatory**: Unified framework across HIPAA, GDPR, SOX, GLBA
-
-**Technical Stack**: Python, OCaml, GPT-4/Claude/Gemini, Formal Logic (LTL, FOL, FOTL), Agentic Reasoning
-
-**Research Impact**: Demonstrates that neural and symbolic AI can be productively combined for trustworthy systems—addressing the fundamental challenge of deploying AI in regulated domains where both flexibility and correctness guarantees are required.
-
----
+Under review at PoPETs 2027 (code release forthcoming).
 
 ### 📊 Systematic Evaluation of LLMs for Formal Specification
 
-**Paper Status**: Under Review  
-**Contribution**: Multi-dimensional evaluation framework for assessing LLM-generated temporal logic
-
-While LLMs show promise for generating formal specifications, their reliability remains unclear. I developed a comprehensive evaluation framework that goes beyond syntactic correctness to assess:
-
-- **Semantic Equivalence**: Are generated formulas logically equivalent to intended specifications?
-- **Trace-Based Behavior**: Do formulas correctly classify satisfying and violating execution traces?
-- **Structured Generation**: How do different prompting strategies affect reliability?
-
-**Key Finding**: LLMs achieve 60-70% semantic accuracy on complex temporal properties, demonstrating capability but highlighting the need for verification directly motivating the agentic system architecture above.
-
-**Impact**: Provides the first systematic, trace-based evaluation of LLMs for temporal logic generation, establishing baselines and revealing failure modes that inform system design for safety-critical applications.
-
----
-
-## Research Trajectory
-
-**Master's (UNB, 2021-2023)**: Applied machine learning for IoT security  
-→ Built widely-adopted dataset (**220+ citations**)  
-→ Demonstrated practical ML systems that people use
-
-**PhD Early (Stony Brook, 2023-2024)**: Formal methods + LLMs  
-→ Evaluated LLM reliability for specification synthesis  
-→ Revealed gaps between capability and trustworthiness
-
-**PhD Current (2024-Present)**: Neural-symbolic integration  
-→ Building trustworthy AI through agentic systems  
-→ Bridging evaluation insights with practical compliance tools
-
-**Research Vision**: Make AI systems that are both powerful (neural) and provably correct (symbolic), essential for deployment in regulated, security-critical domains.
+Beyond syntactic correctness, I built a multi-dimensional evaluation framework that scores LLM-generated temporal logic on semantic equivalence and trace-based behavior — the results (LLMs hit only 60–70% semantic accuracy on complex temporal properties) are part of what motivates keeping a symbolic verifier in the loop, as ATHENA does above. This work is published as [*"Syntax Is Easy, Semantics Is Hard"*](./publications/) at ACM SecDev '26.
 
 ---
 
 ## Selected Publications
 
-**[Under Review]** **P.K. Danso**, et al. "A Multi-dimensional Evaluation of LLMs in Translating Natural Language to Linear Temporal Logic"
+**[Under Review, PoPETs 2027]** **P.K. Danso**, et al. "ATHENA: Answering Regulatory Permissibility Questions through Iterative Fact Finding"
+
+**[SecDev '26]** **P.K. Danso**, et al. "Syntax Is Easy, Semantics Is Hard: Evaluating LLMs for LTL Translation". *Proceedings of the 2026 ACM Secure Development Conference*.
 
 **[IoT-J 2023]** **P.K. Danso**, S. Dadkhah, E.C.P. Neto, et al. "Transferability of Machine Learning Algorithms for IoT Device Profiling and Identification". *IEEE Internet of Things Journal*, 2023.
 
 **[PST 2022]** S. Dadkhah, H. Mahdikhani, **P.K. Danso\***, et al. "Towards the Development of a Realistic Multidimensional IoT Profiling Dataset". *IEEE PST*, 2022. (**220+ citations**)
-
-**[HONET 2025]** **P.K. Danso**, et al. "LLM-based Anomaly Detection for Digital Substation Cybersecurity". *IEEE HONET*, 2025. *(To appear)*
 
 *\*Equal contribution*
 
@@ -127,23 +75,16 @@ While LLMs show promise for generating formal specifications, their reliability 
 
 ## Professional Service
 
-**Leadership Roles**:
-- **Artifact Evaluation Chair**: USENIX Security 2025, ACM CCS 2024
-- **Artifact Reviewer**: ACM CCS 2025
-- **Paper Reviewer**: IEEE Internet of Things Journal (2023-Present)
-- **Mentor**: Women in Computer Science, Stony Brook University (2024-Present)
+- **Artifact Evaluation Committee**: USENIX Security 2025, ACM CCS 2024
+- **Paper Reviewer**: IEEE Internet of Things Journal (2023–Present)
+- **Secretary**, Women in Ph.D. in Computer Science (WPhD), Stony Brook University (2024–Present)
+- **Mentor**: Center for Inclusive Education, Stony Brook University (2025–Present); Women in Computer Science, Stony Brook University (2024–Present)
 
-**Recognition**:
-- NSF Summer School on Formal Techniques (2024)
-- NSF CPS-IoT Week Travel Award (2024)
-- NSF iMentor Scholarship - ACM CCS (2023)
-- 2025 Schonfeld Early Engagement Summit (Accepted)
-
----
-
+[Full service list →](./services/)
 
 ## Honors & Awards
 
+- **SREB Institute on Teaching and Mentoring**, selected participant (2024, 2025)
 - **NSF Summer School on Formal Techniques** + FMiTF Bootcamp (May 2024)
 - **CPS-IoT Week 2024** Student Travel Award, Hong Kong (NSF-sponsored, April 2024)
 - **iMentor Scholarship** for ACM CCS, Copenhagen, Denmark (NSF-sponsored, Nov 2023)
@@ -160,14 +101,7 @@ While LLMs show promise for generating formal specifications, their reliability 
 
 ## Let's Connect
 
-<!-- I'm seeking **Summer 2026 research internship opportunities** where I can apply my expertise in formal verification, LLM evaluation, or trustworthy AI to real-world challenges.
-
-**Particularly interested in**:
-- AI Safety research teams
-- Privacy & compliance engineering
-- Formal verification for ML systems
-- Neural-symbolic AI applications -->
-**Interested in collaborating?** 
+**Interested in collaborating?**
 
 **📧 Email**: [priscillakyeidanso@gmail.com](mailto:priscillakyeidanso@gmail.com)  
 **💼 LinkedIn**: [linkedin.com/in/priscillakyeidanso](https://linkedin.com/in/priscillakyeidanso)  
@@ -176,7 +110,7 @@ While LLMs show promise for generating formal specifications, their reliability 
 
 ---
 
-*Last updated: February 2026*
+*Last updated: September 2026*
 
 <style>
 @keyframes blink {
