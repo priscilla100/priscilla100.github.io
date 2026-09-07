@@ -45,11 +45,16 @@ Prior to Stony Brook, I completed my M.Sc. at the University of New Brunswick un
 
 ### ⚖️ ATHENA: Verifier-Controlled HIPAA Compliance
 
-ATHENA answers a regulatory permissibility question — *"is this disclosure of protected health information permitted under HIPAA?"* — by keeping a symbolic verifier in control of what evidence gets collected, instead of asking an LLM to extract everything upfront and trusting the extraction. The verifier is a machine-checked **Datalog encoding of the HIPAA Privacy Rule** (run in [Souffl&eacute;](https://souffle-lang.github.io/), using stratified negation to capture the Rule's permit/deny structure); it evaluates the current fact state and decides which fact its proof still depends on, and an LLM oracle answers exactly that one question — `TRUE`, `FALSE`, or `UNKNOWN`. A genuine `UNKNOWN` is preserved as `UNRESOLVED` rather than silently treated as `FALSE`.
+**ATHENA** studies how large language models can assist with regulatory compliance without giving the language model control over the compliance decision.
 
-Currently scoped to HIPAA; a next step I'm still working out — not yet built — is extending this to overlapping multi-regulatory scenarios, e.g. an EU citizen receiving care at a US hospital, where GDPR applies alongside HIPAA.
+Given a question such as *“Is this disclosure of protected health information permitted under HIPAA?”*, ATHENA uses a machine-checked **Datalog encoding of the HIPAA Privacy Rule**, executed in [Soufflé](https://souffle-lang.github.io/). Rather than asking an LLM to extract every potentially relevant fact upfront, the verifier determines which unresolved fact can still affect the current policy proof and asks an LLM evidence oracle about that fact. The oracle returns `TRUE`, `FALSE`, or `UNKNOWN`.
 
-Under review at PoPETs 2027 (code release forthcoming).
+A key design principle is that **missing evidence remains missing**. An `UNKNOWN` response is preserved as `UNRESOLVED` rather than silently treated as `FALSE`. This separates evidence acquisition from policy decision-making: the LLM supplies evidence, while the formal verifier determines which evidence is relevant and whether the policy establishes a permitted or denied outcome.
+
+ATHENA is currently scoped to HIPAA and is being evaluated across real-world disclosure scenarios and multiple language models. A future direction I am exploring is **multi-regulatory compliance**, where a single data-use scenario may fall under overlapping frameworks—for example, a U.S. healthcare setting in which HIPAA and GDPR obligations may both become relevant. This direction is exploratory and has not yet been implemented.
+
+**Under review at PoPETs 2027.**
+
 
 ### 📊 Systematic Evaluation of LLMs for Formal Specification
 
