@@ -4,9 +4,9 @@ layout: homepage
 
 <h2 style="margin: 60px 0px 10px;">About Me</h2>
 
-I am a **fourth-year PhD candidate** in Computer Science at [Stony Brook University](https://www.cs.stonybrook.edu/), advised by [Dr. Omar Chowdhury](https://www3.cs.stonybrook.edu/~omar/). My research bridges **formal methods** and **large language models** to build trustworthy AI systems for security-critical applications — evaluating how reliably LLMs translate natural language into Linear Temporal Logic (LTL), and building a verifier-controlled system that checks natural-language HIPAA compliance questions against a machine-checked Datalog formalization of the law.
+I am a **fourth-year PhD candidate** in Computer Science at [Stony Brook University](https://www.cs.stonybrook.edu/), advised by [Dr. Omar Chowdhury](https://www3.cs.stonybrook.edu/~omar/). My research **combines LLMs with symbolic analysis and reasoning**: LLMs translate natural language into formal logic, and symbolic tools verify, select, and decide. This reduces hallucination and gives formal tools a natural-language interface. I apply it to temporal-logic specification (**SecDev '26**; under review at **ICLR 2027**) and HIPAA compliance checking (**ATHENA**; under review at **PoPETs 2027**).
 
-Prior to Stony Brook, I completed my M.Sc. at the University of New Brunswick under [Dr. Ali Ghorbani](https://www.unb.ca/faculty-staff/directory/computer-science/ghorbani-ali.html), where my work on IoT device profiling has been **cited over 220 times**.
+Previously, I completed my M.Sc. at the University of New Brunswick under [Dr. Ali Ghorbani](https://www.unb.ca/faculty-staff/directory/computer-science/ghorbani-ali.html); my IoT device profiling work has been **cited over 220 times**.
 
 ## Research Interests
 
@@ -30,7 +30,7 @@ Prior to Stony Brook, I completed my M.Sc. at the University of New Brunswick un
     📚 <a href="https://scholar.google.com/citations?user=bPvjbUMAAAAJ&hl=en" target="_blank">Google Scholar</a>
   </p>
   <div class="button-container">
-    <a href="./assets/2025_CV.pdf" target="_blank" class="resume-button">
+    <a href="./assets/Priscilla_Kyei_Danso_CV.pdf" target="_blank" class="resume-button">
       📄 Download CV
     </a>
     <a href="./assets/2025_Research_summary.pdf" target="_blank" class="resume-button">
@@ -45,6 +45,8 @@ Prior to Stony Brook, I completed my M.Sc. at the University of New Brunswick un
 
 ### ⚖️ ATHENA: Verifier-Controlled HIPAA Compliance
 
+<img src="./assets/img/athena_overview.png" alt="ATHENA system overview: a trusted Datalog verifier selects the material predicate that can change the verdict, queries an LLM oracle (TRUE/FALSE/UNKNOWN), and returns PERMITTED, DENIED, or UNRESOLVED" style="width:100%; max-width:760px; margin:10px 0;">
+
 **ATHENA** studies how large language models can assist with regulatory compliance without giving the language model control over the compliance decision.
 
 Given a question such as *“Is this disclosure of protected health information permitted under HIPAA?”*, ATHENA uses a machine-checked **Datalog encoding of the HIPAA Privacy Rule**, executed in [Soufflé](https://souffle-lang.github.io/). Rather than asking an LLM to extract every potentially relevant fact upfront, the verifier determines which unresolved fact can still affect the current policy proof and asks an LLM evidence oracle about that fact. The oracle returns `TRUE`, `FALSE`, or `UNKNOWN`.
@@ -53,18 +55,32 @@ A key design principle is that **missing evidence remains missing**. An `UNKNOWN
 
 ATHENA is currently scoped to HIPAA and is being evaluated across real-world disclosure scenarios and multiple language models. A future direction I am exploring is **multi-regulatory compliance**, where a single data-use scenario may fall under overlapping frameworks—for example, a U.S. healthcare setting in which HIPAA and GDPR obligations may both become relevant. This direction is exploratory and has not yet been implemented.
 
-**Under review at PoPETs 2027.**
+**PoPETs 2027 (Issue 2): advanced to Round 2 of review.**
 
 
-### 📊 Systematic Evaluation of LLMs for Formal Specification
+### 🎯 Generation Is Not Selection: Neuro-Symbolic Formalization of Temporal Logic
 
-Beyond syntactic correctness, I built a multi-dimensional evaluation framework that scores LLM-generated temporal logic on semantic equivalence and trace-based behavior — the results (LLMs hit only 60–70% semantic accuracy on complex temporal properties) are part of what motivates keeping a symbolic verifier in the loop, as ATHENA does above. This work is published as [*"Syntax Is Easy, Semantics Is Hard"*](./publications/) at ACM SecDev '26.
+<img src="./assets/img/gin_pipeline.png" alt="Pendulum pipeline: candidate synthesis, symbolic BLACK evidence, LLM judge, deterministic finalization" style="width:100%; max-width:760px; margin:10px 0;">
+
+A natural-language requirement can admit several plausible temporal-logic formalizations, so generating a correct candidate is not the same as selecting the intended one. **Pendulum** separates candidate synthesis from symbolic semantic analysis and final selection: solver-backed (BLACK) equivalence and behavioral evidence is assessed by an LLM judge, and deterministic finalization commits to one formula.
+
+On the `nl2ltl` benchmark, after auditing all 306 references (55 corrected, 48 ambiguous specifications kept as a separate partition), the strongest candidate pool contains a correct formula for **92.2%** of the 258 determinate specifications, but the final system selects one correctly for **87.2%**. This coverage-to-selection gap persists across changes to synthesis, verification, and selection.
+
+**Under review at ICLR 2027** · [OpenReview](https://openreview.net/forum?id=08AFwZWnnv)
+
+### 📊 Syntax Is Easy, Semantics Is Hard: Evaluating LLMs for LTL Translation
+
+<img src="./assets/img/syntax_findings.png" alt="Summary of key findings across syntactic and semantic research questions for the Minimal, Detailed, and Python interfaces" style="width:100%; max-width:760px; margin:10px 0;">
+
+A multi-dimensional evaluation framework that scores LLM-generated temporal logic on syntactic well-formedness, semantic equivalence, and trace-based behavior. Best-observed equivalence accuracy on NL→LTL translation stays around 65–73% across prompting interfaces, which motivates keeping symbolic tools in the loop, as in the two projects above. Published at [ACM SecDev '26](https://dl.acm.org/doi/10.1145/3805773.3806005).
 
 ---
 
 ## Selected Publications
 
-**[Under Review, PoPETs 2027]** **P.K. Danso**, et al. "ATHENA: Answering Regulatory Permissibility Questions through Iterative Fact Finding"
+**[Under Review, ICLR 2027]** **P.K. Danso**, et al. "Generation Is Not Selection: Neuro-Symbolic Natural Language Formalization of Temporal Logic". [OpenReview](https://openreview.net/forum?id=08AFwZWnnv)
+
+**[Under Review, PoPETs 2027 · Round 2]** **P.K. Danso**, et al. "ATHENA: Answering Regulatory Permissibility Questions through Iterative Fact Finding"
 
 **[SecDev '26]** **P.K. Danso**, et al. "Syntax Is Easy, Semantics Is Hard: Evaluating LLMs for LTL Translation". *Proceedings of the 2026 ACM Secure Development Conference*.
 
@@ -80,7 +96,7 @@ Beyond syntactic correctness, I built a multi-dimensional evaluation framework t
 
 ## Professional Service
 
-- **Artifact Evaluation Committee**: USENIX Security 2025, ACM CCS 2024
+- **Artifact Evaluation Committee**: IEEE S&P 2027, USENIX Security 2025, ACM CCS 2024
 - **Paper Reviewer**: IEEE Internet of Things Journal (2023–Present)
 - **Secretary**, Women in Ph.D. in Computer Science (WPhD), Stony Brook University (2024–Present)
 - **Mentor**: Center for Inclusive Education, Stony Brook University (2025–Present); Women in Computer Science, Stony Brook University (2024–Present)
@@ -99,6 +115,7 @@ Beyond syntactic correctness, I built a multi-dimensional evaluation framework t
 ## Teaching
 
 **Teaching Assistant**, Stony Brook University:
+- **CSE 312.01 / ISE 312.01**: Social, Legal, and Ethical Issues in Computing (Fall 2026)
 - **ISE 331**: Fundamentals of Computer Security (Spring 2024)
 - **CSE 331**: Computer Security Fundamentals (Fall 2023)
 

@@ -1,24 +1,31 @@
 main:
+  - title: "Generation Is Not Selection: Neuro-Symbolic Natural Language Formalization of Temporal Logic"
+    authors: <strong>Priscilla Kyei Danso</strong>, et al.
+    conference_short: ICLR '27
+    conference: International Conference on Learning Representations (ICLR), 2027
+    notes: Under Review
+    pdf: https://openreview.net/forum?id=08AFwZWnnv
+    image: /assets/img/gin_pipeline.png
+
   - title: "ATHENA: Answering Regulatory Permissibility Questions through Iterative Fact Finding"
     authors: <strong>Priscilla Kyei Danso</strong>, et al.
     conference_short: PoPETs
     conference: Proceedings on Privacy Enhancing Technologies (PoPETs), 2027
-    notes: Under Review, Issue 2
-    image: /assets/img/overview.png
+    notes: Under Review (Round 2)
+    image: /assets/img/athena_overview.png
 
   - title: "Syntax Is Easy, Semantics Is Hard: Evaluating LLMs for LTL Translation"
     authors: <strong>Priscilla Kyei Danso</strong>, et al.
     conference_short: SecDev '26
     conference: Proceedings of the 2026 ACM Secure Development Conference (SecDev '26), Montreal, QC, Canada
     pdf: https://dl.acm.org/doi/10.1145/3805773.3806005
-    image: /assets/img/llm.png
+    image: /assets/img/syntax_findings.png
 
   - title: "LLM-based Anomaly Detection for Digital Substation Cybersecurity"
     authors: <strong>Priscilla Kyei Danso</strong>, et al.
     conference_short: HONET
     conference: IEEE Smart Communities (HONET), 2025
-    notes: To appear December 2025
-    pdf: https://github.com/priscilla100/all_publications_pdf/blob/main/LLMbasedAnomalyDetectionforDigitalSubstationCybersecurity.pdf
+    pdf: https://ieeexplore.ieee.org/abstract/document/11318449
     image: /assets/img/llm.png
 
   - title: "Transferability of Machine Learning Algorithm for IoT Device Profiling and Identification"
@@ -49,7 +56,6 @@ main:
     pdf: https://www.researchgate.net/profile/Priscilla_Danso3/publication/367370109_Ensemble-based_Intrusion_Detection_for_Internet_of_Things_Devices/links/63d48b66c465a873a262cc73/Ensemble-based-Intrusion-Detection-for-Internet-of-Things-Devices.pdf
     bibtex: https://scholar.googleusercontent.com/scholar.bib?q=info:QH10V04PcYEJ:scholar.google.com/&output=citation&scisdr=ClH1FpZtEKfo_wA1elk:AFWwaeYAAAAAZ6gzYlm1GHCnviTXdOz_2QYcz_s&scisig=AFWwaeYAAAAAZ6gzYmYIG06oJ0r_HIAer4Q0ZxY&scisf=4&ct=citation&cd=-1&hl=en
     code: https://github.com/priscilla100/ensemble_IDS
-    notes: Oral Presentation
     image: /assets/img/ensemble.png
 
   - title: "Human-Centric Machine Learning: The Role of Users in the Development of IoT Device Identification and Vulnerability Assessment"

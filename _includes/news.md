@@ -1,13 +1,14 @@
 <h2 style="margin: 60px 0px 10px;">News</h2>
 
 <ul>
-<li><strong>[Sep. 2026]</strong> Submitted ATHENA, a verifier-controlled system for HIPAA compliance checking, to <a href="https://petsymposium.org/">PoPETs 2027</a>.</li>
+<li><strong>[Sep. 2026]</strong> <a href="https://petsymposium.org/">PoPETs 2027</a> (Issue 2): our paper ATHENA, on verifier-controlled HIPAA compliance checking, advanced to Round 2 of reviewing.</li>
+<li><strong>[Sep. 2026]</strong> Submitted "Generation Is Not Selection: Neuro-Symbolic Natural Language Formalization of Temporal Logic" to <a href="https://iclr.cc/">ICLR 2027</a> (<a href="https://openreview.net/forum?id=08AFwZWnnv">OpenReview</a>).</li>
+<li><strong>[Sep. 2026]</strong> Serving on the Artifact Evaluation Committee of <a href="https://sp2027.ieee-security.org/">IEEE S&amp;P 2027</a>.</li>
+<li><strong>[Aug. 2026]</strong> Teaching Assistant for CSE/ISE 312, Social, Legal, and Ethical Issues in Computing (Fall 2026).</li>
 <li><strong>[Jul. 2026]</strong> Our paper <a href="https://dl.acm.org/doi/10.1145/3805773.3806005">"Syntax Is Easy, Semantics Is Hard: Evaluating LLMs for LTL Translation"</a> was published at ACM SecDev 2026.</li>
-<li><strong>[Mar. 2026]</strong> Submitted "Syntax Is Easy, Semantics Is Hard: Evaluating LLMs for LTL Translation" to ACM SecDev 2026.</li>
-<li><strong>[Dec. 2025]</strong> Presenting at <a href="https://honet-ict.org/">HONET 2025 </a>on LLM-based anomaly detection for digital substations.</li>
-<li><strong>[Oct. 2025]</strong> Attended the <a href="https://www.sreb.org/institute-teaching-and-mentoring">2025 Institute on Teaching and Mentoring</a> in Atlanta, Georgia!</li>
-<li><strong>[Oct. 2025]</strong> Paper submitted to <a href="https://etaps.org/2026/conferences/fase/">FASE 2026 </a>on evaluating LLMs for natural language to LTL translation</li>
-<li><strong>[Jun. 2025]</strong> I will serve on the Artifact Evaluation Committee of <a href="https://www.usenix.org/conference/usenixsecurity25">USENIX Security 2025</a>.</li>
+<li><strong>[Dec. 2025]</strong> Presented at <a href="https://honet-ict.org/">HONET 2025</a> on LLM-based anomaly detection for digital substations.</li>
+<li><strong>[Oct. 2025]</strong> Attended the <a href="https://www.sreb.org/institute-teaching-and-mentoring">2025 Institute on Teaching and Mentoring</a> in Atlanta, Georgia.</li>
+<li><strong>[Jun. 2025]</strong> Served on the Artifact Evaluation Committee of <a href="https://www.usenix.org/conference/usenixsecurity25">USENIX Security 2025</a>.</li>
 <li><strong>[Oct. 2024]</strong> Attended the <a href="https://www.sreb.org/institute-teaching-and-mentoring">2024 Institute on Teaching and Mentoring</a> in New Orleans, Louisiana!</li>
 <li><strong>[Oct. 2024]</strong> Served on the Artifact Evaluation Committee of the<a href="https://www.sigsac.org/ccs/CCS2024/"> ACM CCS 2024 Conference</a>.</li>
 
@@ -19,16 +20,15 @@
 
 <li> <a href="#" onclick="toggleVis(this); return false;">Show more</a> </li>
 <div id="newsmore" style="display:none"> 
-<li><strong>[Jul. 2024]</strong> Finally found my potential research topic (Yes! This a huge milestone for me).</li>
-<li><strong>[May. 2024]</strong> Attended the  <a href="https://fm.csl.sri.com/SSFT24/">Thirteenth Summer School on Formal Techniques</a> in San Franscisco.</li>
-<li><strong>[Apr. 2024]</strong> Receievd an NSF travel grant to attend the  <a href="https://cps-iot-week2024.ie.cuhk.edu.hk/"> CPS-IOT Week 2024</a> in Hong Kong.</li>
+<li><strong>[May. 2024]</strong> Attended the  <a href="https://fm.csl.sri.com/SSFT24/">Thirteenth Summer School on Formal Techniques</a> in San Francisco.</li>
+<li><strong>[Apr. 2024]</strong> Received an NSF travel grant to attend the  <a href="https://cps-iot-week2024.ie.cuhk.edu.hk/"> CPS-IOT Week 2024</a> in Hong Kong.</li>
 <li><strong>[Nov. 2023]</strong> Received the <a href="https://sites.google.com/vt.edu/imentor/">iMentor scholarship </a> by NSF for  <a href="https://www.sigsac.org/ccs/CCS2023/">ACM CCS 2023 conference</a>.</li>
 <li><strong>[Aug. 2023]</strong> Started my doctoral studies in <a href="https://www.cs.stonybrook.edu/">Computer Science</a> at <a href="https://stonybrook.edu">Stony Brook University </a>.</li>
   <li><strong>[Apr. 2023]</strong> Our paper "IoT Zigbee Device Security" was accepted by the<a href="https://www.elsevier.com/r"> Elsevier's Internet of Things Journal</a>.</li>
   <li><strong>[Mar. 2023]</strong> Accepted invitation to review manuscript for the <a href="https://ieee-iotj.org//">IEEE Internet of Things Journal</a>.</li>
   <li><strong>[Feb. 2023]</strong> Our manuscript accepted by the <a href="https://ieee-iotj.org//">IEEE Internet of Things Journal</a>.</li>
   <li><strong>[Dec. 2022]</strong> Our paper "Human-Centric Machine Learning" was accepted at by <a href="https://2023.hci.international/">HCI International 2023</a>.</li>
-  <li><strong>[Oct. 2022]</strong> Accepted an invitation to serve as a reviwer for <a href="https://2023.hci.international/">HCI International 2023</a>.</li>
+  <li><strong>[Oct. 2022]</strong> Accepted an invitation to serve as a reviewer for <a href="https://2023.hci.international/">HCI International 2023</a>.</li>
   <li><strong>[Oct. 2022]</strong> Our paper about "Ensemble-based IDS" was accepted by the <a href="https://honet-ict.org/archives/honet22/index.html">IEEE Honet 2022</a>.</li>
   <li><strong>[Jun. 2022]</strong> Our paper on  IoT profiling was accepted at the <a href="https://pstnet.ca/pst2022/">Privacy, Security, and Trust (PST2022) conference</a>.</li>
   <!-- <li><strong>[Apr. 2023]</strong> I will give a talk on continual learning at <a href="https://sites.google.com/view/visionseminar">MIT Vision and Graphics Seminar</a>.</li>

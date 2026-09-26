@@ -5,6 +5,7 @@
 <h4 style="margin:0 10px 0;">Artifact Evaluation Committee</h4>
 
 <ul style="margin:0 0 5px;">
+  <li>Committee Member, <a href="https://sp2027.ieee-security.org/cfartifacts.html"><autocolor>IEEE Symposium on Security and Privacy (S&amp;P)</autocolor></a> <a href="https://sp2027.ieee-security.org/cfartifacts.html"><autocolor>2027</autocolor></a></li>
   <li>Committee Member, <a href="https://www.usenix.org/conference/usenixsecurity25"><autocolor>USENIX Security</autocolor></a> <a href="https://www.usenix.org/conference/usenixsecurity25"><autocolor>2025</autocolor></a></li>
   <li>Committee Member, <a href="https://www.sigsac.org/ccs/CCS2024/organization/ae-committee.html"><autocolor>ACM CCS</autocolor></a> <a href="https://www.sigsac.org/ccs/CCS2024/organization/ae-committee.html"><autocolor>2024</autocolor></a></li>
 
