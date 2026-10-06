@@ -1,0 +1,22 @@
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "{{ site.title }}",
+  "url": "{{ site.canonical }}",
+  "image": "{{ site.canonical }}{{ site.avatar }}",
+  "jobTitle": "{{ site.position }}",
+  "description": {{ site.description | jsonify }},
+  "affiliation": {
+    "@type": "CollegeOrUniversity",
+    "name": "{{ site.affiliation }}",
+    "url": "{{ site.affiliation_link }}"
+  },
+  "sameAs": [
+    "{{ site.google_scholar }}",
+    "{{ site.github_link }}",
+    "{{ site.linkedin }}",
+    "https://www.alphaxiv.org/@priscilla-kyei-danso"
+  ]
+}
+</script>
