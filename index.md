@@ -4,7 +4,7 @@ layout: homepage
 
 <h2 style="margin: 60px 0px 10px;">About Me</h2>
 
-I am a **fourth-year PhD candidate** in Computer Science at [Stony Brook University](https://www.cs.stonybrook.edu/), advised by [Dr. Omar Chowdhury](https://www3.cs.stonybrook.edu/~omar/). My research **combines LLMs with symbolic analysis and reasoning**: LLMs translate natural language into formal logic, and symbolic tools verify, select, and decide. This reduces hallucination and gives formal tools a natural-language interface. I apply it to temporal-logic specification (**SecDev '26**; under review at **ICLR 2027**) and HIPAA compliance checking (**ATHENA**; under review at **PoPETs 2027**).
+I am a **PhD candidate** in Computer Science at [Stony Brook University](https://www.cs.stonybrook.edu/), advised by [Dr. Omar Chowdhury](https://www3.cs.stonybrook.edu/~omar/). My research **combines LLMs with symbolic analysis and reasoning**: LLMs translate natural language into formal logic, and symbolic tools verify, select, and decide. This reduces hallucination and gives formal tools a natural-language interface. I apply it to temporal-logic specification (**SecDev '26**; under review at **ICLR 2027**) and HIPAA compliance checking (**ATHENA**; under review at **PoPETs 2027**).
 
 Previously, I completed my M.Sc. at the University of New Brunswick under [Dr. Ali Ghorbani](https://www.unb.ca/faculty-staff/directory/computer-science/ghorbani-ali.html); my IoT device profiling work has been **cited over 220 times**.
 
@@ -98,7 +98,7 @@ A multi-dimensional evaluation framework that scores LLM-generated temporal logi
 
 - **Artifact Evaluation Committee**: IEEE S&P 2027, USENIX Security 2025, ACM CCS 2024
 - **Paper Reviewer**: IEEE Internet of Things Journal (2023–Present)
-- **Secretary**, Women in Ph.D. in Computer Science (WPhD), Stony Brook University (2024–Present)
+- **Vice President** (previously Secretary), Women in Ph.D. in Computer Science (WPhD), Stony Brook University (2024–Present)
 - **Mentor**: Center for Inclusive Education, Stony Brook University (2025–Present); Women in Computer Science, Stony Brook University (2024–Present)
 
 [Full service list →](./services/)
@@ -126,7 +126,7 @@ A multi-dimensional evaluation framework that scores LLM-generated temporal logi
 **Interested in collaborating?**
 
 **📧 Email**: [priscillakyeidanso@gmail.com](mailto:priscillakyeidanso@gmail.com)  
-**💼 LinkedIn**: [linkedin.com/in/priscillakyeidanso](https://linkedin.com/in/priscillakyeidanso)  
+**💼 LinkedIn**: [linkedin.com/in/priscilla-kyei-danso](https://www.linkedin.com/in/priscilla-kyei-danso/)  
 **💻 GitHub**: [github.com/priscilla100](https://github.com/priscilla100)  
 **📚 Google Scholar**: [citations?user=bPvjbUMAAAAJ](https://scholar.google.com/citations?user=bPvjbUMAAAAJ&hl=en)
 

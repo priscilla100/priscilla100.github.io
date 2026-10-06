@@ -69,7 +69,7 @@
 
 <h4 style="margin:0 10px 0;">Positions Held</h4>
 <ul style="margin:0 0 5px;">
-  <li>Secretary, <a href="https://wphd.cs.stonybrook.edu/people"><autocolor>Women in PhD in Computer Science (WPhD) at </autocolor></a>Stony Brook University, <a href="https://wphd.cs.stonybrook.edu/people"><autocolor>2024</autocolor></a>-<a href="https://wphd.cs.stonybrook.edu/people"><autocolor>Present</autocolor></a></li>
+  <li>Vice President (previously Secretary), <a href="https://wphd.cs.stonybrook.edu/people"><autocolor>Women in PhD in Computer Science (WPhD) at </autocolor></a>Stony Brook University, <a href="https://wphd.cs.stonybrook.edu/people"><autocolor>2024</autocolor></a>-<a href="https://wphd.cs.stonybrook.edu/people"><autocolor>Present</autocolor></a></li>
 
   <li>Mentor, <a href="https://www.stonybrook.edu/commcms/cie/"><autocolor>Center for Inclusive Education at </autocolor></a>Stony Brook University, <a href="https://www.stonybrook.edu/commcms/cie/"><autocolor>2025</autocolor></a>-<a href="https://www.stonybrook.edu/commcms/cie/"><autocolor>Present</autocolor></a></li>
   <!-- <li>Website Master, <a href="https://www.acmmmasia.org/2020/committee.html"><autocolor>ACM International Conference on Multimedia in Asia (MM Asia) 2020</autocolor></a></li> -->
