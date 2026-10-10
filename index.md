@@ -25,7 +25,7 @@ Previously, I completed my M.Sc. at the University of New Brunswick under [Dr. A
     <strong>AI Safety</strong> • <strong>Formal Verification</strong> • <strong>Privacy Compliance</strong> • <strong>Trustworthy AI</strong>
   </p>
   <p style="font-size: 14px; color: #666; margin-bottom: 20px;">
-    📧 <a href="mailto:priscillakyeidanso@gmail.com">priscillakyeidanso@gmail.com</a> • 
+    📧 <a href="mailto:pdanso@cs.stonybrook.edu">pdanso@cs.stonybrook.edu</a> • 
     💻 <a href="https://github.com/priscilla100" target="_blank">GitHub</a> • 
     📚 <a href="https://scholar.google.com/citations?user=bPvjbUMAAAAJ&hl=en" target="_blank">Google Scholar</a>
   </p>
@@ -125,7 +125,7 @@ A multi-dimensional evaluation framework that scores LLM-generated temporal logi
 
 **Interested in collaborating?**
 
-**📧 Email**: [priscillakyeidanso@gmail.com](mailto:priscillakyeidanso@gmail.com)  
+**📧 Email**: [pdanso@cs.stonybrook.edu](mailto:pdanso@cs.stonybrook.edu)  
 **💼 LinkedIn**: [linkedin.com/in/priscilla-kyei-danso](https://www.linkedin.com/in/priscilla-kyei-danso/)  
 **💻 GitHub**: [github.com/priscilla100](https://github.com/priscilla100)  
 **📚 Google Scholar**: [citations?user=bPvjbUMAAAAJ](https://scholar.google.com/citations?user=bPvjbUMAAAAJ&hl=en)

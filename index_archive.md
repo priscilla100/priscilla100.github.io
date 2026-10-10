@@ -27,7 +27,7 @@ Prior to Stony Brook, I completed my M.Sc. in Computer Science at the University
     <em>formal verification, privacy compliance, security, and trustworthy AI</em>.
   </p>
   <div class="button-container">
-    <a href="./assets/2025_CV.pdf" target="_blank" class="resume-button">
+    <a href="./assets/Priscilla_Kyei_Danso_CV.pdf" target="_blank" class="resume-button">
       View My CV
     </a>
     <a href="./assets/2025_Research_summary.pdf" target="_blank" class="resume-button">
