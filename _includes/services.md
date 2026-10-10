@@ -77,7 +77,6 @@
 <h4 style="margin:0 10px 0;">Mentorship</h4>
 <ul style="margin:0 0 5px;">
   <li>
-    Summer 2026: <strong>AI Innovation & Diffusion REU 2026</strong> — Mentor, Trustworthy AI & NLP Research Lab, Stony Brook University ·
-    <a href="http://priscilla100.github.io/reu2026/">REU 2026 site</a> ·
+    Summer 2026: <strong>AI Innovation & Diffusion REU 2026</strong> — Mentor, Trustworthy AI & NLP Research Lab, Stony Brook University
   </li>
 </ul>

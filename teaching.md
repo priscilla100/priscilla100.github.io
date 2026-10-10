@@ -16,4 +16,4 @@ permalink: /teaching/
 <h2 style="margin: 60px 0px -15px;">Mentorship</h2>
 <br>
 
-- Summer 2026: **AI Innovation & Diffusion REU 2026** — Mentor, Trustworthy AI & NLP Research Lab, Stony Brook University · [[ComplianceGPT Lab site]](https://priscilla100.github.io/reu2026/)
+- Summer 2026: **AI Innovation & Diffusion REU 2026** — Mentor, Trustworthy AI & NLP Research Lab, Stony Brook University
